@@ -13,7 +13,7 @@ namespace Datos
         {
             CargarReporte();
             _rutaInformeTxt = Path.ChangeExtension(rutaInforme, ".txt");
-            LeerDatosParametrosTxt();
+            //LeerDatosParametrosTxt();
         }
         
         public void LeerDatosParametrosTxt()

@@ -23,22 +23,34 @@ namespace Capas
         {
             _rutaReporte = rutaReporte;
             InitializeComponent();
+
+            ReportDocument reporte = new ReportDocument();
+            reporte.Load(_rutaReporte);
+
+            //Parametros(reporte);
+
+            crystalReportViewer1.ReportSource = reporte;
+            //reporte.PrintToPrinter(1, true, 1, 1);
+            Refresh();
+            Show();
+
+            
         }
 
-        private void reportViewer_Load(object sender, EventArgs e)
+       /*private void reportViewer_Load(object sender, EventArgs e)
         {
             ReportDocument reporte = new ReportDocument();
             reporte.Load(_rutaReporte);
-            
+
             Parametros(reporte);
-            
+
             crystalReportViewer1.ReportSource = reporte;
-            if (reporte.IsLoaded)
-            {
-                MessageBox.Show("loaded");
-                Show();
-            }
-        }
+            
+            Refresh();
+            Show();
+
+            crystalReportViewer1.PrintReport();
+        }*/
 
         private void Parametros(ReportDocument reporte)
         {
