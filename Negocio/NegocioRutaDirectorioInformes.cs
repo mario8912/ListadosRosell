@@ -12,7 +12,7 @@ using Entidades;
 
 namespace Negocio
 {
-    public static class NegocioRutaInformes
+    public static class NegocioRutaDirectorioInformes
     {
         private static string rutaCompletaInformes = DatosRutaInformes.ObtenerRutaCompletaInformes().ToUpper();
 
