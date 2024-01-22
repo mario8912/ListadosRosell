@@ -76,7 +76,7 @@ namespace Capas
 
         private string ReporteSinExtension(string reporte)
         {
-            return Path.GetFileName(reporte).ToUpper();
+            return Path.GetFileName(reporte).ToUpper();l
         }
 
         #endregion
