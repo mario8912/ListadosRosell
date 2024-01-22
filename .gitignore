@@ -1,0 +1,9 @@
+#EXTENSIONES
+*.ini
+
+#DIRECTORIOS
+packages/
+bin/
+obj/
+.vs/
+debug/
