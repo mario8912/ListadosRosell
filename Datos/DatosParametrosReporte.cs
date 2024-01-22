@@ -1,36 +1,44 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.ReportAppServer;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Datos
 {
-    public class DatosParametrosReporte
+     public class DatosParametrosReporte : DatosReporte
     {
-        private ReportDocument _reporte;
         private string _rutaInformeTxt;
-        private StreamWriter _streamEscritura;
-
-        public DatosParametrosReporte(ReportDocument reporte, string rutaInforme)
+        private StreamReader _streamReader;
+        
+        public DatosParametrosReporte(string rutaInforme) : base(rutaInforme) 
         {
-            _reporte = reporte;
+            CargarReporte();
             _rutaInformeTxt = Path.ChangeExtension(rutaInforme, ".txt");
-            _streamEscritura = new StreamWriter(_rutaInformeTxt);
+            LeerDatosParametrosTxt();
         }
+        
+        public void LeerDatosParametrosTxt()
+        {
+            _streamReader = new StreamReader(_rutaInformeTxt);
+            //NUMERO PARAMETROS//_reporte.DataDefinition.ParameterFields.Count);
+
+        }
+       
+
         public void GeneraTxtParamentrosReporte()
         {
+
+            CargarReporte();
+
+            StreamWriter streamWriter = new StreamWriter(_rutaInformeTxt);
+
             foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
             {
-                _streamEscritura.WriteLine(string.Format("{0}|{1}|{2}", 
+                streamWriter.WriteLine(string.Format("{0}|{1}|{2}", 
                     datosDelParametro.ParameterFieldName, 
                     datosDelParametro.ParameterValueKind,
                     datosDelParametro.DiscreteOrRangeKind));
             }
-            _streamEscritura.Close();
+            streamWriter.Close();
         }
 
     }

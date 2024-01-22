@@ -17,7 +17,6 @@ namespace Capas
 {
     public partial class FormListados : Form
     {
-
         public FormListados()
         {
             InitializeComponent();
@@ -37,14 +36,14 @@ namespace Capas
 
         private void AnadirNodoPrincipal()
         {
-            string nombreNodoPrincipal = Path.GetFileName(NegocioRutaInformes.NodoPrincipalRutaInformes());
+            string nombreNodoPrincipal = Path.GetFileName(NegocioRutaDirectorioInformes.NodoPrincipalRutaInformes());
             treeViewListados.Nodes.Add(nombreNodoPrincipal);
         }
 
         private void CrearYAnadirNodosSubdirectoriosYReportes()
         {
             TreeNode nodoInformes = treeViewListados.Nodes[0];
-            var claveValorNombreRuta = NegocioRutaInformes.DiccionarioSubdirectoriosInformes();
+            var claveValorNombreRuta = NegocioRutaDirectorioInformes.DiccionarioSubdirectoriosInformes();
 
             foreach (KeyValuePair<string, string> subidorectoriosInformes in claveValorNombreRuta)
             {
@@ -76,7 +75,7 @@ namespace Capas
 
         private string ReporteSinExtension(string reporte)
         {
-            return Path.GetFileName(reporte).ToUpper();l
+            return Path.GetFileName(reporte).ToUpper();
         }
 
         #endregion
@@ -92,11 +91,11 @@ namespace Capas
             if (e.Node.Tag != null)
             {
                 var rutaReporte = e.Node.Tag.ToString();
-                if (Path.GetExtension(rutaReporte) == ".rpt") CrearInstanciaFormCrpViewer(rutaReporte).Show();
+                if (Path.GetExtension(rutaReporte) == ".rpt") CrearInstanciaFormParametrosReport(rutaReporte).Show();
             }
         }
 
-        internal FormParametrosReporte CrearInstanciaFormCrpViewer(string rutaReporte)
+        internal FormParametrosReporte CrearInstanciaFormParametrosReport(string rutaReporte)
         {
             return new FormParametrosReporte(rutaReporte);
         }

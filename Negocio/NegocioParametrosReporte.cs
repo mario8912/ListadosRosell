@@ -12,9 +12,9 @@ namespace Negocio
 {
     public static class NegocioParametrosReporte
     {
-        public static void GenerarTxtParamentros(ReportDocument reporte, string rutaReporte)
+        public static void GenerarTxtParamentros(string rutaReporte)
         { 
-            DatosParametrosReporte parametrosReporte = new DatosParametrosReporte(reporte, rutaReporte);
+            DatosParametrosReporte parametrosReporte = new DatosParametrosReporte(rutaReporte);
             parametrosReporte.GeneraTxtParamentrosReporte();
         }
     }

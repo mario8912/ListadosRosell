@@ -18,5 +18,10 @@ namespace Capas
             InitializeComponent();
             _rutaReporte = rutaReporte;
         }
+
+        private void FormParametrosReporte_Load(object sender, EventArgs e)
+        {
+            Negocio.NegocioParametrosReporte.GenerarTxtParamentros(_rutaReporte);
+        }
     }
 }

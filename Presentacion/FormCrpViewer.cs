@@ -12,31 +12,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Negocio;
+using CrystalDecisions.Data;
 
 namespace Capas
 {
     public partial class FormCrpViewer : Form
     {
-        private string _rutaReoprte;
+        private string _rutaReporte;
         public FormCrpViewer(string rutaReporte)
         {
             InitializeComponent();
-            _rutaReoprte = rutaReporte;
         }
 
         private void reportViewer_Load(object sender, EventArgs e)
         {
-            ReportDocument reporte = new ReportDocument();
+            /*ReportDocument reporte = new ReportDocument();
             reporte.Load(_rutaReoprte);
             
             //Parametros(reporte);
             
-            reportViewer.ReportSource = reporte;
+            reportViewer.ReportSource = reporte;*/
         }
 
         private void Parametros(ReportDocument reporte)
         {
-            NegocioParametrosReporte.GenerarTxtParamentros(reporte, _rutaReoprte);
+            NegocioParametrosReporte.GenerarTxtParamentros(_rutaReporte);
 
             ParameterRangeValue rangoRuta = new ParameterRangeValue();
             rangoRuta.StartValue = 23;
