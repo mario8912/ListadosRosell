@@ -1,12 +1,6 @@
-#DIRECTORIOS
+*.csproj*
+*.resx
 bin/
 obj/
 .vs/
 debug/
-
-#ARCHIVOS
-
-
-#EXTENSIONES
-*.csproj
-*.resx
