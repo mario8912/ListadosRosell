@@ -98,8 +98,9 @@ namespace Capas
 
         internal FormCrpViewer CrearInstanciaFormCrpViewer(string rutaReporte)
         {
-            return new FormCrpViewer(rutaReporte);
+            return new FormParametrosReporte(rutaReporte);
         }
+
         #endregion
 
     }

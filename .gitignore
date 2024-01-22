@@ -1,7 +1,12 @@
+#DIRECTORIOS
 bin/
 obj/
 .vs/
 debug/
 
+#ARCHIVOS
+
+
+#EXTENSIONES
 *.csproj
 *.resx

@@ -29,7 +29,7 @@ namespace Capas
             ReportDocument reporte = new ReportDocument();
             reporte.Load(_rutaReoprte);
             
-            Parametros(reporte);
+            //Parametros(reporte);
             
             reportViewer.ReportSource = reporte;
         }
