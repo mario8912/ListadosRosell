@@ -27,17 +27,11 @@ namespace Capas
 
         private void FormListados_Load(object sender, EventArgs e)
         {
-            RellenarArbolNodos();
-        }
-
-        
-        private void RellenarArbolNodos()
-        {
             AnadirNodoPrincipal();
             CrearYAnadirNodosSubdirectoriosYReportes();
         }
 
-        #region MIS MÉTODOS
+    #region MIS MÉTODOS
         private void AnadirNodoPrincipal()
         {
             string nombreNodoPrincipal = Path.GetFileName(NegocioRutaDirectorioInformes.NodoPrincipalRutaInformes());
@@ -53,6 +47,7 @@ namespace Capas
             {
                 TreeNode nodoSubdirectorio = new TreeNode(subidorectoriosInformes.Key);
                 nodoSubdirectorio.Tag = subidorectoriosInformes.Value;
+
                 nodoInformes.Nodes.Add(nodoSubdirectorio);
                 AnadirNodosReportes(nodoSubdirectorio);
             }
@@ -63,6 +58,7 @@ namespace Capas
             foreach (string reporte in Directory.GetFiles(nodoSubdirectorio.Tag.ToString()))
             {
                 Global.RutaReporte = reporte;
+
                 if (ComprobarExtensionRpt())
                 {
                     TreeNode nodoReporte = new TreeNode(ReporteSinExtension());
@@ -73,15 +69,10 @@ namespace Capas
         }
 
         #region FILTROS EXTENSIONES RPT
-        private bool ComprobarExtensionRpt()
-        {
-            return (Path.GetExtension(Global.RutaReporte) == ".rpt") ? true : false;
-        }
 
-        private string ReporteSinExtension()
-        {
-            return Path.GetFileName(Global.RutaReporte).ToUpper();
-        }
+        private static Func<bool> ComprobarExtensionRpt = () => Path.GetExtension(Global.RutaReporte) == ".rpt";
+
+        private static Func<string> ReporteSinExtension = () => Path.GetFileName(Global.RutaReporte).ToUpper();
         #endregion
 
         #endregion
@@ -89,22 +80,20 @@ namespace Capas
         #region EVENTOS
         private void treeViewListados_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            VerificarRptYLanzarReporte(e);
+            if (VerificarEtiqueta(e)) Global.RutaReporte = e.Node.Tag.ToString();
+
+            if (ComprobarExtensionRpt()) PruebaCrystalReportViewer().Show();
         }
 
-        private void VerificarRptYLanzarReporte(TreeNodeMouseClickEventArgs e)
+        private bool VerificarEtiqueta(TreeNodeMouseClickEventArgs e)
         {
-            if (e.Node.Tag != null)
-            {
-                var abrirReporte = e.Node.Tag.ToString();
-                if (Path.GetExtension(abrirReporte) == ".rpt")
-                {
-                    Global.RutaReporte = abrirReporte;
-                    PruebaCrystalReportViewer().Show();
-                }
-            }
+            return e.Node.Tag != null;
         }
 
+        
+        #endregion
+
+        #region INSTANCIAS
         private FormParametrosReporte CrearInstanciaFormParametrosReport()
         {
             return new FormParametrosReporte();
@@ -114,8 +103,6 @@ namespace Capas
         {
             return new FormCrpViewer();
         }
-
         #endregion
-
     }
 }
