@@ -8,6 +8,7 @@ namespace Datos
     {
         private string _rutaInformeTxt;
         private StreamReader _streamReader;
+        private StreamWriter _streamWriter);
         
         public DatosParametrosReporte(string rutaInforme) : base(rutaInforme) 
         {
@@ -20,25 +21,28 @@ namespace Datos
         {
             _streamReader = new StreamReader(_rutaInformeTxt);
             //NUMERO PARAMETROS//_reporte.DataDefinition.ParameterFields.Count);
-
         }
        
+        private void GenerarTxtParametrosTodosReportes()
+        {
+
+        }
 
         public void GeneraTxtParamentrosReporte()
         {
 
             CargarReporte();
 
-            StreamWriter streamWriter = new StreamWriter(_rutaInformeTxt);
+            _streamWriter = new StreamWriter(_rutaInformeTxt);
 
             foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
             {
-                streamWriter.WriteLine(string.Format("{0}|{1}|{2}", 
+                _streamWriter.WriteLine(string.Format("{0}|{1}|{2}", 
                     datosDelParametro.ParameterFieldName, 
                     datosDelParametro.ParameterValueKind,
                     datosDelParametro.DiscreteOrRangeKind));
             }
-            streamWriter.Close();
+            _streamWriter.Close();
         }
 
     }

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CrystalDecisions.CrystalReports.Engine;
+
 namespace Datos
 {
-    public class DatosReporte
+    public abstract class DatosReporte
     {
         internal string _rutaInforme;
         public ReportDocument _reporte;
@@ -21,5 +22,7 @@ namespace Datos
         {
             _reporte.Load(_rutaInforme);
         }
+
+        public abstract void ImprimirReporte();
     }
 }
