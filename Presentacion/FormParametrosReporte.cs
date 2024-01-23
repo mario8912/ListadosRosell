@@ -7,21 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Entidades;
 
 namespace Capas
 {
     public partial class FormParametrosReporte : Form
     {
-        private string _rutaReporte;
-        public FormParametrosReporte(string rutaReporte)
+        public FormParametrosReporte()
         {
             InitializeComponent();
-            _rutaReporte = rutaReporte;
         }
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            Negocio.NegocioParametrosReporte.GenerarTxtParamentros(_rutaReporte);
+            Negocio.NegocioParametrosReporte.GenerarTxtParamentros();
         }
     }
 }

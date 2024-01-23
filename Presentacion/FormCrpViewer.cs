@@ -12,40 +12,44 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Negocio;
-using CrystalDecisions.Data;
+using Entidades;
+using CrystalDecisions.ReportAppServer.Controllers;
 
 namespace Capas
 {
     public partial class FormCrpViewer : Form
     {
-        private string _rutaReporte;
-        public FormCrpViewer(string rutaReporte)
+        private ReportDocument _reporte;
+
+        public FormCrpViewer()
         {
-            _rutaReporte = rutaReporte;
             InitializeComponent();
         }
 
         private void crystalReportViewer1_Load(object sender, EventArgs e)
         {
-            ReportDocument reporte = new ReportDocument();
-            reporte.Load(_rutaReporte);
+            _reporte = new ReportDocument();
+            _reporte.Load(Global.RutaReporte);
 
             //Parametros(reporte);
 
-            crystalReportViewer1.ReportSource = reporte;
+            crystalReportViewer1.ReportSource = _reporte;
+
+            Refresh();
+            Show();
             //reporte.PrintToPrinter(1, true, 1, 1);
         }
 
-        private void Parametros(ReportDocument reporte)
+        private void Parametros()
         {
-            NegocioParametrosReporte.GenerarTxtParamentros(_rutaReporte);
+            NegocioParametrosReporte.GenerarTxtParamentros();
 
             ParameterRangeValue rangoRuta = new ParameterRangeValue();
             rangoRuta.StartValue = 23;
             rangoRuta.EndValue = 28;
 
-            reporte.SetParameterValue("Ruta", rangoRuta);
-            reporte.SetParameterValue("TipoCliente", "BAR");
+            _reporte.SetParameterValue("Ruta", rangoRuta);
+            _reporte.SetParameterValue("TipoCliente", "BAR");
 
             //int numeroParametros = reporte.ParameterFields.Count;
         }

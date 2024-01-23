@@ -9,5 +9,6 @@ namespace Entidades
     public static class Global
     {
         public static string RutaAplicacion = AppDomain.CurrentDomain.BaseDirectory;
+        public static string RutaReporte;
     }
 }

@@ -8,29 +8,28 @@ namespace Datos
      public  class DatosParametrosReporte : DatosReporte
     {
         private string _rutaInformeTxt;
-        private StreamReader _streamReader;
+        private string _rutaTodosParamentrosTxt;
+        //private StreamReader _streamReader;
         private StreamWriter _streamWriter;
-        private string _rutaTotalParametrosTxt;
+        
         
         public DatosParametrosReporte(string rutaInforme) : base(rutaInforme) 
         {
             CargarReporte();
             _rutaInformeTxt = Path.ChangeExtension(rutaInforme, ".txt");
-            //LeerDatosParametrosTxt();
-            GenerarTxtParametrosTodosReportes();
         }
         
-        public void LeerDatosParametrosTxt()
-        {
-            _streamReader = new StreamReader(_rutaInformeTxt);
-            //NUMERO PARAMETROS//_reporte.DataDefinition.ParameterFields.Count);
-        }
+        //public void LeerDatosParametrosTxt()
+        //{   
+        //    _streamReader = new StreamReader(_rutaInformeTxt);
+        //    //NUMERO PARAMETROS//_reporte.DataDefinition.ParameterFields.Count);
+        //}
        
-        private void GenerarTxtParametrosTodosReportes()
+        public void GenerarTxtParametrosTodosReportes()
         {
-            _rutaTotalParametrosTxt = Global.RutaAplicacion + "totalParametros1.txt";
+            _rutaTodosParamentrosTxt = Global.RutaAplicacion + "totalParametros1.txt";
 
-            _streamWriter = new StreamWriter(_rutaTotalParametrosTxt, true);
+            _streamWriter = new StreamWriter(_rutaTodosParamentrosTxt, true);
             
             foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
             {
@@ -44,7 +43,7 @@ namespace Datos
             _streamWriter.Close();
         }
 
-        public void GeneraTxtParamentrosReporte()
+        public void GenerarTxtParamentrosReporte()
         {
 
             CargarReporte();

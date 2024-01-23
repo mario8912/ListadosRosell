@@ -8,7 +8,7 @@ using CrystalDecisions.Shared;
 
 namespace Datos
 {
-    internal class ConexionReporte
+   /* internal class ConexionReporte
     {
         private string servidor;
         private string baseDeDatos;
@@ -20,5 +20,5 @@ namespace Datos
         }
 
 
-    }
+    }*/
 }
