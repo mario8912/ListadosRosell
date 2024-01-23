@@ -1,7 +1,8 @@
-#EXTENSIONES
+*.csproj*
+*.resx
 *.ini
+*.config
 
-#DIRECTORIOS
 packages/
 bin/
 obj/

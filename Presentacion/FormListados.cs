@@ -92,7 +92,7 @@ namespace Capas
             if (e.Node.Tag != null)
             {
                 var rutaReporte = e.Node.Tag.ToString();
-                if (Path.GetExtension(rutaReporte) == ".rpt") Abc(rutaReporte).Show();
+                if (Path.GetExtension(rutaReporte) == ".rpt") CrearInstanciaFormParametrosReport(rutaReporte).Show();
                 else MessageBox.Show("no rpt");
             }
         }

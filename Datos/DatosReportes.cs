@@ -7,7 +7,7 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace Datos
 {
-    public abstract class DatosReporte
+    public /*abstract*/ class DatosReporte
     {
         internal string _rutaInforme;
         public ReportDocument _reporte;
@@ -23,6 +23,6 @@ namespace Datos
             _reporte.Load(_rutaInforme);
         }
 
-        public abstract void ImprimirReporte();
+        //public abstract void ImprimirReporte();
     }
 }

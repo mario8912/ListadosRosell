@@ -33,7 +33,7 @@ namespace Capas
             //Parametros(reporte);
 
             crystalReportViewer1.ReportSource = reporte;
-            reporte.PrintToPrinter(1, true, 1, 1);
+            //reporte.PrintToPrinter(1, true, 1, 1);
         }
 
         private void Parametros(ReportDocument reporte)
