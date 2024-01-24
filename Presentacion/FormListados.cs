@@ -34,7 +34,7 @@ namespace Capas
     #region MIS MÉTODOS
         private void AnadirNodoPrincipal()
         {
-            string nombreNodoPrincipal = Path.GetFileName(NegocioRutaDirectorioInformes.NodoPrincipalRutaInformes());
+            string nombreNodoPrincipal = Path.GetFileName(Global.RutaDirectorioInformes.ToUpper());
             treeViewListados.Nodes.Add(nombreNodoPrincipal);
         }
 
