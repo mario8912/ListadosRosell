@@ -49,7 +49,7 @@
             this.ClientSize = new System.Drawing.Size(884, 661);
             this.Controls.Add(this.treeViewListados);
             this.Name = "FormListados";
-            this.Text = "FormListados";
+            this.Text = "Listados";
             this.Load += new System.EventHandler(this.FormListados_Load);
             this.ResumeLayout(false);
 

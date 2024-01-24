@@ -81,7 +81,26 @@ namespace Capas
         {
             if (VerificarEtiqueta(e)) Global.RutaReporte = e.Node.Tag.ToString();
 
-            if (ComprobarExtensionRpt()) CrearInstanciaFormParametrosReport();//.Show();
+            if (ComprobarExtensionRpt()) 
+            {
+                InterruptoEnableTrvListados();
+
+                Text = "Cargando " + ReporteSinExtension();
+                Cursor = Cursors.WaitCursor;
+                PruebaCrystalReportViewer().Show();
+                Cursor = Cursors.Default;
+                Text = "Listados";
+
+                InterruptoEnableTrvListados();
+            }
+            
+        }
+
+
+
+        private void InterruptoEnableTrvListados()
+        {
+            treeViewListados.Enabled = !treeViewListados.Enabled;
         }
 
         private readonly Func<TreeNodeMouseClickEventArgs, bool> VerificarEtiqueta = (e) => e.Node.Tag != null;
