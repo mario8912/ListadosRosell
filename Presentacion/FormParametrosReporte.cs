@@ -8,11 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Entidades;
+using Negocio;
 
 namespace Capas
 {
     public partial class FormParametrosReporte : Form
     {
+        
         public FormParametrosReporte()
         {
             InitializeComponent();
@@ -20,7 +22,8 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            Negocio.NegocioParametrosReporte.GenerarTxtParamentros();
+            MessageBox.Show(NegocioParametrosReporte.GenerarTxtParametrosTodos());
+            
         }
     }
 }

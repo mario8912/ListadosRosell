@@ -5,18 +5,18 @@ using System.IO;
 
 namespace Datos
 {
-     public  class DatosParametrosReporte : DatosReporte
+     public  class DatosParametrosReporte : InterfacceDatosReporte
     {
+        private ReportDocument _reporte;
         private string _rutaInformeTxt;
         private string _rutaTodosParamentrosTxt;
         //private StreamReader _streamReader;
         private StreamWriter _streamWriter;
         
-        
-        public DatosParametrosReporte(string rutaInforme) : base(rutaInforme) 
+        public DatosParametrosReporte() 
         {
             CargarReporte();
-            _rutaInformeTxt = Path.ChangeExtension(rutaInforme, ".txt");
+            _rutaInformeTxt = Path.ChangeExtension(Global.RutaReporte, ".txt");
         }
         
         //public void LeerDatosParametrosTxt()
@@ -25,22 +25,26 @@ namespace Datos
         //    //NUMERO PARAMETROS//_reporte.DataDefinition.ParameterFields.Count);
         //}
        
-        public void GenerarTxtParametrosTodosReportes()
+        public string GenerarTxtParametrosTodosReportes()
         {
             _rutaTodosParamentrosTxt = Global.RutaAplicacion + "totalParametros1.txt";
-
             _streamWriter = new StreamWriter(_rutaTodosParamentrosTxt, true);
-            
-            foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
-            {
-                _streamWriter.WriteLine(string.Format("{0}|{1}|{2}|{3}",
-                    Path.GetFileName(_rutaInforme),
-                    datosDelParametro.ParameterFieldName,
-                    datosDelParametro.ParameterValueKind,
-                    datosDelParametro.DiscreteOrRangeKind));
-            }
 
+            CargarReporte();
+            if(_reporte.IsLoaded)
+            {
+                foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
+                {
+                    _streamWriter.WriteLine(string.Format("{0}|{1}|{2}|{3}",
+                        Path.GetFileName(Global.RutaReporte),
+                        datosDelParametro.ParameterFieldName,
+                        datosDelParametro.ParameterValueKind,
+                        datosDelParametro.DiscreteOrRangeKind));
+                }
+            }
             _streamWriter.Close();
+
+            return "Cargado";
         }
 
         public void GenerarTxtParamentrosReporte()
@@ -58,6 +62,17 @@ namespace Datos
                     datosDelParametro.DiscreteOrRangeKind));
             }
             _streamWriter.Close();
+        }
+
+        public void CargarReporte()
+        {
+            _reporte = new ReportDocument();
+            _reporte.Load(Global.RutaReporte);
+        }
+
+        public void ImprimirReporte()
+        {
+            throw new NotImplementedException();
         }
 
     }

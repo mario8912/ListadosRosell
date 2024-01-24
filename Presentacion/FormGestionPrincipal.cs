@@ -30,7 +30,6 @@ namespace Capas
 
             return formularioListados;
         }
-
         
         internal void EstablecerHijoMdi(Form formulario)
         {

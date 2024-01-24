@@ -1,9 +1,15 @@
+#EXTENSIONES
 *.resx
 *.ini
 *.config
 
+#DIRECTORIOS
 packages/
 bin/
 obj/
 .vs/
 debug/
+
+#ARCHIVOS
+
+#EXCEPCIONES

@@ -70,9 +70,8 @@ namespace Capas
 
         #region FILTROS EXTENSIONES RPT
 
-        private static Func<bool> ComprobarExtensionRpt = () => Path.GetExtension(Global.RutaReporte) == ".rpt";
-
-        private static Func<string> ReporteSinExtension = () => Path.GetFileName(Global.RutaReporte).ToUpper();
+        private readonly Func<bool> ComprobarExtensionRpt = () => Path.GetExtension(Global.RutaReporte) == ".rpt";
+        private readonly Func<string> ReporteSinExtension = () => Path.GetFileName(Global.RutaReporte).ToUpper();
         #endregion
 
         #endregion
@@ -82,21 +81,19 @@ namespace Capas
         {
             if (VerificarEtiqueta(e)) Global.RutaReporte = e.Node.Tag.ToString();
 
-            if (ComprobarExtensionRpt()) PruebaCrystalReportViewer().Show();
+            if (ComprobarExtensionRpt()) CrearInstanciaFormParametrosReport();//.Show();
         }
 
-        private bool VerificarEtiqueta(TreeNodeMouseClickEventArgs e)
-        {
-            return e.Node.Tag != null;
-        }
+        private readonly Func<TreeNodeMouseClickEventArgs, bool> VerificarEtiqueta = (e) => e.Node.Tag != null;
 
-        
         #endregion
 
         #region INSTANCIAS
-        private FormParametrosReporte CrearInstanciaFormParametrosReport()
+        private  void CrearInstanciaFormParametrosReport()
         {
-            return new FormParametrosReporte();
+            //return new FormParametrosReporte();
+            var a = NegocioParametrosReporte.GenerarTxtParametrosTodos();
+            MessageBox.Show(a);
         }
 
         private FormCrpViewer PruebaCrystalReportViewer()
