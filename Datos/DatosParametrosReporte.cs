@@ -5,25 +5,17 @@ using System.IO;
 
 namespace Datos
 {
-     public  class DatosParametrosReporte : InterfacceDatosReporte
+    public class DatosParametrosReporte : DatosReporte
     {
         private ReportDocument _reporte;
-        private string _rutaInformeTxt;
-        private string _rutaTodosParamentrosTxt;
-        //private StreamReader _streamReader;
+        private string _rutaInformeTxt, _rutaTodosParamentrosTxt;
         private StreamWriter _streamWriter;
-        
-        public DatosParametrosReporte() 
+
+        public DatosParametrosReporte(string rutaReporte) : base(rutaReporte)
         {
             CargarReporte();
             _rutaInformeTxt = Path.ChangeExtension(Global.RutaReporte, ".txt");
         }
-        
-        //public void LeerDatosParametrosTxt()
-        //{   
-        //    _streamReader = new StreamReader(_rutaInformeTxt);
-        //    //NUMERO PARAMETROS//_reporte.DataDefinition.ParameterFields.Count);
-        //}
        
         public string GenerarTxtParametrosTodosReportes()
         {
@@ -64,16 +56,7 @@ namespace Datos
             _streamWriter.Close();
         }
 
-        public void CargarReporte()
-        {
-            _reporte = new ReportDocument();
-            _reporte.Load(Global.RutaReporte);
-        }
-
-        public void ImprimirReporte()
-        {
-            throw new NotImplementedException();
-        }
+        
 
     }
 }

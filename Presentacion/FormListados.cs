@@ -85,17 +85,20 @@ namespace Capas
             {
                 InterruptoEnableTrvListados();
 
-                Text = "Cargando " + ReporteSinExtension();
+                Text = string.Format("Cargando {0}...", ReporteSinExtension());
                 Cursor = Cursors.WaitCursor;
+<<<<<<< HEAD
 
                 CrearInstanciaFormParametrosReport().Show();
 
+=======
+                CrearInstanciaFormParametrosReport().Show();
+>>>>>>> form-parametros
                 Cursor = Cursors.Default;
                 Text = "Listados";
 
                 InterruptoEnableTrvListados();
             }
-            
         }
 
         private void InterruptoEnableTrvListados()

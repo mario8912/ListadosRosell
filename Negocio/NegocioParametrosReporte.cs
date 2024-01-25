@@ -17,5 +17,10 @@ namespace Negocio
             DatosParametrosReporte todosParametrosReporte = new DatosParametrosReporte();
             return todosParametrosReporte.GenerarTxtParametrosTodosReportes();
         }
+
+        public static void CargarParametrosReporte()
+        {
+
+        }
     }
 }
