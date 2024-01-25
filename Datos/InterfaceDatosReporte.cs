@@ -6,8 +6,7 @@ namespace Datos
 {
     public interface InterfaceDatosReporte
     {
-        void CargarReporte();
-        ReportDocument GetReporte();
+        ReportDocument CrearNewReporte();
         void ImprimirReporte();
         string GetNombreReporte();
         string GetRutaReporte();
