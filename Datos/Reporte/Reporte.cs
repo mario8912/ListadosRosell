@@ -1,35 +1,30 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using System;
-using System.Collections.Generic;
+﻿
+using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Datos
 {
-    public class DatosReporte : InterfaceDatosReporte
+    public class Reporte : ReportDocument, InterfaceDatosReporte
     {
         private string _rutaReporte;
         private string _nombreReporte;
+        private ReportDocument _reporte;
 
-        internal DatosReporte(string rutaReporte)
+        public Reporte(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
             _nombreReporte = Path.GetFileName(rutaReporte);
+            CargarReporte();
         }
-
         
-        public ReportDocument CrearNewReporte()
+        private void CargarReporte()
         {
-            ReportDocument reporte = new ReportDocument();
-            reporte.Load(_rutaReporte);
-            return reporte;
+            _reporte.Load(_rutaReporte);
         }
 
         public void ImprimirReporte()
         {
-            throw new NotImplementedException();
+            _reporte.PrintToPrinter(1, true, 1, 1);
         }
 
         public string GetNombreReporte()

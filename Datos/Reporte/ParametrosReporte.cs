@@ -1,20 +1,19 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using Entidades;
-using System;
 using System.IO;
+using Entidades;
 
 namespace Datos
 {
-    public class DatosParametrosReporte : DatosReporte
+    public class ParametrosReporte : Reporte
     {
-        private ReportDocument _reporte;
+        private Reporte _reporte;
         private string _rutaInformeTxt, _rutaTodosParamentrosTxt;
         private StreamWriter _streamWriter;
 
-        public DatosParametrosReporte(string rutaReporte) : base(rutaReporte)
+        public ParametrosReporte(string rutaReporte) : base(rutaReporte)
         {
-            CargarReporte();
-            _rutaInformeTxt = Path.ChangeExtension(Global.RutaReporte, ".txt");
+            _reporte = new Reporte(rutaReporte);
+            _rutaInformeTxt = Path.ChangeExtension(rutaReporte, ".txt");
         }
        
         public string GenerarTxtParametrosTodosReportes()
@@ -22,13 +21,12 @@ namespace Datos
             _rutaTodosParamentrosTxt = Global.RutaAplicacion + "totalParametros1.txt";
             _streamWriter = new StreamWriter(_rutaTodosParamentrosTxt, true);
 
-            CargarReporte();
             if(_reporte.IsLoaded)
             {
                 foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
                 {
                     _streamWriter.WriteLine(string.Format("{0}|{1}|{2}|{3}",
-                        Path.GetFileName(Global.RutaReporte),
+                        Path.GetFileName(GetRutaReporte()),
                         datosDelParametro.ParameterFieldName,
                         datosDelParametro.ParameterValueKind,
                         datosDelParametro.DiscreteOrRangeKind));
@@ -41,9 +39,6 @@ namespace Datos
 
         public void GenerarTxtParamentrosReporte()
         {
-
-            CargarReporte();
-
             _streamWriter = new StreamWriter(_rutaInformeTxt);
 
             foreach (ParameterFieldDefinition datosDelParametro in _reporte.DataDefinition.ParameterFields)
@@ -55,8 +50,5 @@ namespace Datos
             }
             _streamWriter.Close();
         }
-
-        
-
     }
 }

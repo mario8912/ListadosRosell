@@ -1,6 +1,6 @@
 ﻿namespace Capas
 {
-    partial class FormListados
+    partial class ReportViewer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,35 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.treeViewListados = new System.Windows.Forms.TreeView();
+            this.crystalReportViewer1 = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
             this.SuspendLayout();
             // 
-            // treeViewListados
+            // crystalReportViewer1
             // 
-            this.treeViewListados.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeViewListados.Location = new System.Drawing.Point(12, 12);
-            this.treeViewListados.Name = "treeViewListados";
-            this.treeViewListados.Size = new System.Drawing.Size(860, 637);
-            this.treeViewListados.TabIndex = 0;
-            this.treeViewListados.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewListados_NodeMouseDoubleClick);
+            this.crystalReportViewer1.ActiveViewIndex = -1;
+            this.crystalReportViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.crystalReportViewer1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.crystalReportViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.crystalReportViewer1.Location = new System.Drawing.Point(0, 0);
+            this.crystalReportViewer1.Name = "crystalReportViewer1";
+            this.crystalReportViewer1.Size = new System.Drawing.Size(800, 450);
+            this.crystalReportViewer1.TabIndex = 0;
+            this.crystalReportViewer1.Load += new System.EventHandler(this.crystalReportViewer1_Load);
             // 
-            // FormListados
+            // FormCrpViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 661);
-            this.Controls.Add(this.treeViewListados);
-            this.Name = "FormListados";
-            this.Text = "Listados";
-            this.Load += new System.EventHandler(this.FormListados_Load);
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.crystalReportViewer1);
+            this.Name = "FormCrpViewer";
+            this.Text = "FormCrpViewer";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeViewListados;
+        private CrystalDecisions.Windows.Forms.CrystalReportViewer crystalReportViewer1;
     }
 }

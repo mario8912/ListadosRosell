@@ -1,6 +1,6 @@
 ﻿namespace Capas
 {
-    partial class FormParametrosReporte
+    partial class FrmParametros
     {
         /// <summary>
         /// Required designer variable.
@@ -28,20 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-<<<<<<< HEAD
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.SuspendLayout();
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(146, 12);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(81, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Vista previa";
-            this.checkBox1.UseVisualStyleBackColor = true;
-=======
             this.chkBoxVistaPrevia = new System.Windows.Forms.CheckBox();
             this.btnAceptar = new System.Windows.Forms.Button();
             this.grpBoxParametros = new System.Windows.Forms.GroupBox();
@@ -69,6 +55,7 @@
             this.btnAceptar.TabIndex = 1;
             this.btnAceptar.Text = "Aceptar";
             this.btnAceptar.UseVisualStyleBackColor = true;
+            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
             // grpBoxParametros
             // 
@@ -87,21 +74,16 @@
             this.splitContainer1.Size = new System.Drawing.Size(770, 378);
             this.splitContainer1.SplitterDistance = 375;
             this.splitContainer1.TabIndex = 0;
->>>>>>> form-parametros
             // 
-            // FormParametrosReporte
+            // Parametros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-<<<<<<< HEAD
-            this.Controls.Add(this.checkBox1);
-=======
             this.Controls.Add(this.grpBoxParametros);
             this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.chkBoxVistaPrevia);
->>>>>>> form-parametros
-            this.Name = "FormParametrosReporte";
+            this.Name = "Parametros";
             this.Text = "FormParametrosReporte";
             this.Load += new System.EventHandler(this.FormParametrosReporte_Load);
             this.grpBoxParametros.ResumeLayout(false);
@@ -114,13 +96,12 @@
 
         #endregion
 
-<<<<<<< HEAD
+
         private System.Windows.Forms.CheckBox checkBox1;
-=======
+
         private System.Windows.Forms.CheckBox chkBoxVistaPrevia;
         private System.Windows.Forms.Button btnAceptar;
         private System.Windows.Forms.GroupBox grpBoxParametros;
         private System.Windows.Forms.SplitContainer splitContainer1;
->>>>>>> form-parametros
     }
 }

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
 
 namespace Datos
 {
-  
+    public interface InterfacceDatosReporte
+    {
+         void CargarReporte();
+         void ImprimirReporte();
+    }
 }

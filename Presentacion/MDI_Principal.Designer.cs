@@ -1,6 +1,6 @@
 ﻿namespace Capas
 {
-    partial class FormGestionPrincipal
+    partial class MDI_Principal
     {
         /// <summary>
         /// Required designer variable.

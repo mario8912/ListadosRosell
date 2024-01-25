@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace Capas
 {
-    public partial class FormGestionPrincipal : Form
+    public partial class MDI_Principal : Form
     {
 
 
-        public FormGestionPrincipal()
+        public MDI_Principal()
         {
             InitializeComponent();
         }
@@ -26,9 +26,9 @@ namespace Capas
         }
 
         #region MIS MÉTODOS
-        internal FormListados CrearInstanciaFormListados()
+        internal Listados CrearInstanciaFormListados()
         {
-            FormListados formularioListados = new FormListados();
+            Listados formularioListados = new Listados();
             EstablecerHijoMdi(formularioListados);
 
             return formularioListados;

@@ -40,6 +40,26 @@
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
@@ -50,7 +70,6 @@
       <HintPath>packages\CrystalReports.TemplateEngine.13.0.4003\lib\net40\CrystalDecisions.CrystalReports.TemplateEngine.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CrystalDecisions.Data.AdoDotNetInterop, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <HintPath>packages\CrystalReports.ReportAppServer.ClientDoc.13.0.4003\lib\net40\CrystalDecisions.ReportAppServer.ClientDoc.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -125,43 +144,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormCrpViewer.cs">
+    <Compile Include="Reporte\ReportViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormCrpViewer.Designer.cs">
-      <DependentUpon>FormCrpViewer.cs</DependentUpon>
+    <Compile Include="Reporte\ReportViewer.Designer.cs">
+      <DependentUpon>ReportViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormGestionPrincipal.cs">
+    <Compile Include="MDI_Principal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGestionPrincipal.Designer.cs">
-      <DependentUpon>FormGestionPrincipal.cs</DependentUpon>
+    <Compile Include="MDI_Principal.Designer.cs">
+      <DependentUpon>MDI_Principal.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormListados.cs">
+    <Compile Include="Listados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormListados.Designer.cs">
-      <DependentUpon>FormListados.cs</DependentUpon>
+    <Compile Include="Listados.Designer.cs">
+      <DependentUpon>Listados.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormParametrosReporte.cs">
+    <Compile Include="Reporte\FrmParametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormParametrosReporte.Designer.cs">
-      <DependentUpon>FormParametrosReporte.cs</DependentUpon>
+    <Compile Include="Reporte\FrmParametros.Designer.cs">
+      <DependentUpon>FrmParametros.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormCrpViewer.resx">
-      <DependentUpon>FormCrpViewer.cs</DependentUpon>
+    <EmbeddedResource Include="Reporte\ReportViewer.resx">
+      <DependentUpon>ReportViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGestionPrincipal.resx">
-      <DependentUpon>FormGestionPrincipal.cs</DependentUpon>
+    <EmbeddedResource Include="MDI_Principal.resx">
+      <DependentUpon>MDI_Principal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormListados.resx">
-      <DependentUpon>FormListados.cs</DependentUpon>
+    <EmbeddedResource Include="Listados.resx">
+      <DependentUpon>Listados.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormParametrosReporte.resx">
-      <DependentUpon>FormParametrosReporte.cs</DependentUpon>
+    <EmbeddedResource Include="Reporte\FormParametrosReporte.resx">
+      <DependentUpon>FrmParametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -187,6 +206,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Entidades\Entidades.csproj">
       <Project>{e098a814-37d6-47e6-a042-12e1bde600dc}</Project>
       <Name>Entidades</Name>
@@ -195,9 +217,6 @@
       <Project>{69d3b05b-f544-4b06-bd91-495d5c22a88f}</Project>
       <Name>Negocio</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
