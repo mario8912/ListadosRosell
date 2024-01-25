@@ -87,7 +87,9 @@ namespace Capas
 
                 Text = "Cargando " + ReporteSinExtension();
                 Cursor = Cursors.WaitCursor;
-                PruebaCrystalReportViewer().Show();
+
+                CrearInstanciaFormParametrosReport().Show();
+
                 Cursor = Cursors.Default;
                 Text = "Listados";
 
@@ -95,8 +97,6 @@ namespace Capas
             }
             
         }
-
-
 
         private void InterruptoEnableTrvListados()
         {
@@ -108,11 +108,9 @@ namespace Capas
         #endregion
 
         #region INSTANCIAS
-        private  void CrearInstanciaFormParametrosReport()
+        private FormParametrosReporte CrearInstanciaFormParametrosReport()
         {
-            //return new FormParametrosReporte();
-            var a = NegocioParametrosReporte.GenerarTxtParametrosTodos();
-            MessageBox.Show(a);
+            return new FormParametrosReporte();
         }
 
         private FormCrpViewer PruebaCrystalReportViewer()

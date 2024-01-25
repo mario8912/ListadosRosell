@@ -22,7 +22,6 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            MessageBox.Show(NegocioParametrosReporte.GenerarTxtParametrosTodos());
             
         }
     }
