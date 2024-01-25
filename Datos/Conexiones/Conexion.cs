@@ -54,9 +54,7 @@ namespace Datos
 
         public static Conexion ComprobarConexion()
         {
-            if (conexion1 == null) conexion1 = new Conexion();
-            //return conexion1 == null ? new Conexion() : null;
-            return conexion1;
+            return conexion1 == null ? new Conexion() : null;
         }
     }
 

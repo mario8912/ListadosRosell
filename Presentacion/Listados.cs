@@ -67,7 +67,7 @@ namespace Capas
                 _rutaReporte = e.Node.Tag.ToString();
 
                 FormatoCargaFomrulario();
-                FormParametrosReporte().Show();
+                FormParametrosReporte();
                 FormatoPostCargaFormulario();
             }
         }
@@ -86,9 +86,9 @@ namespace Capas
             treeViewListados.Enabled = !treeViewListados.Enabled;
         }
 
-        private FrmParametros FormParametrosReporte()
+        private void FormParametrosReporte()
         {
-            return new FrmParametros(_rutaReporte);
+            new FrmParametros(_rutaReporte).Show();
         }
 
         private void FormatoPostCargaFormulario()
