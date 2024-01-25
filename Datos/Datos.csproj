@@ -46,6 +46,7 @@
     <Compile Include="Conexiones\Conexion.cs" />
     <Compile Include="Conexiones\ConexionReporte.cs" />
     <Compile Include="DatosParametrosReporte.cs" />
+    <Compile Include="DatosReporte.cs" />
     <Compile Include="InterfaceDatosReporte.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

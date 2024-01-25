@@ -8,19 +8,14 @@ namespace Negocio
     {
         public static void GenerarTxtParamentros()
         {
-            DatosParametrosReporte parametrosReporte = new DatosParametrosReporte();
+            DatosParametrosReporte parametrosReporte = new DatosParametrosReporte("");
             parametrosReporte.GenerarTxtParamentrosReporte();
         }
 
         public static string GenerarTxtParametrosTodos()
         {
-            DatosParametrosReporte todosParametrosReporte = new DatosParametrosReporte();
+            DatosParametrosReporte todosParametrosReporte = new DatosParametrosReporte("");
             return todosParametrosReporte.GenerarTxtParametrosTodosReportes();
-        }
-
-        public static void CargarParametrosReporte()
-        {
-
         }
     }
 }

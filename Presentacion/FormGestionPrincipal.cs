@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,8 @@ namespace Capas
 {
     public partial class FormGestionPrincipal : Form
     {
+
+
         public FormGestionPrincipal()
         {
             InitializeComponent();
@@ -35,7 +38,6 @@ namespace Capas
         {
             formulario.MdiParent = this;
         }
-
         #endregion
     }
 }
