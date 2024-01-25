@@ -19,17 +19,13 @@ namespace Datos
             _nombreReporte = Path.GetFileName(rutaReporte);
         }
 
-        public void CargarReporte()
-        {
-
-        }
-
-        public ReportDocument GetReporte()
+        
+        public ReportDocument CrearNewReporte()
         {
             ReportDocument reporte = new ReportDocument();
+            reporte.Load(_rutaReporte);
             return reporte;
         }
-
 
         public void ImprimirReporte()
         {
@@ -38,12 +34,12 @@ namespace Datos
 
         public string GetNombreReporte()
         {
-            return "";
+            return _nombreReporte;
         }
 
         public string GetRutaReporte()
         {
-            return "";
+            return _rutaReporte;
         }
     }
 }
