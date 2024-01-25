@@ -76,7 +76,7 @@ namespace Capas
 
         private void FormatoCargaFomrulario()
         {
-            Text = string.Format("Cargando {0}...", ReporteSinExtension());
+            Text = string.Format("Cargando {0}... ", ReporteSinExtension());
             Cursor = Cursors.WaitCursor;
             InterruptorEnabled();
         }
@@ -88,7 +88,7 @@ namespace Capas
 
         private void FormParametrosReporte()
         {
-            new FrmParametros(_rutaReporte).Show();
+            new Parametros(_rutaReporte).ShowDialog();
         }
 
         private void FormatoPostCargaFormulario()

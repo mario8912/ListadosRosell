@@ -162,11 +162,11 @@
     <Compile Include="Listados.Designer.cs">
       <DependentUpon>Listados.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormularioReporte\FrmParametros.cs">
+    <Compile Include="FormularioReporte\Parametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormularioReporte\FrmParametros.Designer.cs">
-      <DependentUpon>FrmParametros.cs</DependentUpon>
+    <Compile Include="FormularioReporte\Parametros.Designer.cs">
+      <DependentUpon>Parametros.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,7 +180,7 @@
       <DependentUpon>Listados.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormularioReporte\FormParametrosReporte.resx">
-      <DependentUpon>FrmParametros.cs</DependentUpon>
+      <DependentUpon>Parametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -15,6 +15,7 @@ namespace Presentacion
         [STAThread]
         static void Main()
         {
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MDI_Principal());

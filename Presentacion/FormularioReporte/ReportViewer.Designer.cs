@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            
+            this.rptViewer = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
             this.SuspendLayout();
             // 
             // rptViewer
             // 
-            this.rptViewer = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
             this.rptViewer.ActiveViewIndex = -1;
             this.rptViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rptViewer.Cursor = System.Windows.Forms.Cursors.Default;

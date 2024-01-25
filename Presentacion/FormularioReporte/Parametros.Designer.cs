@@ -1,6 +1,6 @@
 ﻿namespace Capas
 {
-    partial class FrmParametros
+    partial class Parametros
     {
         /// <summary>
         /// Required designer variable.

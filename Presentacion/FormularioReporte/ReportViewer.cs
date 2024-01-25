@@ -1,16 +1,13 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
-using CrystalDecisions.Windows.Forms;
-using System;
+﻿using System;
 using System.Windows.Forms;
 using Negocio;
+using Entidades;
 
 namespace Capas
 {
     public partial class ReportViewer : Form
     {
         private string _rutaReporte;
-
         public ReportViewer(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
@@ -21,6 +18,7 @@ namespace Capas
         {
             rptViewer.ReportSource = NegocioReporte.Reporte(_rutaReporte);
             Refresh();
+            Show();
         }
 
         /*private void Parametros()

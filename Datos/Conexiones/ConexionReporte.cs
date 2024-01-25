@@ -12,17 +12,19 @@ namespace Datos
 {
     public class ConexionReporte
     {
-        private const string servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+        private const string servidor = @"SERVER2017";
         private const string baseDeDatos = "ROSELL";
         private string cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection = True;", servidor, baseDeDatos);
         private ReportDocument _reporte;
         private TableLogOnInfo _conexionInfo;
+
         private SqlConnection _conexion;
 
         public ConexionReporte(ReportDocument reporte)
         {
             _reporte = reporte;
             if(ComprobarConexion()) ConectarReporte();
+
             _conexion.Close();
         }   
 
@@ -40,7 +42,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw (ex);
             }
         }
 
