@@ -144,10 +144,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Reporte\ReportViewer.cs">
+    <Compile Include="FormularioReporte\ReportViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reporte\ReportViewer.Designer.cs">
+    <Compile Include="FormularioReporte\ReportViewer.Designer.cs">
       <DependentUpon>ReportViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="MDI_Principal.cs">
@@ -162,15 +162,15 @@
     <Compile Include="Listados.Designer.cs">
       <DependentUpon>Listados.cs</DependentUpon>
     </Compile>
-    <Compile Include="Reporte\FrmParametros.cs">
+    <Compile Include="FormularioReporte\FrmParametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reporte\FrmParametros.Designer.cs">
+    <Compile Include="FormularioReporte\FrmParametros.Designer.cs">
       <DependentUpon>FrmParametros.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Reporte\ReportViewer.resx">
+    <EmbeddedResource Include="FormularioReporte\ReportViewer.resx">
       <DependentUpon>ReportViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MDI_Principal.resx">
@@ -179,7 +179,7 @@
     <EmbeddedResource Include="Listados.resx">
       <DependentUpon>Listados.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reporte\FormParametrosReporte.resx">
+    <EmbeddedResource Include="FormularioReporte\FormParametrosReporte.resx">
       <DependentUpon>FrmParametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

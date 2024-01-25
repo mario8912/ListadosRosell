@@ -1,4 +1,4 @@
-﻿
+﻿using CrystalDecisions.Shared;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
 
@@ -8,7 +8,7 @@ namespace Datos
     {
         private string _rutaReporte;
         private string _nombreReporte;
-        private ReportDocument _reporte;
+        private ReportDocument _reporte = new ReportDocument();
 
         public Reporte(string rutaReporte)
         {
@@ -20,6 +20,12 @@ namespace Datos
         private void CargarReporte()
         {
             _reporte.Load(_rutaReporte);
+            ConectarReporte();
+        }
+
+        public void ConectarReporte()
+        {
+            new ConexionReporte(_reporte);
         }
 
         public void ImprimirReporte()
@@ -36,5 +42,12 @@ namespace Datos
         {
             return _rutaReporte;
         }
+
+        public ReportDocument GetReporte() 
+        {
+            return _reporte;
+        }
+
+        
     }
 }

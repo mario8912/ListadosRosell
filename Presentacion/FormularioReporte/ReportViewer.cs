@@ -4,25 +4,23 @@ using CrystalDecisions.Windows.Forms;
 using System;
 using System.Windows.Forms;
 using Negocio;
-using Entidades;
 
 namespace Capas
 {
     public partial class ReportViewer : Form
     {
-        private ReportDocument _reporte;
+        private string _rutaReporte;
 
         public ReportViewer(string rutaReporte)
         {
+            _rutaReporte = rutaReporte;
             InitializeComponent();
         }
 
-        private void crystalReportViewer1_Load(object sender, EventArgs e)
+        private void ReportViewer_Load(object sender, EventArgs e)
         {
-            _reporte = new ReportDocument();
-            _reporte.Load("");
-
-            crystalReportViewer1.ReportSource = _reporte;
+            rptViewer.ReportSource = NegocioReporte.Reporte(_rutaReporte);
+            Refresh();
         }
 
         /*private void Parametros()
