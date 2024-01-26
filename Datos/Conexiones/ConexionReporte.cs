@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using CrystalDecisions.CrystalReports.Engine;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
+using System;
+using System.Data.SqlClient;
 
 namespace Datos
 {
     public class ConexionReporte
     {
-        private const string servidor = @"SERVER2017";
+        private const string servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+        //private const string servidor = @"SERVER2017";
         private const string baseDeDatos = "ROSELL";
         private string cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection = True;", servidor, baseDeDatos);
         private ReportDocument _reporte;
@@ -42,7 +38,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw (ex);
+                throw ex;
             }
         }
 
@@ -52,7 +48,7 @@ namespace Datos
             _conexionInfo.ConnectionInfo.ServerName = servidor;
             _conexionInfo.ConnectionInfo.DatabaseName = baseDeDatos;
             _conexionInfo.ConnectionInfo.IntegratedSecurity = true;
-
+            
             Tables tablas = _reporte.Database.Tables;
 
             foreach (Table tabla in tablas)

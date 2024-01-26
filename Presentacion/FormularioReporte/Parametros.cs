@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using Entidades;
 using Negocio;
 
 namespace Capas
@@ -25,7 +24,12 @@ namespace Capas
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (chkBoxVistaPrevia.Checked) new ReportViewer(_rutaReporte).Show();
+            if (chkBoxVistaPrevia.Checked)
+            {
+                ReportViewer reportViewer = new ReportViewer(_rutaReporte);
+                reportViewer.MdiParent = MDI_Principal.InstanciaMdiPrincipal;
+                reportViewer.Show();
+            }
             else NegocioReporte.ImprimirReporte(_rutaReporte);
 
             Close();

@@ -1,10 +1,9 @@
-﻿using CrystalDecisions.Shared;
-using CrystalDecisions.CrystalReports.Engine;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
 
 namespace Datos
 {
-    public class Reporte : ReportDocument, InterfaceDatosReporte
+    public class Reporte : ReportDocument, IReporte
     {
         private string _rutaReporte;
         private string _nombreReporte;
@@ -30,8 +29,7 @@ namespace Datos
 
         public void ImprimirReporte()
         {
-            _reporte.SetParameterValue("numregistros", 100);
-            _reporte.SetParameterValue("cliente", 100);
+            _reporte.SetParameterValue("numRegistros", 20);
             _reporte.PrintToPrinter(1, true, 1, 1);
         }
 

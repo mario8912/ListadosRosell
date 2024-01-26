@@ -1,6 +1,4 @@
-﻿using CrystalDecisions.ReportAppServer;
-using Datos;
-using Entidades;
+﻿using Datos;
 
 
 namespace Negocio

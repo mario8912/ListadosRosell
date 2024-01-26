@@ -1,5 +1,4 @@
-﻿
-using CrystalDecisions.CrystalReports.Engine;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using Datos;
 
 namespace Negocio
@@ -13,8 +12,7 @@ namespace Negocio
 
         public static void ImprimirReporte(string rutaReporte)
         {
-            Reporte reporte = new Reporte(rutaReporte);
-            reporte.ImprimirReporte();
+            new Reporte(rutaReporte).ImprimirReporte();
         }
     }
 }

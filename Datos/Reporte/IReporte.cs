@@ -2,7 +2,7 @@
 
 namespace Datos
 {
-    public interface InterfaceDatosReporte
+    public interface IReporte
     {
         void ConectarReporte();
         void ImprimirReporte();

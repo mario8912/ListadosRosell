@@ -1,6 +1,6 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using System.IO;
 using Entidades;
+using System.IO;
 
 namespace Datos
 {
