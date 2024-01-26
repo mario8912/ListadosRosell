@@ -7,9 +7,8 @@ namespace Datos
 {
     public class ConexionReporte
     {
-        private const string servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
         //private const string servidor = @"SERVER2017";
-        private const string baseDeDatos = "ROSELL";
+        private const string baseDeDatos = "ROSELL2022";
         private string cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection = True;", servidor, baseDeDatos);
         private ReportDocument _reporte;
         private TableLogOnInfo _conexionInfo;
