@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Negocio;
 using Entidades;
+using System.Runtime.InteropServices;
 
 namespace Capas
 {
@@ -9,7 +10,7 @@ namespace Capas
     {
         private string _rutaReporte;
         public ReportViewer(string rutaReporte)
-        {
+        {   
             _rutaReporte = rutaReporte;
             InitializeComponent();
         }
@@ -17,7 +18,6 @@ namespace Capas
         private void ReportViewer_Load(object sender, EventArgs e)
         {
             rptViewer.ReportSource = NegocioReporte.Reporte(_rutaReporte);
-            Refresh();
             Show();
         }
 
