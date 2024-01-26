@@ -30,6 +30,8 @@ namespace Datos
 
         public void ImprimirReporte()
         {
+            _reporte.SetParameterValue("numregistros", 100);
+            _reporte.SetParameterValue("cliente", 100);
             _reporte.PrintToPrinter(1, true, 1, 1);
         }
 
