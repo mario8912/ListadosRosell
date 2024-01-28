@@ -6,17 +6,27 @@ namespace Capas
 {
     public partial class ReportViewer : Form
     {
-        private string _rutaReporte;
+        private readonly string _rutaReporte;
+
         public ReportViewer(string rutaReporte)
         {   
             _rutaReporte = rutaReporte;
             InitializeComponent();
+
+            try
+            {
+                visorReporte.ReportSource = NegocioReporte.Reporte(_rutaReporte);
+            }
+            catch (Exception excepcion)
+            {
+                MessageBox.Show("Se ha producido un error: " + excepcion.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CierreAsincrono();
+            }
         }
 
-        private void ReportViewer_Load_1(object sender, EventArgs e)
+        private void CierreAsincrono()
         {
-            visorReporte.ReportSource = NegocioReporte.Reporte(_rutaReporte);
-            Show();
+            BeginInvoke(new MethodInvoker(Close));
         }
     }
 }

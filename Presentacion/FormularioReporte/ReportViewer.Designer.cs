@@ -31,7 +31,6 @@ namespace Capas
         private void InitializeComponent()
         {
             this.visorReporte = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
-
             this.SuspendLayout();
             // 
             // visorReporte
@@ -50,7 +49,6 @@ namespace Capas
             this.ClientSize = new System.Drawing.Size(854, 509);
             this.Controls.Add(this.visorReporte);
             this.Name = "ReportViewer";
-            this.Load += new System.EventHandler(this.ReportViewer_Load_1);
             this.ResumeLayout(false);
 
         }

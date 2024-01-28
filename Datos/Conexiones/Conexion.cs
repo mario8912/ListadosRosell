@@ -1,59 +1,42 @@
 ﻿using System;
 using System.Data.SqlClient;
+using Entidades;
 
 namespace Datos
 {
     public class Conexion
     {
-        private string baseDatos;
-        private string servidor;
-        /*
-         *private string usuario;
-         *private string clave;
-         *private string path;
-        */
-        private static Conexion conexion1 = null;
+        public string Servidor {get; set;}
+        public string BaseDeDatos { get; set;}
+        public string EstadoConexion { get; set; }
 
-        private Conexion()
+        public Conexion()
         {
-            this.baseDatos = "miBaseDeDatos";
-            this.servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
-
-            /* Diferentes propiedades de la conexión
-             * this.path = @"C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\miBaseDeDatos.mdf";
-             *this.usuario = "sa";
-             *this.clave = "2891998";
-             *Server = localhost\SQLEXPRESS; Database = master; Trusted_Connection = True;
-            */
+            EstablecerServidorBaseDeDatos();
+            ComprobarConexion();
         }
 
-        public SqlConnection CrearConexion()
+        private void EstablecerServidorBaseDeDatos()
         {
-            SqlConnection cadenaConexion = new SqlConnection();
-            
-            try
+            Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+            BaseDeDatos = "ROSELL";
+        }
+        private void ComprobarConexion()
+        {
+            SqlConnection conexion = new SqlConnection
             {
-                cadenaConexion.ConnectionString =
-                    "Server=" + this.servidor + ";" +
-                    //"Authentication=Windows Authentication;" +
-                    "Database=" + this.baseDatos + ";" +
-                    "Trusted_Connection = True;";
-            }
-            catch (Exception)
-            {
-                cadenaConexion = null;
-                throw;
-            }
+                ConnectionString = FormatoCadenaConexion()
+            };
 
-            return cadenaConexion;
+            try { conexion.Open(); }
+            catch (Exception excepcion) { throw new Exception("Error al conectarse con la base de datos:" + Environment.NewLine + excepcion.Message); }
+            finally { conexion.Close(); }
         }
 
-        public static Conexion ComprobarConexion()
+        private string FormatoCadenaConexion()
         {
-            return conexion1 == null ? new Conexion() : null;
+            return string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
+
     }
-
-    
 }
-    

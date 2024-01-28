@@ -1,58 +1,33 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using System;
-using System.Data.SqlClient;
 
 namespace Datos
 {
     public class ConexionReporte
     {
-        //private const string servidor = @"SERVER2017";
-        private const string baseDeDatos = "ROSELL2022";
-        private string cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection = True;", servidor, baseDeDatos);
-        private ReportDocument _reporte;
-        private TableLogOnInfo _conexionInfo;
-
-        private SqlConnection _conexion;
-
+        private readonly ReportDocument _reporte;
+        private const bool _seguridadIntegrada = true;
+        private Conexion _conexion;
+        
         public ConexionReporte(ReportDocument reporte)
         {
             _reporte = reporte;
-            if(ComprobarConexion()) ConectarReporte();
-
-            _conexion.Close();
-        }   
-
-        private bool ComprobarConexion()
-        {
-            _conexion = new SqlConnection
-            {
-                ConnectionString = cadenaConexion
-            };
-
-            try
-            {
-                _conexion.Open();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _conexion = new Conexion();
+            ConectarReporte();
         }
 
         private void ConectarReporte()
         {
-            _conexionInfo = new TableLogOnInfo();
-            _conexionInfo.ConnectionInfo.ServerName = servidor;
-            _conexionInfo.ConnectionInfo.DatabaseName = baseDeDatos;
-            _conexionInfo.ConnectionInfo.IntegratedSecurity = true;
-            
+            TableLogOnInfo tableInfo = new TableLogOnInfo();
+            tableInfo.ConnectionInfo.ServerName = _conexion.Servidor;
+            tableInfo.ConnectionInfo.DatabaseName = _conexion.BaseDeDatos;
+            tableInfo.ConnectionInfo.IntegratedSecurity = _seguridadIntegrada;
+
             Tables tablas = _reporte.Database.Tables;
 
             foreach (Table tabla in tablas)
             {
-                tabla.ApplyLogOnInfo(_conexionInfo);
+                tabla.ApplyLogOnInfo(tableInfo);
             }
         }
     }
