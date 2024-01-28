@@ -24,12 +24,7 @@ namespace Capas
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (chkBoxVistaPrevia.Checked)
-            {
-                ReportViewer reportViewer = new ReportViewer(_rutaReporte);
-                reportViewer.MdiParent = MDI_Principal.InstanciaMdiPrincipal;
-                reportViewer.Show();
-            }
+            if (chkBoxVistaPrevia.Checked) new ReportViewer(_rutaReporte).Show();
             else NegocioReporte.ImprimirReporte(_rutaReporte);
 
             Close();

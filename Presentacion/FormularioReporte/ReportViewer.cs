@@ -8,7 +8,7 @@ namespace Capas
     {
         private string _rutaReporte;
         public ReportViewer(string rutaReporte)
-        {   
+        {
             _rutaReporte = rutaReporte;
             InitializeComponent();
         }
