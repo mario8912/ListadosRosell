@@ -29,7 +29,6 @@ namespace Datos
 
         public void ImprimirReporte()
         {
-            _reporte.SetParameterValue("numRegistros", 20);
             _reporte.PrintToPrinter(1, true, 1, 1);
         }
 
@@ -47,7 +46,5 @@ namespace Datos
         {
             return _reporte;
         }
-
-        
     }
 }

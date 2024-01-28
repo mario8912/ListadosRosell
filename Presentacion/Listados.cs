@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using CrystalDecisions.CrystalReports.Engine;
 using Negocio;
 
 namespace Capas
@@ -9,6 +10,7 @@ namespace Capas
     public partial class Listados : Form
     {
         private static string _rutaReporte;
+        private DialogResult _respuesta;
 
         public Listados()
         {
@@ -61,12 +63,11 @@ namespace Capas
 
         private void treeViewListados_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            _rutaReporte = e.Node.Tag.ToString();
             if (VerificarEtiqueta(e) && ComprobarExtensionRpt())
             {
-                _rutaReporte = e.Node.Tag.ToString();
-
                 FormatoCargaFomrulario();
-                FormParametrosReporte();
+                ComprobarParametros();
                 FormatoPostCargaFormulario();
             }
         }
@@ -83,6 +84,49 @@ namespace Capas
         private void InterruptorEnabled()
         {
             treeViewListados.Enabled = !treeViewListados.Enabled;
+        }
+
+        private void ComprobarParametros()
+        {
+            if (NegocioReporte.ComprobarParametrosReporte(_rutaReporte)) FormParametrosReporte();
+            else
+            {
+                StreamReader streamReader = new StreamReader(@"D:\miPc\desktop\og.txt");
+                HashSet<string> names = new HashSet<string>();
+                while (!streamReader.EndOfStream) names.Add(streamReader.ReadLine());
+                StreamWriter writer = new StreamWriter(@"D:\miPc\desktop\dest.txt");
+                foreach (var item in names)
+                {
+                    writer.WriteLine(item);
+                }
+
+                streamReader.Close();
+                writer.Close();
+                _respuesta = MessageBox.Show(
+                    "¿Desea visualizar el reporte?" + Environment.NewLine +
+                    "En caso contrario se imprimirá directamente.",
+                    "Reporte",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                RespuestaVisualizarFormulario();
+            }
+        }
+
+        private void RespuestaVisualizarFormulario()
+        {
+            if (_respuesta == DialogResult.Yes) FormReportViewer();
+            else if (_respuesta == DialogResult.No) ImprimirReporte();
+            else BeginInvoke(new MethodInvoker(Close));
+        }
+
+        private void FormReportViewer()
+        {
+            new ReportViewer(_rutaReporte).Show();
+        }
+
+        private void ImprimirReporte()
+        {
+            NegocioReporte.ImprimirReporte(_rutaReporte);
         }
 
         private void FormParametrosReporte()
