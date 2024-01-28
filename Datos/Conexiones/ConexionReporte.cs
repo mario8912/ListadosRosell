@@ -37,7 +37,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw (ex);
+                throw ex;
             }
         }
 
@@ -47,7 +47,7 @@ namespace Datos
             _conexionInfo.ConnectionInfo.ServerName = servidor;
             _conexionInfo.ConnectionInfo.DatabaseName = baseDeDatos;
             _conexionInfo.ConnectionInfo.IntegratedSecurity = true;
-
+            
             Tables tablas = _reporte.Database.Tables;
 
             foreach (Table tabla in tablas)
