@@ -91,6 +91,7 @@ namespace Capas
             if (NegocioReporte.ComprobarParametrosReporte(_rutaReporte)) FormParametrosReporte();
             else
             {
+                /*
                 StreamReader streamReader = new StreamReader(@"D:\miPc\desktop\og.txt");
                 HashSet<string> names = new HashSet<string>();
                 while (!streamReader.EndOfStream) names.Add(streamReader.ReadLine());
@@ -101,7 +102,7 @@ namespace Capas
                 }
 
                 streamReader.Close();
-                writer.Close();
+                writer.Close();*/
                 _respuesta = MessageBox.Show(
                     "¿Desea visualizar el reporte?" + Environment.NewLine +
                     "En caso contrario se imprimirá directamente.",

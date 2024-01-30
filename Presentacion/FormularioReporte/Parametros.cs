@@ -22,7 +22,7 @@ namespace Capas
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
             ReportDocument reporte = NegocioReporte.Reporte(_rutaReporte);
-
+            #region FUNCIONALIDAD PARAMETROS PRUEBA
             foreach (ParameterFieldDefinition item in reporte.DataDefinition.ParameterFields)
             {
                 var nombreParametro = item.ParameterFieldName.ToString();
@@ -66,6 +66,7 @@ namespace Capas
                     }
                 }
             }
+            #endregion
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)

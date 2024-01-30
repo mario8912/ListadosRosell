@@ -1,33 +1,40 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
+using System;
+using System.Data.SqlClient;
 
 namespace Datos
 {
-    public class ConexionReporte
+    public class ConexionReporte : Conexion
     {
         private readonly ReportDocument _reporte;
-        private const bool _seguridadIntegrada = true;
-        private Conexion _conexion;
         
         public ConexionReporte(ReportDocument reporte)
         {
             _reporte = reporte;
-            _conexion = new Conexion();
             ConectarReporte();
         }
 
         private void ConectarReporte()
         {
             TableLogOnInfo tableInfo = new TableLogOnInfo();
-            tableInfo.ConnectionInfo.ServerName = _conexion.Servidor;
-            tableInfo.ConnectionInfo.DatabaseName = _conexion.BaseDeDatos;
-            tableInfo.ConnectionInfo.IntegratedSecurity = _seguridadIntegrada;
+            tableInfo.ConnectionInfo.ServerName = Servidor;
+            tableInfo.ConnectionInfo.DatabaseName = BaseDeDatos;
+            tableInfo.ConnectionInfo.IntegratedSecurity = SeguridadIntegrada;
 
             Tables tablas = _reporte.Database.Tables;
-
+            
             foreach (Table tabla in tablas)
             {
+                var tablaNombre = tabla.Name;
+                var esProcedimiento = tablaNombre.Substring(tablaNombre.Length - 1);
+
+                if (esProcedimiento == "1")
+                {
+                    
+                }
                 tabla.ApplyLogOnInfo(tableInfo);
+                //tabla.SetDataSource(tableInfo);
             }
         }
     }

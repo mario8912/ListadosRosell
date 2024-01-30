@@ -8,7 +8,10 @@ namespace Datos
     {
         public string Servidor {get; set;}
         public string BaseDeDatos { get; set;}
-        public string EstadoConexion { get; set; }
+        public bool SeguridadIntegrada { get; set;}
+        public string Usuario { get; set;}
+        public string Constrasenya { get; set;}
+        //public string EstadoConexion { get; set; }
 
         public Conexion()
         {
@@ -18,8 +21,10 @@ namespace Datos
 
         private void EstablecerServidorBaseDeDatos()
         {
-            Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
-            BaseDeDatos = "ROSELL";
+            //Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+            Servidor = "server2017";
+            BaseDeDatos = "REFRESKAS";
+            SeguridadIntegrada = true;
         }
         private void ComprobarConexion()
         {
@@ -28,9 +33,18 @@ namespace Datos
                 ConnectionString = FormatoCadenaConexion()
             };
 
-            try { conexion.Open(); }
-            catch (Exception excepcion) { throw new Exception("Error al conectarse con la base de datos:" + Environment.NewLine + excepcion.Message); }
-            finally { conexion.Close(); }
+            try 
+            { 
+                conexion.Open(); 
+            }
+            catch (Exception excepcion) 
+            { 
+                throw new Exception("Error al conectarse con la base de datos:" + Environment.NewLine + excepcion.Message); 
+            }
+            finally 
+            { 
+                conexion.Close(); 
+            }
         }
 
         private string FormatoCadenaConexion()
