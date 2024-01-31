@@ -21,7 +21,10 @@ namespace Datos
             tableInfo.ConnectionInfo.ServerName = Servidor;
             tableInfo.ConnectionInfo.DatabaseName = BaseDeDatos;
             tableInfo.ConnectionInfo.IntegratedSecurity = SeguridadIntegrada;
-
+            #region CONEXIÓN LOCAL
+            /*tableInfo.ConnectionInfo.UserID = Usuario;
+            tableInfo.ConnectionInfo.Password = Contrasenya;*/
+            #endregion
             Tables tablas = _reporte.Database.Tables;
             
             foreach (Table tabla in tablas)
@@ -31,7 +34,7 @@ namespace Datos
 
                 if (esProcedimiento == "1")
                 {
-                    
+                    Console.WriteLine(tablaNombre);
                 }
                 tabla.ApplyLogOnInfo(tableInfo);
                 //tabla.SetDataSource(tableInfo);

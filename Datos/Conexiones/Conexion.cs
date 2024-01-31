@@ -10,7 +10,7 @@ namespace Datos
         public string BaseDeDatos { get; set;}
         public bool SeguridadIntegrada { get; set;}
         public string Usuario { get; set;}
-        public string Constrasenya { get; set;}
+        public string Contrasenya { get; set;}
         //public string EstadoConexion { get; set; }
 
         public Conexion()
@@ -22,8 +22,10 @@ namespace Datos
         private void EstablecerServidorBaseDeDatos()
         {
             //Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+            Usuario = "sa";
+            Contrasenya = "";
             Servidor = "server2017";
-            BaseDeDatos = "REFRESKAS";
+            BaseDeDatos = "rosell";
             SeguridadIntegrada = true;
         }
         private void ComprobarConexion()
@@ -49,6 +51,7 @@ namespace Datos
 
         private string FormatoCadenaConexion()
         {
+            //return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
             return string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
