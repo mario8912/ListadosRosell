@@ -23,49 +23,21 @@ namespace Capas
         {
             ReportDocument reporte = NegocioReporte.Reporte(_rutaReporte);
             #region FUNCIONALIDAD PARAMETROS PRUEBA
+            /*
             foreach (ParameterFieldDefinition item in reporte.DataDefinition.ParameterFields)
             {
-                var nombreParametro = item.ParameterFieldName.ToString();
-                if (nombreParametro.Substring(nombreParametro.Length - 3) == "INI" || nombreParametro.Substring(nombreParametro.Length - 3) == "FIN")
-                {
-                    if (!_grpBoxCreados)
-                    {
-                        _grpDesde = new GroupBox();
-                        _grpHasta = new GroupBox();
+                var tipoParametro = item.ParameterType;
+                var tipoValorParametro = item.ValueType;
+                var tipoOtra = item.ParameterValueKind;
+                var nombre = item.Name;
+                var nombreReporte = item.ReportName;
 
-                        _grpDesde.Size = new System.Drawing.Size(Width / 2, 30);
-                        _grpHasta.Size = new System.Drawing.Size(Width / 2, 30);
-                        _grpDesde.Location = new System.Drawing.Point(0, 0);
-                        _grpHasta.Size = new System.Drawing.Size(Width/2, 0);
-
-                        Controls.Add(_grpDesde);
-                        Controls.Add(_grpHasta);
-                    }
-                    if(nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
-                    {
-                        Label label = new Label();
-                        label.Text = nombreParametro;
-                        label.Location = new System.Drawing.Point(0, 0);
-
-                        TextBox txt = new TextBox();
-                        txt.Location = new System.Drawing.Point(label.Width + 5,0);
-                        _grpDesde.Controls.Add(label);
-                        _grpDesde.Controls.Add(txt);
-
-                    }
-                    else
-                    {
-                        Label label = new Label();
-                        label.Text = nombreParametro;
-                        label.Location = new System.Drawing.Point(label.Width/2, 0);
-
-                        TextBox txt = new TextBox();
-                        txt.Location = new System.Drawing.Point(label.Width + 5, 0);
-                        _grpDesde.Controls.Add(label);
-                        _grpDesde.Controls.Add(txt);
-                    }
-                }
-            }
+                string str = string.Format(
+                    "TipoParametro: {0} " + Environment.NewLine +
+                    "ValueType: {1}" + Environment.NewLine +
+                    "ValueKind {2}" + Environment.NewLine + 
+                    "");
+            }*/
             #endregion
         }
 
