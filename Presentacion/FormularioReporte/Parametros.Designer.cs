@@ -35,7 +35,7 @@
             // chkBoxVistaPrevia
             // 
             this.chkBoxVistaPrevia.AutoSize = true;
-            this.chkBoxVistaPrevia.Location = new System.Drawing.Point(12, 419);
+            this.chkBoxVistaPrevia.Location = new System.Drawing.Point(626, 421);
             this.chkBoxVistaPrevia.Name = "chkBoxVistaPrevia";
             this.chkBoxVistaPrevia.Size = new System.Drawing.Size(81, 17);
             this.chkBoxVistaPrevia.TabIndex = 0;

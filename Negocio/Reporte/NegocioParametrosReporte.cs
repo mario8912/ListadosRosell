@@ -1,4 +1,5 @@
 ﻿using Datos;
+using System.Windows.Forms;
 
 
 namespace Negocio

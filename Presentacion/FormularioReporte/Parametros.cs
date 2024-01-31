@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 using CrystalDecisions.CrystalReports.Engine;
 using Negocio;
@@ -23,22 +22,49 @@ namespace Capas
         {
             ReportDocument reporte = NegocioReporte.Reporte(_rutaReporte);
             #region FUNCIONALIDAD PARAMETROS PRUEBA
-            /*
+            int altura = 10;
+            int sumatorioAltura = 30;
+
+
+            Label label = new Label
+            {
+                Text = "Parametro 1",
+                Size = new System.Drawing.Size(),
+
+            };
+
+
             foreach (ParameterFieldDefinition item in reporte.DataDefinition.ParameterFields)
             {
-                var tipoParametro = item.ParameterType;
-                var tipoValorParametro = item.ValueType;
-                var tipoOtra = item.ParameterValueKind;
-                var nombre = item.Name;
-                var nombreReporte = item.ReportName;
+                
+                
+                
+                
+                
+                
+                MuestraMensajeInfoParametros(item);
+            }
 
-                string str = string.Format(
-                    "TipoParametro: {0} " + Environment.NewLine +
-                    "ValueType: {1}" + Environment.NewLine +
-                    "ValueKind {2}" + Environment.NewLine + 
-                    "");
-            }*/
+            
             #endregion
+        }
+
+        private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
+        {
+            var tipoParametro = item.ParameterType;
+            var tipoValorParametro = item.ValueType;
+            var tipoOtra = item.ParameterValueKind;
+            var nombre = item.Name;
+            var discretoRango = item.DiscreteOrRangeKind;
+
+            string str = string.Format(
+                "TipoParametro: {0} " + Environment.NewLine +
+                "ValueType: {1}" + Environment.NewLine +
+                "ValueKind: {2}" + Environment.NewLine +
+                "Nombre: {3}" + Environment.NewLine +
+                "Nombre Reporte: {4}",
+                tipoParametro, tipoValorParametro, tipoOtra, nombre, discretoRango);
+            MessageBox.Show(str);
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
