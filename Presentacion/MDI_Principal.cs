@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Negocio;
 
 namespace Capas
 {
@@ -13,6 +14,8 @@ namespace Capas
         }
         private void listadosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+
             CrearInstanciaFormListados().Show();
         }
 

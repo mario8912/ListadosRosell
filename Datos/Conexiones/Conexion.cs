@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
-using Entidades;
-using Microsoft.SqlServer.Server;
+using System.Diagnostics;
 
 namespace Datos
 {
@@ -40,8 +39,11 @@ namespace Datos
 
             try 
             { 
-                conexion.Open();
-                Console.WriteLine("CONEXION");
+                Stopwatch sw = Stopwatch.StartNew();
+                conexion.OpenAsync();
+                sw.Stop();
+
+                Console.WriteLine("Tiempo justo conexion" + sw.Elapsed.ToString());   
             }
             catch (Exception excepcion) 
             { 

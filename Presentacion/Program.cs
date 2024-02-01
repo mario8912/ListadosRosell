@@ -1,9 +1,9 @@
 ﻿using Capas;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Negocio;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Presentacion
 {
@@ -15,10 +15,20 @@ namespace Presentacion
         [STAThread]
         static void Main()
         {
-            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Task.Run(Conexion());
             Application.Run(new MDI_Principal());
+
+            Action Conexion()
+            {
+                return () =>
+                {
+                    PrimeraConexion prmCon = new PrimeraConexion();
+                    prmCon.NegocioPrimeraConexion();
+                };
+            }
+            
         }
     }
 }

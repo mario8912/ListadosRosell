@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrimeraConexion.cs" />
     <Compile Include="Reporte\NegocioParametrosReporte.cs" />
     <Compile Include="NegocioDirectorioInformes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

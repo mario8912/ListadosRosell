@@ -116,14 +116,21 @@ namespace Capas
 
         private void RespuestaVisualizarFormulario()
         {
-            if (_respuesta == DialogResult.Yes) FormReportViewer();
+            if (_respuesta == DialogResult.Yes)
+            {
+                FormReportViewer();
+            }
             else if (_respuesta == DialogResult.No) ImprimirReporte();
             else BeginInvoke(new MethodInvoker(Close));
         }
 
         private void FormReportViewer()
         {
-            new ReportViewer().Show();
+            ReportViewer visorReporte = new ReportViewer()
+            {
+                MdiParent = MDI_Principal.InstanciaMdiPrincipal
+            };
+            visorReporte.Show();
         }
 
         private void ImprimirReporte()
