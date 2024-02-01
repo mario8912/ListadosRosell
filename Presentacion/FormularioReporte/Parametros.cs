@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using CrystalDecisions.CrystalReports.Engine;
 using Negocio;
+using Entidades;
 
 namespace Capas
 {
@@ -13,14 +14,13 @@ namespace Capas
         private GroupBox _grpHasta;
 
         public Parametros(string rutaReporte)
-        {
+        { 
             _rutaReporte = rutaReporte;
             InitializeComponent();
         }
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            ReportDocument reporte = NegocioReporte.Reporte(_rutaReporte);
             #region FUNCIONALIDAD PARAMETROS PRUEBA
             int altura = 10;
             int sumatorioAltura = 30;
@@ -34,14 +34,8 @@ namespace Capas
             };
 
 
-            foreach (ParameterFieldDefinition item in reporte.DataDefinition.ParameterFields)
+            foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
-                
-                
-                
-                
-                
-                
                 MuestraMensajeInfoParametros(item);
             }
 
@@ -71,13 +65,13 @@ namespace Capas
         {
             if (chkBoxVistaPrevia.Checked)
             {
-                ReportViewer visorReporte = new ReportViewer(_rutaReporte)
+                ReportViewer visorReporte = new ReportViewer()
                 {
                     MdiParent = MDI_Principal.InstanciaMdiPrincipal
                 };
                 visorReporte.Show();
             }
-            else NegocioReporte.ImprimirReporte(_rutaReporte);
+            else NegocioReporte.ImprimirReporte();
 
             Close();
         }

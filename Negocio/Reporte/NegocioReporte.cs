@@ -15,12 +15,11 @@ namespace Negocio
         {
            
             return Global.ReporteCargado.ParameterFields.Count > 0;
-            
         }
 
-        public static void ImprimirReporte(string rutaReporte)
+        public static void ImprimirReporte()
         {
-            new Reporte(rutaReporte).ImprimirReporte();
+            new Reporte(Global.RutaReporte).ImprimirReporte();
         }
     }
 }

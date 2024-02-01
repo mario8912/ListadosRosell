@@ -40,7 +40,8 @@ namespace Datos
 
             try 
             { 
-                conexion.Open(); 
+                conexion.Open();
+                Console.WriteLine("CONEXION");
             }
             catch (Exception excepcion) 
             { 

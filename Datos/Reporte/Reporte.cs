@@ -1,6 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
 using Entidades;
+using System;
 
 namespace Datos
 {
@@ -13,14 +14,14 @@ namespace Datos
 
         public Reporte(string rutaReporte)
         {
-            _rutaReporte = rutaReporte;
-            _nombreReporte = Path.GetFileName(rutaReporte);
-
-            if (Global.ReporteCargado == null)
+            if (Global.ReporteCargado == null || _nombreReporte != Path.GetFileName(rutaReporte))
             {
+                _rutaReporte = rutaReporte;
+                _nombreReporte = Path.GetFileName(rutaReporte);
                 _reporte = new ReportDocument();
                 CargarReporte();
                 Global.ReporteCargado = _reporte;
+                Global.RutaReporte = _rutaReporte;
             }
         }
 

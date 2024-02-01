@@ -123,12 +123,12 @@ namespace Capas
 
         private void FormReportViewer()
         {
-            new ReportViewer(_rutaReporte).Show();
+            new ReportViewer().Show();
         }
 
         private void ImprimirReporte()
         {
-            NegocioReporte.ImprimirReporte(_rutaReporte);
+            NegocioReporte.ImprimirReporte();
         }
 
         private void FormParametrosReporte()

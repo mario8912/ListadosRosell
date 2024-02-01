@@ -9,6 +9,8 @@ namespace Entidades
     {
         public static string RutaAplicacion = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string RutaDirectorioInformes = TryRutaInformes();
+        public static string RutaReporte;
+        public static ReportDocument ReporteCargado;
         private static string TryRutaInformes()
         {
             string dirInformes = Path.Combine(RutaAplicacion, "Informes");
@@ -21,7 +23,5 @@ namespace Entidades
         {
             frmHijo.MdiParent = frmPadre;
         }
-
-        public static ReportDocument ReporteCargado;
     }
 }

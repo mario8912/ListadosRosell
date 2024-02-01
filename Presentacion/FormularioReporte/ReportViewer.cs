@@ -1,21 +1,20 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
-using Negocio;
+using Entidades;
 
 namespace Capas
 {
     public partial class ReportViewer : Form
     {
-        private readonly string _rutaReporte;
-
-        public ReportViewer(string rutaReporte)
+        public ReportViewer()
         {   
-            _rutaReporte = rutaReporte;
             InitializeComponent();
+            Text = Path.GetFileName(Global.RutaReporte);
 
             try
             {
-                visorReporte.ReportSource = NegocioReporte.Reporte(_rutaReporte);
+                visorReporte.ReportSource = Global.ReporteCargado;
             }
             catch (Exception excepcion)
             {
