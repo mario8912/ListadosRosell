@@ -1,19 +1,32 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using Entidades;
 
 namespace Datos
 {
     public class Reporte : ReportDocument, IReporte
     {
-        private string _rutaReporte;
-        private string _nombreReporte;
-        private ReportDocument _reporte = new ReportDocument();
+        private readonly string _rutaReporte;
+        private readonly string _nombreReporte;
+
+        private readonly ReportDocument _reporte;
 
         public Reporte(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
             _nombreReporte = Path.GetFileName(rutaReporte);
-            CargarReporte();
+
+            if (Global.ReporteCargado == null)
+            {
+                _reporte = new ReportDocument();
+                CargarReporte();
+                Global.ReporteCargado = _reporte;
+            }
+        }
+
+        public ReportDocument GetReporte()
+        {
+            return _reporte;
         }
         
         private void CargarReporte()
@@ -40,11 +53,6 @@ namespace Datos
         public string GetRutaReporte()
         {
             return _rutaReporte;
-        }
-
-        public ReportDocument GetReporte() 
-        {
-            return _reporte;
         }
     }
 }

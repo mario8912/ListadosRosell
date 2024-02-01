@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace Entidades
 {
@@ -20,5 +21,7 @@ namespace Entidades
         {
             frmHijo.MdiParent = frmPadre;
         }
+
+        public static ReportDocument ReporteCargado;
     }
 }
