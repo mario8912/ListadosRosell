@@ -4,9 +4,9 @@ namespace Negocio
 {
     public class PrimeraConexion
     {
-        public void NegocioPrimeraConexion()
+        public async void NegocioPrimeraConexion()
         {
-            new Conexion();
+            await new Conexion().ComprobarConexion();
         }
     }
 }

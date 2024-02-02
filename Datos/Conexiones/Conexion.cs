@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Datos
 {
@@ -17,7 +17,7 @@ namespace Datos
         public Conexion()
         {
             EstablecerServidorBaseDeDatos();
-            ComprobarConexion();
+            //ComprobarConexion();
         }
 
         private void EstablecerServidorBaseDeDatos()
@@ -30,28 +30,21 @@ namespace Datos
             BaseDeDatos = "rosell";
             SeguridadIntegrada = true;
         }
-        private void ComprobarConexion()
+        public async Task ComprobarConexion()
         {
-            SqlConnection conexion = new SqlConnection
+            string connectionString = FormatoCadenaConexion();
+
+            using (SqlConnection conexion = new SqlConnection(connectionString))
             {
-                ConnectionString = FormatoCadenaConexion()
-            };
-
-            try 
-            { 
-                Stopwatch sw = Stopwatch.StartNew();
-                conexion.OpenAsync();
-                sw.Stop();
-
-                Console.WriteLine("Tiempo justo conexion" + sw.Elapsed.ToString());   
-            }
-            catch (Exception excepcion) 
-            { 
-                throw new Exception("Error al conectarse con la base de datos:" + Environment.NewLine + excepcion.Message); 
-            }
-            finally 
-            { 
-                conexion.Close(); 
+                try
+                {
+                    await conexion.OpenAsync();
+                }
+                // No necesitas atrapar la excepción aquí, deja que se propague
+                finally
+                {
+                    conexion.Close();
+                }
             }
         }
 

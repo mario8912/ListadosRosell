@@ -36,9 +36,9 @@ namespace Datos
             ConectarReporte();
         }
 
-        public void ConectarReporte()
+        public async void ConectarReporte()
         {
-            new ConexionReporte(_reporte);
+            await new ConexionReporte(_reporte).ComprobarConexion();
         }
 
         public void ImprimirReporte()

@@ -5,9 +5,9 @@ using Entidades;
 
 namespace Capas
 {
-    public partial class ReportViewer : Form
+    public partial class rptViewer : Form
     {
-        public ReportViewer()
+        public rptViewer()
         {   
             InitializeComponent();
             Text = Path.GetFileName(Global.RutaReporte);

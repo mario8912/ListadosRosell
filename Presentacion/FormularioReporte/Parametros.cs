@@ -65,7 +65,7 @@ namespace Capas
         {
             if (chkBoxVistaPrevia.Checked)
             {
-                ReportViewer visorReporte = new ReportViewer()
+                rptViewer visorReporte = new rptViewer()
                 {
                     MdiParent = MDI_Principal.InstanciaMdiPrincipal
                 };
