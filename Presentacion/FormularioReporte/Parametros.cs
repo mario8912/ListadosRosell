@@ -34,6 +34,21 @@ namespace Capas
                 if(nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
                 {
                     parDeCampos++;
+                    if (nombreParametro.Substring(0, 1) == "@") nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);        
+                    else nombreLabel = nombreParametro.Substring(0, nombreParametro.Length - 3);
+                    
+                    if(parDeCampos % 2 == 0)
+                    {
+                        Label labelDesde = new Label
+                        {
+                            Text = nombreLabel,
+                            AutoSize = true,
+                            Location = new System.Drawing.Point(20, altura)
+                        };
+
+                if(nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
+                {
+                    parDeCampos++;
                     if (item.Name.Substring(0, 1) == "@")
                     {
                         nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);
@@ -75,9 +90,6 @@ namespace Capas
                     Controls.Add(label);
                 }
                 //MuestraMensajeInfoParametros(item);
-                
-
-                
                 altura += sumatorioAltura;
             }
         }
