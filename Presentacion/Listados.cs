@@ -126,7 +126,7 @@ namespace Capas
 
         private void FormReportViewer()
         {
-            ReportViewer visorReporte = new ReportViewer()
+            RptViewer visorReporte = new RptViewer()
             {
                 MdiParent = MDI_Principal.InstanciaMdiPrincipal
             };

@@ -40,7 +40,6 @@ namespace Datos
                 {
                     await conexion.OpenAsync();
                 }
-                // No necesitas atrapar la excepción aquí, deja que se propague
                 finally
                 {
                     conexion.Close();

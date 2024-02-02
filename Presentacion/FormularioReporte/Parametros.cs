@@ -29,14 +29,13 @@ namespace Capas
             Label label = new Label
             {
                 Text = "Parametro 1",
-                Size = new System.Drawing.Size(),
-
+                Size = new System.Drawing.Size()
             };
 
 
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
-                MuestraMensajeInfoParametros(item);
+               // MuestraMensajeInfoParametros(item);
             }
 
             
@@ -65,7 +64,7 @@ namespace Capas
         {
             if (chkBoxVistaPrevia.Checked)
             {
-                rptViewer visorReporte = new rptViewer()
+                RptViewer visorReporte = new RptViewer()
                 {
                     MdiParent = MDI_Principal.InstanciaMdiPrincipal
                 };

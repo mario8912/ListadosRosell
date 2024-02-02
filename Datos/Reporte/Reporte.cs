@@ -19,7 +19,9 @@ namespace Datos
                 _rutaReporte = rutaReporte;
                 _nombreReporte = Path.GetFileName(rutaReporte);
                 _reporte = new ReportDocument();
+
                 CargarReporte();
+
                 Global.ReporteCargado = _reporte;
                 Global.RutaReporte = _rutaReporte;
             }
