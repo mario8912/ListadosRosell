@@ -41,16 +41,13 @@ namespace Capas
         {
             _visorReporte = new CrystalReportViewer();
             
-            this._visorReporte.ActiveViewIndex = -1;
-            this._visorReporte.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._visorReporte.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._visorReporte.Cursor = System.Windows.Forms.Cursors.Default;
-            this._visorReporte.Location = new System.Drawing.Point(0, 0);
-            //this._visorReporte.Name = "_visorReporte";
-            this._visorReporte.Size = new System.Drawing.Size(1064, 490);
-            this._visorReporte.TabIndex = 0;
+            _visorReporte.ActiveViewIndex = -1;
+            _visorReporte.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            _visorReporte.BorderStyle = BorderStyle.FixedSingle;
+            _visorReporte.Cursor = Cursors.Default;
+            _visorReporte.Location = new System.Drawing.Point(0, 0);
+            _visorReporte.Size = new System.Drawing.Size(Width-10, Height);
+            _visorReporte.TabIndex = 0;
 
             Controls.Add(_visorReporte);
         }

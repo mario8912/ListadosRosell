@@ -1,7 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
 using Entidades;
-using System;
+using System.Threading.Tasks;
 
 namespace Datos
 {
@@ -14,16 +14,17 @@ namespace Datos
 
         public Reporte(string rutaReporte)
         {
-            if (Global.ReporteCargado == null || _nombreReporte != Path.GetFileName(rutaReporte))
+            if (Global.ReporteCargado == null || Global.RutaReporte != rutaReporte)
             {
                 _rutaReporte = rutaReporte;
                 _nombreReporte = Path.GetFileName(rutaReporte);
                 _reporte = new ReportDocument();
 
-                CargarReporte();
 
                 Global.ReporteCargado = _reporte;
                 Global.RutaReporte = _rutaReporte;
+
+                _ = CargarReporte();
             }
         }
 
@@ -32,20 +33,20 @@ namespace Datos
             return _reporte;
         }
         
-        private void CargarReporte()
+        private async Task CargarReporte()
         {
             _reporte.Load(_rutaReporte);
-            ConectarReporte();
+            await ConectarReporte();
         }
 
-        public async void ConectarReporte()
+        public async Task ConectarReporte()
         {
             await new ConexionReporte(_reporte).ComprobarConexion();
         }
 
         public void ImprimirReporte()
         {
-            _reporte.PrintToPrinter(1, true, 1, 1);
+            Global.ReporteCargado.PrintToPrinter(1, true, 1, 1);
         }
 
         public string GetNombreReporte()

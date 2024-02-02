@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using CrystalDecisions.CrystalReports.Engine;
 using Negocio;
+using Entidades;
+using CrystalDecisions.CrystalReports.Engine;
+
 
 namespace Capas
 {
@@ -11,6 +13,7 @@ namespace Capas
     {
         private static string _rutaReporte;
         private DialogResult _respuesta;
+        private HashSet<string> _listaParametros;
 
         public Listados()
         {
@@ -92,18 +95,14 @@ namespace Capas
             if (NegocioReporte.ComprobarParametrosReporte()) FormParametrosReporte();
             else
             {
-                /*
-                StreamReader streamReader = new StreamReader(@"D:\miPc\desktop\og.txt");
-                HashSet<string> names = new HashSet<string>();
-                while (!streamReader.EndOfStream) names.Add(streamReader.ReadLine());
-                StreamWriter writer = new StreamWriter(@"D:\miPc\desktop\dest.txt");
-                foreach (var item in names)
+                #region GUARDADO PARAMETROS TXT
+                foreach (ParameterFieldDefinition item in Global.ReporteCargado.ParameterFields)
                 {
-                    writer.WriteLine(item);
+                    _listaParametros.Add(item.Name + "|" + item.ParameterType + "|" + item.ValueType + "|" + item.ParameterValueKind);
                 }
+                GenerarGuardarParametrosTodos();
+                #endregion
 
-                streamReader.Close();
-                writer.Close();*/
                 _respuesta = MessageBox.Show(
                     "¿Desea visualizar el reporte?" + Environment.NewLine +
                     "En caso contrario se imprimirá directamente.",
@@ -148,6 +147,12 @@ namespace Capas
             Cursor = Cursors.Default;
             Text = "Listados";
             InterruptorEnabled();
+        }
+
+        private void GenerarGuardarParametrosTodos()
+        {
+            try { using (StreamWriter sw = new StreamWriter("parametrosTodos.txt")) foreach (string item in _listaParametros) sw.WriteLine(item, true); }
+            catch (Exception ex) { throw new Exception("Error de escritura parametros" + ex); }
         }
     }
 }

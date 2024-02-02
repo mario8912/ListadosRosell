@@ -121,9 +121,6 @@
     <Compile Include="Conexiones\ConexionReporte.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporte\IReporte.cs" />
-    <Compile Include="Reporte\ParametrosReporte.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reporte\Reporte.cs">
       <SubType>Component</SubType>
     </Compile>

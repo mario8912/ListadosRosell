@@ -39,6 +39,7 @@ namespace Datos
                 try
                 {
                     await conexion.OpenAsync();
+                    Console.WriteLine("Connected");
                 }
                 finally
                 {

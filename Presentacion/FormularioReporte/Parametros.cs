@@ -1,20 +1,20 @@
-﻿using System;
-using System.Windows.Forms;
-using CrystalDecisions.CrystalReports.Engine;
-using Negocio;
+﻿using CrystalDecisions.CrystalReports.Engine;
 using Entidades;
+using Negocio;
+using System;
+using System.Windows.Forms;
 
 namespace Capas
 {
     public partial class Parametros : Form
     {
         private string _rutaReporte;
-        private bool _grpBoxCreados = false;
+        /*private bool _grpBoxCreados = false;
         private GroupBox _grpDesde;
-        private GroupBox _grpHasta;
+        private GroupBox _grpHasta;*/
 
         public Parametros(string rutaReporte)
-        { 
+        {
             _rutaReporte = rutaReporte;
             InitializeComponent();
         }
@@ -26,19 +26,35 @@ namespace Capas
             int sumatorioAltura = 30;
 
 
-            Label label = new Label
+            /*Label label = new Label
             {
                 Text = "Parametro 1",
-                Size = new System.Drawing.Size()
-            };
+                Size = new System.Drawing.Size(25, altura),
+                Po
+            };*/
 
 
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
-               // MuestraMensajeInfoParametros(item);
+                string nombre = "";
+                if (item.Name.Substring(0, 1) == "@") 
+                { 
+                    nombre = item.Name.Substring(1);
+                    nombre = nombre.Substring(0,nombre.Length -3);
+                }
+                //MuestraMensajeInfoParametros(item);
+                Label label = new Label
+                {
+                    Text = nombre,
+                    AutoSize = true,
+                    Location = new System.Drawing.Point(20, altura)
+                };
+
+                Controls.Add(label);
+                altura += sumatorioAltura;
             }
 
-            
+
             #endregion
         }
 
