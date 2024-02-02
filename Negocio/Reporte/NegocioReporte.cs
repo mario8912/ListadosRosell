@@ -13,7 +13,6 @@ namespace Negocio
 
         public static bool ComprobarParametrosReporte()
         {
-           
             return Global.ReporteCargado.ParameterFields.Count > 0;
         }
 

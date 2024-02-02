@@ -66,6 +66,7 @@ namespace Capas
 
         private void treeViewListados_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            //PONER TRY
             _rutaReporte = e.Node.Tag.ToString();
             if (VerificarEtiqueta(e) && ComprobarExtensionRpt())
             {
@@ -92,17 +93,20 @@ namespace Capas
 
         private void ComprobarParametros()
         {
-            if (NegocioReporte.ComprobarParametrosReporte()) FormParametrosReporte();
-            else
+            if (NegocioReporte.ComprobarParametrosReporte())
             {
+                FormParametrosReporte();
+
                 #region GUARDADO PARAMETROS TXT
-                foreach (ParameterFieldDefinition item in Global.ReporteCargado.ParameterFields)
+                /*foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
                 {
                     _listaParametros.Add(item.Name + "|" + item.ParameterType + "|" + item.ValueType + "|" + item.ParameterValueKind);
                 }
-                GenerarGuardarParametrosTodos();
+                GenerarGuardarParametrosTodos();*/
                 #endregion
-
+            }
+            else
+            {
                 _respuesta = MessageBox.Show(
                     "¿Desea visualizar el reporte?" + Environment.NewLine +
                     "En caso contrario se imprimirá directamente.",

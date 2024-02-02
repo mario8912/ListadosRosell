@@ -21,41 +21,65 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            #region FUNCIONALIDAD PARAMETROS PRUEBA
             int altura = 10;
             int sumatorioAltura = 30;
-
-
-            /*Label label = new Label
-            {
-                Text = "Parametro 1",
-                Size = new System.Drawing.Size(25, altura),
-                Po
-            };*/
-
+            int parDeCampos = 0;
 
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
-                string nombre = "";
-                if (item.Name.Substring(0, 1) == "@") 
-                { 
-                    nombre = item.Name.Substring(1);
-                    nombre = nombre.Substring(0,nombre.Length -3);
+                string nombreParametro = item.Name.ToUpper();
+                string nombreLabel = "";
+                
+
+                if(nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
+                {
+                    parDeCampos++;
+                    if (item.Name.Substring(0, 1) == "@")
+                    {
+                        nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);
+                    }
+                    else
+                    {
+                        nombreLabel = nombreParametro.Substring(0, nombreParametro.Length - 3);
+                    }
+
+                    if(parDeCampos % 2 == 0)
+                    {
+                        Label labelDesde = new Label
+                        {
+                            Text = nombreLabel,
+                            AutoSize = true,
+                            Location = new System.Drawing.Point(20, altura)
+                        };
+
+                        Label labelHasta = new Label
+                        {
+                            Text = nombreLabel,
+                            AutoSize = true,
+                            Location = new System.Drawing.Point(120, altura)
+                        };
+
+                        Controls.Add(labelDesde);
+                        Controls.Add(labelHasta);
+                    }
+                }
+                else
+                {
+                    Label label = new Label
+                    {
+                        Text = nombreLabel,
+                        AutoSize = true,
+                        Location = new System.Drawing.Point(20, altura)
+                    };
+
+                    Controls.Add(label);
                 }
                 //MuestraMensajeInfoParametros(item);
-                Label label = new Label
-                {
-                    Text = nombre,
-                    AutoSize = true,
-                    Location = new System.Drawing.Point(20, altura)
-                };
+                
 
-                Controls.Add(label);
+                
                 altura += sumatorioAltura;
             }
-
-
-            #endregion
         }
 
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
