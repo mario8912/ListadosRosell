@@ -2,6 +2,7 @@
 using Entidades;
 using Negocio;
 using System;
+using System.Web.Instrumentation;
 using System.Windows.Forms;
 
 namespace Capas
@@ -9,9 +10,7 @@ namespace Capas
     public partial class Parametros : Form
     {
         private string _rutaReporte;
-        /*private bool _grpBoxCreados = false;
-        private GroupBox _grpDesde;
-        private GroupBox _grpHasta;*/
+       
 
         public Parametros(string rutaReporte)
         {
@@ -21,77 +20,50 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            int altura = 10;
-            int sumatorioAltura = 30;
             int parDeCampos = 0;
+            
 
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
                 string nombreParametro = item.Name.ToUpper();
                 string nombreLabel = "";
-                
 
-                if(nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
+                if (nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
                 {
+                    
+
                     parDeCampos++;
+
                     if (nombreParametro.Substring(0, 1) == "@") nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);        
                     else nombreLabel = nombreParametro.Substring(0, nombreParametro.Length - 3);
                     
                     if(parDeCampos % 2 == 0)
                     {
-                        Label labelDesde = new Label
-                        {
-                            Text = nombreLabel,
-                            AutoSize = true,
-                            Location = new System.Drawing.Point(20, altura)
-                        };
-
-                if(nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
-                {
-                    parDeCampos++;
-                    if (item.Name.Substring(0, 1) == "@")
-                    {
-                        nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);
-                    }
-                    else
-                    {
-                        nombreLabel = nombreParametro.Substring(0, nombreParametro.Length - 3);
-                    }
-
-                    if(parDeCampos % 2 == 0)
-                    {
-                        Label labelDesde = new Label
-                        {
-                            Text = nombreLabel,
-                            AutoSize = true,
-                            Location = new System.Drawing.Point(20, altura)
-                        };
-
-                        Label labelHasta = new Label
-                        {
-                            Text = nombreLabel,
-                            AutoSize = true,
-                            Location = new System.Drawing.Point(120, altura)
-                        };
-
-                        Controls.Add(labelDesde);
-                        Controls.Add(labelHasta);
+                       
                     }
                 }
                 else
                 {
-                    Label label = new Label
-                    {
-                        Text = nombreLabel,
-                        AutoSize = true,
-                        Location = new System.Drawing.Point(20, altura)
-                    };
 
-                    Controls.Add(label);
+                   
                 }
-                //MuestraMensajeInfoParametros(item);
-                altura += sumatorioAltura;
             }
+
+            btnAceptar = new Button
+            {
+                Text = "Aceptar",
+                AutoSize = true
+            };
+            btnAceptar.Click += new EventHandler(btnAceptar_Click);
+
+            chkBoxVistaPrevia = new CheckBox
+            {
+                Text = "Vista previa",
+                AutoSize = true,
+                Checked = true
+            };
+
+            AutoSize = true;
         }
 
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
