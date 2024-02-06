@@ -2,13 +2,13 @@
 using Entidades;
 using Negocio;
 using System;
-using System.Web.Instrumentation;
 using System.Windows.Forms;
 
 namespace Capas
 {
     public partial class Parametros : Form
     {
+        private const int ALTURA_FILA = 50;
         private readonly string _rutaReporte;
         private Button _btnAceptar;
         private CheckBox _chkBoxVistaPrevia;
@@ -20,6 +20,28 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
+            Cargar();
+        }
+        private void btnAceptar_Click(object sender, EventArgs e)
+        {
+            ClickAceptar();
+        }
+
+        private void Cargar()
+        {
+            TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 4,
+                Padding = new Padding(0, 0, 30, 20),
+                AutoSize = true
+            };
+
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25));
+
             int parDeCampos = 0;
             int incrementoFilasTableLAyout = 0;
 
@@ -32,11 +54,43 @@ namespace Capas
                 {
                     parDeCampos++;
 
-                    if (nombreParametro.Substring(0, 1) == "@") nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);        
+                    if (nombreParametro.Substring(0, 1) == "@") nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);
                     else nombreLabel = nombreParametro.Substring(0, nombreParametro.Length - 3);
-                    
-                    if(parDeCampos % 2 == 0)
+
+                    if (parDeCampos % 2 == 0)
                     {
+                        nombreLabel += ":";
+                        Label labelDesde = new Label
+                        {
+                            Text = nombreLabel,
+                            TextAlign = System.Drawing.ContentAlignment.MiddleRight,
+                            Dock = DockStyle.Bottom
+                        };
+
+                        TextBox textBoxDesde = new TextBox
+                        {
+                            Dock = DockStyle.Bottom
+                        };
+
+
+                        Label labelHasta = new Label
+                        {
+                            Text = nombreLabel,
+                            TextAlign = System.Drawing.ContentAlignment.MiddleRight,
+                            Dock = DockStyle.Bottom
+                        };
+
+                        TextBox textBoxHasta = new TextBox
+                        {
+                            Dock = DockStyle.Bottom
+                        };
+
+
+                        tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+                        tableLayoutPanel.Controls.Add(labelDesde, 0, incrementoFilasTableLAyout);
+                        tableLayoutPanel.Controls.Add(textBoxDesde, 1, incrementoFilasTableLAyout);
+                        tableLayoutPanel.Controls.Add(labelHasta, 2, incrementoFilasTableLAyout);
+                        tableLayoutPanel.Controls.Add(textBoxHasta, 3, incrementoFilasTableLAyout);
 
                         incrementoFilasTableLAyout++;
                     }
@@ -44,10 +98,11 @@ namespace Capas
                 else
                 {
                     nombreLabel = nombreParametro + ":";
-                    Label label = new Label 
+                    Label label = new Label
                     {
                         Text = nombreLabel,
-                        Dock = DockStyle.Bottom,
+                        TextAlign = System.Drawing.ContentAlignment.MiddleRight,
+                        Dock = DockStyle.Bottom
                     };
 
                     TextBox textBox = new TextBox
@@ -55,37 +110,33 @@ namespace Capas
                         Dock = DockStyle.Bottom
                     };
 
-                    tableLayoutPanel1.Controls.Add(label, 0, incrementoFilasTableLAyout);
-                    tableLayoutPanel1.Controls.Add(textBox, 1, incrementoFilasTableLAyout);
+                    tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+                    tableLayoutPanel.Controls.Add(label, 0, incrementoFilasTableLAyout);
+                    tableLayoutPanel.Controls.Add(textBox, 1, incrementoFilasTableLAyout);
+
                     incrementoFilasTableLAyout++;
                 }
             }
 
+            _chkBoxVistaPrevia = new CheckBox
+            {
+                Text = "Vista Previa",
+                Dock = DockStyle.Bottom,
+                Enabled = true
+            };
+
             _btnAceptar = new Button
             {
                 Text = "Aceptar",
-                AutoSize = true,
                 Dock = DockStyle.Bottom
             };
-            _btnAceptar.Click += new EventHandler(btnAceptar_Click);
+            _btnAceptar.Click += btnAceptar_Click;
 
-            _chkBoxVistaPrevia = new CheckBox
-            {
-                Text = "Vista previa",
-                AutoSize = true,
-                Checked = true,
-                Dock = DockStyle.Bottom
-            };
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+            tableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, incrementoFilasTableLAyout);
+            tableLayoutPanel.Controls.Add(_btnAceptar, 3, incrementoFilasTableLAyout);
 
-            tableLayoutPanel1.Controls.Add(_btnAceptar, 2, incrementoFilasTableLAyout);
-            //tableLayoutPanel1.SetColumnSpan(_btnAceptar, 2);
-            tableLayoutPanel1.Controls.Add(_chkBoxVistaPrevia, 2, incrementoFilasTableLAyout);
-            //tableLayoutPanel1.SetColumnSpan(_chkBoxVistaPrevia, 2);
-        }
-
-        private void btnAceptar_Click(object sender, EventArgs e)
-        {
-            ClickAceptar();
+            Controls.Add(tableLayoutPanel);
         }
 
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)

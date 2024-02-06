@@ -85,6 +85,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormularioReporte\Parametros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormularioReporte\Parametros.designer.cs">
+      <DependentUpon>Parametros.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormularioReporte\ReportViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,12 +108,6 @@
     </Compile>
     <Compile Include="Listados.Designer.cs">
       <DependentUpon>Listados.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormularioReporte\Parametros.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormularioReporte\Parametros.Designer.cs">
-      <DependentUpon>Parametros.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
