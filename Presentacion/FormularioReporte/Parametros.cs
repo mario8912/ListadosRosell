@@ -9,9 +9,9 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
-        private string _rutaReporte;
-       
-
+        private readonly string _rutaReporte;
+        private Button _btnAceptar;
+        private CheckBox _chkBoxVistaPrevia;
         public Parametros(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
@@ -21,7 +21,7 @@ namespace Capas
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
             int parDeCampos = 0;
-            
+            int incrementoFilasTableLAyout = 0;
 
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
@@ -30,8 +30,6 @@ namespace Capas
 
                 if (nombreParametro.Substring(nombreParametro.Length - 3) == "FIN" || nombreParametro.Substring(nombreParametro.Length - 3) == "INI")
                 {
-                    
-
                     parDeCampos++;
 
                     if (nombreParametro.Substring(0, 1) == "@") nombreLabel = nombreParametro.Substring(1, nombreParametro.Length - 4);        
@@ -39,31 +37,55 @@ namespace Capas
                     
                     if(parDeCampos % 2 == 0)
                     {
-                       
+
+                        incrementoFilasTableLAyout++;
                     }
                 }
                 else
                 {
+                    nombreLabel = nombreParametro + ":";
+                    Label label = new Label 
+                    {
+                        Text = nombreLabel,
+                        Dock = DockStyle.Bottom,
+                    };
 
-                   
+                    TextBox textBox = new TextBox
+                    {
+                        Dock = DockStyle.Bottom
+                    };
+
+                    tableLayoutPanel1.Controls.Add(label, 0, incrementoFilasTableLAyout);
+                    tableLayoutPanel1.Controls.Add(textBox, 1, incrementoFilasTableLAyout);
+                    incrementoFilasTableLAyout++;
                 }
             }
 
-            btnAceptar = new Button
+            _btnAceptar = new Button
             {
                 Text = "Aceptar",
-                AutoSize = true
+                AutoSize = true,
+                Dock = DockStyle.Bottom
             };
-            btnAceptar.Click += new EventHandler(btnAceptar_Click);
+            _btnAceptar.Click += new EventHandler(btnAceptar_Click);
 
-            chkBoxVistaPrevia = new CheckBox
+            _chkBoxVistaPrevia = new CheckBox
             {
                 Text = "Vista previa",
                 AutoSize = true,
-                Checked = true
+                Checked = true,
+                Dock = DockStyle.Bottom
             };
 
-            AutoSize = true;
+            tableLayoutPanel1.Controls.Add(_btnAceptar, 2, incrementoFilasTableLAyout);
+            //tableLayoutPanel1.SetColumnSpan(_btnAceptar, 2);
+            tableLayoutPanel1.Controls.Add(_chkBoxVistaPrevia, 2, incrementoFilasTableLAyout);
+            //tableLayoutPanel1.SetColumnSpan(_chkBoxVistaPrevia, 2);
+        }
+
+        private void btnAceptar_Click(object sender, EventArgs e)
+        {
+            ClickAceptar();
         }
 
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
@@ -84,9 +106,9 @@ namespace Capas
             MessageBox.Show(str);
         }
 
-        private void btnAceptar_Click(object sender, EventArgs e)
+        private void ClickAceptar()
         {
-            if (chkBoxVistaPrevia.Checked)
+            if (_chkBoxVistaPrevia.Checked)
             {
                 RptViewer visorReporte = new RptViewer()
                 {

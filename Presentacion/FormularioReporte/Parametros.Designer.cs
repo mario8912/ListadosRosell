@@ -28,37 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.chkBoxVistaPrevia = new System.Windows.Forms.CheckBox();
-            this.btnAceptar = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
             // 
-            // chkBoxVistaPrevia
+            // tableLayoutPanel1
             // 
-            this.chkBoxVistaPrevia.AutoSize = true;
-            this.chkBoxVistaPrevia.Location = new System.Drawing.Point(626, 421);
-            this.chkBoxVistaPrevia.Name = "chkBoxVistaPrevia";
-            this.chkBoxVistaPrevia.Size = new System.Drawing.Size(81, 17);
-            this.chkBoxVistaPrevia.TabIndex = 0;
-            this.chkBoxVistaPrevia.Text = "Vista previa";
-            this.chkBoxVistaPrevia.UseVisualStyleBackColor = true;
-            // 
-            // btnAceptar
-            // 
-            this.btnAceptar.Location = new System.Drawing.Point(713, 415);
-            this.btnAceptar.Name = "btnAceptar";
-            this.btnAceptar.Size = new System.Drawing.Size(75, 23);
-            this.btnAceptar.TabIndex = 1;
-            this.btnAceptar.Text = "Aceptar";
-            this.btnAceptar.UseVisualStyleBackColor = true;
-            this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(606, 73);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // Parametros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnAceptar);
-            this.Controls.Add(this.chkBoxVistaPrevia);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(606, 73);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Parametros";
             this.Text = "FormParametrosReporte";
             this.Load += new System.EventHandler(this.FormParametrosReporte_Load);
@@ -69,7 +65,6 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox chkBoxVistaPrevia;
-        private System.Windows.Forms.Button btnAceptar;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
