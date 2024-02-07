@@ -22,13 +22,13 @@ namespace Datos
 
         private void EstablecerServidorBaseDeDatos()
         {
-            if (nombreEquipo == "PUESTO012") Servidor = "server2017";
+            if (nombreEquipo == "PUESTO012") Servidor = "(local)";
             else Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
 
             Usuario = "sa";
             Contrasenya = "";
             BaseDeDatos = "rosell";
-            SeguridadIntegrada = true;
+            SeguridadIntegrada = false;
         }
         public async Task ComprobarConexion()
         {
@@ -50,9 +50,9 @@ namespace Datos
 
         private string FormatoCadenaConexion()
         {
-            //return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
+            return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
             
-            return string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            //return string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
     }

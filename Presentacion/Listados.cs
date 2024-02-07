@@ -13,7 +13,9 @@ namespace Capas
     {
         private static string _rutaReporte;
         private DialogResult _respuesta;
+#pragma warning disable CS0649 // El campo 'Listados._listaParametros' nunca se asigna y siempre tendrá el valor predeterminado null
         private HashSet<string> _listaParametros;
+#pragma warning restore CS0649 // El campo 'Listados._listaParametros' nunca se asigna y siempre tendrá el valor predeterminado null
 
         public Listados()
         {

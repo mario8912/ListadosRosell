@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using CrystalDecisions.CrystalReports.Engine;
 
@@ -23,5 +24,14 @@ namespace Entidades
         {
             frmHijo.MdiParent = frmPadre;
         }
+
+        public static int clienteIni;
+        public static int clienteFin;
+
+        public static int rutaIni;
+        public static int rutaFin;
+
+        public static int preventaIni;
+        public static int preventaFin;
     }
 }
