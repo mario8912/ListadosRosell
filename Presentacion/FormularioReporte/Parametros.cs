@@ -18,8 +18,10 @@ namespace Capas
         private int _incrementoLayoutFilas;
         private string _nombreLabel;
         private string _nombreParametro;
+        private string _iniFinParametro;
 
         private ParameterFieldDefinition _item;
+
         public Parametros(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
@@ -28,15 +30,6 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            Cargar();
-        }
-        private void btnAceptar_Click(object sender, EventArgs e)
-        {
-            ClickAceptar();
-        }
-
-        private void Cargar()
-        {
             AgregarTableLayoutPanel();
 
             _incrementoLayoutFilas = 0;
@@ -44,33 +37,42 @@ namespace Capas
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _nombreParametro = item.Name.ToUpper();
-
-                if (_nombreParametro.Substring(0, 1) == "@") _nombreLabel = _nombreParametro.Substring(1, _nombreParametro.Length - 4);
-                else _nombreLabel = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
-
-                string iniFinparametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
-                switch (iniFinparametro)
-                {
-                    case "INI":
-                        AgregarCampoParametroRangoIni();
-                        break;
-
-                    case "FIN":
-                        AgregarCampoParametroRangoFin();
-                        _incrementoLayoutFilas++;
-                        break;
-
-                    default:
-                        AgregarCampoParametroDiscreto();
-                        _incrementoLayoutFilas++;
-                        break;
-                }
+                NombreParametroSinIniFin();
+                SwitchIniFinParametros();
             }
 
             AgregarBotonCheckBox();
             Controls.Add(_tableLayoutPanel);
         }
+        
+        private void NombreParametroSinIniFin()
+        {
+            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;
 
+            _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
+
+            _nombreParametro = _iniFinParametro == "INI" || _iniFinParametro == "FIN" ? _nombreParametro.Substring(0, _nombreParametro.Length - 3) : _nombreParametro;
+            _nombreLabel = _nombreParametro + ":";
+        }
+        private void SwitchIniFinParametros() 
+        {
+            switch (_iniFinParametro)
+            {
+                case "INI":
+                    AgregarCampoParametroRangoIni();
+                    break;
+
+                case "FIN":
+                    AgregarCampoParametroRangoFin();
+                    _incrementoLayoutFilas++;
+                    break;
+
+                default:
+                    AgregarCampoParametroDiscreto();
+                    _incrementoLayoutFilas++;
+                    break;
+            }
+        }
         private void AgregarTableLayoutPanel()
         {
             _tableLayoutPanel = new TableLayoutPanel
@@ -88,7 +90,6 @@ namespace Capas
         }
         private void AgregarCampoParametroDiscreto()
         {
-            _nombreLabel = _nombreParametro + ":";
             Label label = new Label
             {
                 Text = _nombreLabel,
@@ -102,16 +103,12 @@ namespace Capas
                 Tag = _nombreParametro
             };
 
-
-            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+            AgregarFila();
             _tableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
-
-            
         }
         private void AgregarCampoParametroRangoIni()
         {
-            _nombreLabel += ":";
             Label labelDesde = new Label
             {
                 Text = _nombreLabel,
@@ -125,13 +122,12 @@ namespace Capas
                 Tag = _nombreParametro
             };
 
-            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+            AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
         }
         private void AgregarCampoParametroRangoFin()
         {
-            _nombreLabel += ":";
             Label labelHasta = new Label
             {
                 Text = _nombreLabel,
@@ -145,10 +141,9 @@ namespace Capas
                 Tag = _nombreParametro
             };
 
+            AgregarFila();
             _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
-            _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
-
-            
+            _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas); 
         }
         private void AgregarBotonCheckBox()
         {
@@ -161,14 +156,18 @@ namespace Capas
 
             _btnAceptar = new Button
             {
-                Text = "Aceptar",
+                Text = "ACEPTAR",
                 Dock = DockStyle.Bottom
             };
             _btnAceptar.Click += btnAceptar_Click;
 
-            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+            AgregarFila();
             _tableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(_btnAceptar, 3, _incrementoLayoutFilas);
+        }
+        private void AgregarFila()
+        {
+            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
         private void AnadirValoresPredeterminadosList()
         {
@@ -199,6 +198,10 @@ namespace Capas
                 "Nombre Reporte: {4}",
                 tipoParametro, tipoValorParametro, tipoOtra, nombre, discretoRango);
             MessageBox.Show(str);
+        }
+        private void btnAceptar_Click(object sender, EventArgs e)
+        {
+            ClickAceptar();
         }
         private void ClickAceptar()
         {
