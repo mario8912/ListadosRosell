@@ -1,8 +1,8 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
 using Entidades;
 using Negocio;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Capas
@@ -17,8 +17,11 @@ namespace Capas
         private TableLayoutPanel _tableLayoutPanel;
         private int _incrementoLayoutFilas;
         private string _nombreLabel;
+        private string _parametro;
         private string _nombreParametro;
         private string _iniFinParametro;
+
+        private Dictionary<Control, string> _diccionarioParametros = new Dictionary<Control, string>();
 
         private ParameterFieldDefinition _item;
 
@@ -37,6 +40,8 @@ namespace Capas
             foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _nombreParametro = item.Name.ToUpper();
+                _parametro = item.Name;
+
                 NombreParametroSinIniFin();
                 SwitchIniFinParametros();
             }
@@ -100,7 +105,7 @@ namespace Capas
             ComboBox comboBox = new ComboBox
             {
                 Dock = DockStyle.Bottom,
-                Tag = _nombreParametro
+                Tag = _parametro
             };
 
             AgregarFila();
@@ -119,9 +124,10 @@ namespace Capas
             ComboBox comboBoxDesde = new ComboBox
             {
                 Dock = DockStyle.Bottom,
-                Tag = _nombreParametro
+                Tag = _parametro
             };
 
+            comboBoxDesde.Items.Add(NegocioParametrosReporte.NegocioConsultaParametros("preventista", "idpreventa", true));
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
@@ -138,12 +144,12 @@ namespace Capas
             ComboBox comboBoxHasta = new ComboBox
             {
                 Dock = DockStyle.Bottom,
-                Tag = _nombreParametro
+                Tag = _parametro
             };
 
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
-            _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas); 
+            _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
         }
         private void AgregarBotonCheckBox()
         {
@@ -151,7 +157,7 @@ namespace Capas
             {
                 Text = "Vista Previa",
                 Dock = DockStyle.Bottom,
-                Enabled = true
+                Checked = true
             };
 
             _btnAceptar = new Button
@@ -169,18 +175,9 @@ namespace Capas
         {
             _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
-        private void AnadirValoresPredeterminadosList()
+        private void RellenarDiccionarioControlParametro(Control control, string parametro)
         {
-            if (_item.DefaultValues.Count > 0)
-            {
-                foreach (ParameterValue parametroValor in _item.DefaultValues)
-                {
-                    if (parametroValor is ParameterDiscreteValue discreteValue)
-                    {
-                        discreteValue.Value.ToString();
-                    }
-                }
-            }
+            _diccionarioParametros.Add(control, parametro);
         }
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
         {
