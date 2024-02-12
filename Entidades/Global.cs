@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using CrystalDecisions.CrystalReports.Engine;
 
@@ -25,6 +24,21 @@ namespace Entidades
             frmHijo.MdiParent = frmPadre;
         }
 
+        public const string MONEDA= "EURO";
+        public const float VALOR_MONEDA = 166.386f;
+        public static string[] CORREO = { "SINCORRREO", "CONCORREO", "TODOS" };
+
+        public static string familiaIni = "";
+        public static string familiaFin = "ZZZZ";
+
+        public static string subfamiliaIni = "";
+        public static string subfamiliaFin = "ZZZZ";
+
+        public static string articuloIni = "";
+        public static string articuloFin = "ZZZZ";
+        
+        public static bool inactivo = true;
+
         public static int clienteIni;
         public static int clienteFin;
 
@@ -33,5 +47,12 @@ namespace Entidades
 
         public static int preventaIni;
         public static int preventaFin;
+
+        public static DateTime fechaIni;
+        public static DateTime fechaFin;
+
+        public static int valorMinimoBeneficio;
+        public static string idTipoCliente;
     }
 }
+

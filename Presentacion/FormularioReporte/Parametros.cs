@@ -23,8 +23,6 @@ namespace Capas
 
         private Dictionary<Control, string> _diccionarioParametros = new Dictionary<Control, string>();
 
-        private ParameterFieldDefinition _item;
-
         public Parametros(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
@@ -127,7 +125,7 @@ namespace Capas
                 Tag = _parametro
             };
 
-            comboBoxDesde.Items.Add(NegocioParametrosReporte.NegocioConsultaParametros("preventista", "idpreventa", true));
+            //NegocioConsultaQuery(comboBoxDesde, _nombreLabel, false);
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
@@ -147,6 +145,7 @@ namespace Capas
                 Tag = _parametro
             };
 
+            //NegocioConsultaQuery(comboBoxHasta, _nombreLabel, true);
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
@@ -175,9 +174,10 @@ namespace Capas
         {
             _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
-        private void RellenarDiccionarioControlParametro(Control control, string parametro)
+
+        private void NegocioConsultaQuery(ComboBox comboBox, string tabla, bool minMax)
         {
-            _diccionarioParametros.Add(control, parametro);
+            comboBox.Items.Add(NegocioParametrosReporte.NegocioConsultaParametros(tabla, "idpreventa", minMax));
         }
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
         {
