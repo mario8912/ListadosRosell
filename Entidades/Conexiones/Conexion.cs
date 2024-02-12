@@ -11,6 +11,7 @@ namespace Datos
         public bool SeguridadIntegrada { get; set;}
         public string Usuario { get; set;}
         public string Contrasenya { get; set;}
+        internal SqlConnection _conexion;
 
         private string _cadenaConexion;
 
@@ -36,16 +37,16 @@ namespace Datos
         {
             string connectionString = _cadenaConexion;
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            using (_conexion = new SqlConnection(connectionString))
             {
                 try
                 {
-                    await conexion.OpenAsync();
+                    await _conexion.OpenAsync();
                     Console.WriteLine("Connected");
                 }
                 finally
                 {
-                    conexion.Close();
+                    CerrarConexion();
                 }
             }
         }
@@ -56,31 +57,21 @@ namespace Datos
             _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
-        public string SqlConexionQuery(string query)
-        {
-            SqlConnection conexion = new SqlConnection(_cadenaConexion);
-            try
-            {
-                conexion.Open();
+        
 
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        reader.Read();
-                        return reader.GetInt16(0).ToString();
-                    }
-                }
-            }
-            catch (Exception ex)
+        public void AbrirConexion()
+        {
+            FormatoCadenaConexion();
+            using (_conexion = new SqlConnection(_cadenaConexion))
             {
-                conexion.Close();
-                throw new Exception(ex.Message);
+                _conexion.Open();
             }
-            finally
-            {
-                conexion.Close();
-            }
+                
+        }
+
+        public void CerrarConexion()
+        {
+            _conexion.Close();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using Entidades;
+using Entidades.Modelos.Tablas;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -125,6 +126,9 @@ namespace Capas
                 Tag = _parametro
             };
 
+            Ruta rt = new Ruta();
+
+            MessageBox.Show(rt.GetMinIdRuta());
             //NegocioConsultaQuery(comboBoxDesde, _nombreLabel, false);
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
@@ -175,10 +179,10 @@ namespace Capas
             _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
 
-        private void NegocioConsultaQuery(ComboBox comboBox, string tabla, bool minMax)
+        /*private void NegocioConsultaQuery(ComboBox comboBox, string tabla, bool minMax)
         {
             comboBox.Items.Add(NegocioParametrosReporte.NegocioConsultaParametros(tabla, "idpreventa", minMax));
-        }
+        }*/
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
         {
             var tipoParametro = item.ParameterType;
