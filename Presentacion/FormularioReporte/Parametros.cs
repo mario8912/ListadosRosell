@@ -126,10 +126,6 @@ namespace Capas
                 Tag = _parametro
             };
 
-            Ruta rt = new Ruta();
-
-            MessageBox.Show(rt.GetMinIdRuta());
-            //NegocioConsultaQuery(comboBoxDesde, _nombreLabel, false);
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
@@ -149,7 +145,6 @@ namespace Capas
                 Tag = _parametro
             };
 
-            //NegocioConsultaQuery(comboBoxHasta, _nombreLabel, true);
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
@@ -179,10 +174,7 @@ namespace Capas
             _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
 
-        /*private void NegocioConsultaQuery(ComboBox comboBox, string tabla, bool minMax)
-        {
-            comboBox.Items.Add(NegocioParametrosReporte.NegocioConsultaParametros(tabla, "idpreventa", minMax));
-        }*/
+        
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
         {
             var tipoParametro = item.ParameterType;

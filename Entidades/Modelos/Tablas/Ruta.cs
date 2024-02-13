@@ -11,18 +11,6 @@ namespace Entidades.Modelos.Tablas
 {
     public class Ruta : Tabla
     {
-        private const string TABLA = "Ruta";
-
-        private readonly string IdRuta = "idRuta";
-
-        public string GetMinIdRuta()
-        {
-            return GetMinField(IdRuta, TABLA).RecordsAffected.ToString();
-        }
-
-        public string GetMaxIdRuta() 
-        {
-            return GetMinField(IdRuta, TABLA).RecordsAffected.ToString();
-        }
+       
     }
 }

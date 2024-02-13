@@ -57,18 +57,14 @@ namespace Datos
             _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
-        
-
         public void AbrirConexion()
         {
             FormatoCadenaConexion();
             using (_conexion = new SqlConnection(_cadenaConexion))
             {
                 _conexion.Open();
-            }
-                
+            }       
         }
-
         public void CerrarConexion()
         {
             _conexion.Close();
