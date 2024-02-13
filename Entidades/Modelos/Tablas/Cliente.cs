@@ -15,19 +15,22 @@ namespace Tablas
         private string _resultadoQuery;
         public Cliente()
         {
-            _query = $"SELECT MIN({COLUMNA_ID}) " +
-                $"FROM {NOMBRE_TABLA}";
+            _query =
+                $"SELECT MIN({COLUMNA_ID}) " +
+                $" FROM {NOMBRE_TABLA}" +
+                $" WHERE eliminado = 0";
             
             Datos(_query);
             IdClienteMin = _resultadoQuery;
 
-            _query = $"SELECT MAX({COLUMNA_ID}) " +
-                $"FROM {NOMBRE_TABLA}";
+            _query = 
+                $"SELECT MAX({COLUMNA_ID}) " +
+                $" FROM {NOMBRE_TABLA} " +
+                $" WHERE eliminado = 0";
 
             Datos(_query);
             IdClienteMax = _resultadoQuery;
         }
-
         protected void Datos(string query)
         {
             using (SqlDataReader reader = base.Consulta(query))

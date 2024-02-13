@@ -2,6 +2,9 @@
 using System;
 using System.Windows.Forms;
 using Negocio;
+using System.Threading.Tasks;
+using Datos;
+using Entidades;
 
 namespace Presentacion
 {
@@ -15,16 +18,20 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            Con();
-
+            Tasks();
             Application.Run(new MDI_Principal());
+            
         }
 
-        private static void Con()
+        private static void Tasks()
         {
-            PrimeraConexion prmCon = new PrimeraConexion();
-            prmCon.NegocioPrimeraConexion();
+            Task[] tasks = {
+                Task.Run(() => new Conexion().ComprobarConexion()),
+                Task.Run(() => Global.ConexionConsulta())
+            };
+
+            foreach (var task in tasks) if (task.IsCompleted) task.Dispose();
         }
     }
 }
+

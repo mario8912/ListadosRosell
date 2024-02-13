@@ -16,20 +16,22 @@ namespace Tablas
         private string _resultadoQuery;
         public Ruta()
         {
-            _query = $"SELECT MIN({COLUMNA_ID}) " +
-                $"FROM {NOMBRE_TABLA} AS r " +
-                $"inner join preventista as p " +
-                $"on p.idpreventa = r.idpreventa " +
-                $"nwhere p.inactivo = 0";
+            _query = 
+                $"SELECT MIN({COLUMNA_ID})" +
+                $" FROM {NOMBRE_TABLA} AS r" +
+                $" INNER JOIN preventista AS p" +
+                $" ON p.idpreventa = r.idpreventa" +
+                $" WHERE p.inactivo = 0";
 
             Datos(_query);
             IdRutaMin = _resultadoQuery;
 
-            _query = $"SELECT MAX({COLUMNA_ID}) " +
-                $"FROM {NOMBRE_TABLA} AS r " +
-                $"inner join preventista as p " +
-                $"on p.idpreventa = r.idpreventa " +
-                $"nwhere p.inactivo = 0";
+            _query =
+                $"SELECT MAX({COLUMNA_ID})" +
+                $" FROM {NOMBRE_TABLA} AS r" +
+                $" INNER JOIN preventista AS p" +
+                $" ON p.idpreventa = r.idpreventa" +
+                $" WHERE p.inactivo = 0";
 
             Datos( _query );
             IdRutaMax = _resultadoQuery;

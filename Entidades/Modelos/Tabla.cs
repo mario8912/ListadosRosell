@@ -6,9 +6,7 @@ using System.Data.SqlClient;
 namespace Entidades.Modelos
 {
     public abstract class Tabla
-    {
-        public SqlDataReader Reader { get; set; }
-
+    { 
         protected Conexion _conexion;
 
         public virtual SqlDataReader Consulta(string query)

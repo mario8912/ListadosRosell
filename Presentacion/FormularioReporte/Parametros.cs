@@ -10,19 +10,19 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
+        private const int ALTURA_FILA = 50;
         private string _rutaReporte;
 
-        private const int ALTURA_FILA = 50;
         private CheckBox _chkBoxVistaPrevia;
         private Button _btnAceptar;
         private TableLayoutPanel _tableLayoutPanel;
-        private int _incrementoLayoutFilas;
+
         private string _nombreLabel;
         private string _parametro;
         private string _nombreParametro;
         private string _iniFinParametro;
 
-        private Dictionary<Control, string> _diccionarioParametros = new Dictionary<Control, string>();
+        private int _incrementoLayoutFilas;
 
         public Parametros(string rutaReporte)
         {

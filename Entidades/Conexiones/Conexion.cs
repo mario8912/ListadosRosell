@@ -13,7 +13,7 @@ namespace Datos
         public string Contrasenya { get; set;}
 
         public SqlConnection _conexionSql;
-        private string _cadenaConexion;
+        private readonly string _cadenaConexion;
         private readonly string nombreEquipo = Environment.MachineName;
 
         public Conexion()
@@ -46,8 +46,8 @@ namespace Datos
 
         public string FormatoCadenaConexion()
         {
-            //return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
-            return _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
+            //return _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
         
         public void Dispose()
