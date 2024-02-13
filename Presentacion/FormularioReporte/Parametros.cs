@@ -1,6 +1,5 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using Entidades;
-using Entidades.Modelos.Tablas;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -105,6 +104,11 @@ namespace Capas
             {
                 Dock = DockStyle.Bottom,
                 Tag = _parametro
+            };
+
+            Ruta rt = new Ruta
+            {
+                Nombre = _nombreLabel
             };
 
             AgregarFila();

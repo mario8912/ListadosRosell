@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 
 namespace Datos
 {
-    public class Conexion
+    public class Conexion : IDisposable
     {
         public string Servidor {get; set;}
         public string BaseDeDatos { get; set;}
         public bool SeguridadIntegrada { get; set;}
         public string Usuario { get; set;}
         public string Contrasenya { get; set;}
-        internal SqlConnection _conexion;
+        public SqlConnection _conexionSql;
 
         private string _cadenaConexion;
 
@@ -20,7 +20,8 @@ namespace Datos
         public Conexion()
         {
             EstablecerServidorBaseDeDatos();
-            FormatoCadenaConexion();
+            _cadenaConexion = FormatoCadenaConexion();
+            _conexionSql = new SqlConnection(_cadenaConexion);
         }
 
         private void EstablecerServidorBaseDeDatos()
@@ -37,37 +38,46 @@ namespace Datos
         {
             string connectionString = _cadenaConexion;
 
-            using (_conexion = new SqlConnection(connectionString))
+            using (_conexionSql = new SqlConnection(connectionString))
             {
                 try
                 {
-                    await _conexion.OpenAsync();
-                    Console.WriteLine("Connected");
+                    await _conexionSql.OpenAsync();
                 }
                 finally
                 {
-                    CerrarConexion();
+                    Dispose();
                 }
             }
         }
 
-        private void FormatoCadenaConexion()
+        public string FormatoCadenaConexion()
         {
             //return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
-            _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            return _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+        }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_conexionSql != null)
+                {
+                    _conexionSql.Dispose();
+                    _conexionSql = null;
+                }
+            }
         }
 
         public void AbrirConexion()
         {
-            FormatoCadenaConexion();
-            using (_conexion = new SqlConnection(_cadenaConexion))
-            {
-                _conexion.Open();
-            }       
-        }
-        public void CerrarConexion()
-        {
-            _conexion.Close();
+            _conexionSql.Open();
         }
     }
 }
