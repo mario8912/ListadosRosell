@@ -67,6 +67,8 @@
     <Compile Include="Conexiones\ConexionReporte.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Modelos\Tabla.cs" />
+    <Compile Include="Modelos\Tablas\Cliente.cs" />
+    <Compile Include="Modelos\Tablas\Preventa.cs" />
     <Compile Include="Modelos\Tablas\Ruta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -11,10 +11,9 @@ namespace Datos
         public bool SeguridadIntegrada { get; set;}
         public string Usuario { get; set;}
         public string Contrasenya { get; set;}
+
         public SqlConnection _conexionSql;
-
         private string _cadenaConexion;
-
         private readonly string nombreEquipo = Environment.MachineName;
 
         public Conexion()
@@ -40,14 +39,8 @@ namespace Datos
 
             using (_conexionSql = new SqlConnection(connectionString))
             {
-                try
-                {
-                    await _conexionSql.OpenAsync();
-                }
-                finally
-                {
-                    Dispose();
-                }
+                try { await _conexionSql.OpenAsync(); }
+                finally { Dispose(); }
             }
         }
 

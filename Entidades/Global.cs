@@ -24,6 +24,7 @@ namespace Entidades
             frmHijo.MdiParent = frmPadre;
         }
 
+        /*
         public const string MONEDA= "EURO";
         public const float VALOR_MONEDA = 166.386f;
         public static string[] CORREO = { "SINCORRREO", "CONCORREO", "TODOS" };
@@ -53,6 +54,7 @@ namespace Entidades
 
         public static int valorMinimoBeneficio;
         public static string idTipoCliente;
+        */
     }
 }
 

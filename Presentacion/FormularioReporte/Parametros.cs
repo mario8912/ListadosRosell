@@ -4,6 +4,7 @@ using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Tablas;
 
 namespace Capas
 {
@@ -106,15 +107,11 @@ namespace Capas
                 Tag = _parametro
             };
 
-            Ruta rt = new Ruta
-            {
-                Nombre = _nombreLabel
-            };
-
             AgregarFila();
             _tableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
         }
+
         private void AgregarCampoParametroRangoIni()
         {
             Label labelDesde = new Label
@@ -177,25 +174,6 @@ namespace Capas
         {
             _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
-
-        
-        private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
-        {
-            var tipoParametro = item.ParameterType;
-            var tipoValorParametro = item.ValueType;
-            var tipoOtra = item.ParameterValueKind;
-            var nombre = item.Name;
-            var discretoRango = item.DiscreteOrRangeKind;
-
-            string str = string.Format(
-                "TipoParametro: {0} " + Environment.NewLine +
-                "ValueType: {1}" + Environment.NewLine +
-                "ValueKind: {2}" + Environment.NewLine +
-                "Nombre: {3}" + Environment.NewLine +
-                "Nombre Reporte: {4}",
-                tipoParametro, tipoValorParametro, tipoOtra, nombre, discretoRango);
-            MessageBox.Show(str);
-        }
         private void btnAceptar_Click(object sender, EventArgs e)
         {
             ClickAceptar();
@@ -213,6 +191,23 @@ namespace Capas
             else NegocioReporte.ImprimirReporte();
 
             Close();
+        }
+        private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
+        {
+            var tipoParametro = item.ParameterType;
+            var tipoValorParametro = item.ValueType;
+            var tipoOtra = item.ParameterValueKind;
+            var nombre = item.Name;
+            var discretoRango = item.DiscreteOrRangeKind;
+
+            string str = string.Format(
+                "TipoParametro: {0} " + Environment.NewLine +
+                "ValueType: {1}" + Environment.NewLine +
+                "ValueKind: {2}" + Environment.NewLine +
+                "Nombre: {3}" + Environment.NewLine +
+                "Nombre Reporte: {4}",
+                tipoParametro, tipoValorParametro, tipoOtra, nombre, discretoRango);
+            MessageBox.Show(str);
         }
     }
 }
