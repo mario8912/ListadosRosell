@@ -110,6 +110,7 @@
       <DependentUpon>Listados.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="ProgramHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormularioReporte\Parametros.resx">
       <DependentUpon>Parametros.cs</DependentUpon>

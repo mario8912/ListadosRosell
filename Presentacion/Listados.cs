@@ -145,7 +145,7 @@ namespace Capas
 
         private void FormParametrosReporte()
         {
-            new Parametros(_rutaReporte).ShowDialog();
+            new Parametros().ShowDialog();
         }
 
         private void FormatoPostCargaFormulario()

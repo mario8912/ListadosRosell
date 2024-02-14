@@ -1,32 +1,34 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using Entidades;
+using Entidades.Modelos;
 using Negocio;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using Tablas;
 
 namespace Capas
 {
     public partial class Parametros : Form
     {
+        private readonly ReportDocument _reporte;
         private const int ALTURA_FILA = 50;
-        private string _rutaReporte;
 
         private CheckBox _chkBoxVistaPrevia;
         private Button _btnAceptar;
         private TableLayoutPanel _tableLayoutPanel;
 
         private string _nombreLabel;
-        private string _parametro;
+        private ParameterField _parametro;
         private string _nombreParametro;
         private string _iniFinParametro;
+        private string _desdeHastaParametro;
+        private string _valorPorDefecto;
 
         private int _incrementoLayoutFilas;
 
-        public Parametros(string rutaReporte)
+        public Parametros()
         {
-            _rutaReporte = rutaReporte;
+            _reporte = Global.ReporteCargado;
             InitializeComponent();
         }
 
@@ -35,37 +37,63 @@ namespace Capas
             AgregarTableLayoutPanel();
 
             _incrementoLayoutFilas = 0;
-
-            foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
+            foreach (ParameterField parametro in _reporte.ParameterFields)
             {
-                _nombreParametro = item.Name.ToUpper();
-                _parametro = item.Name;
+                Console.WriteLine();
+                _parametro = parametro;
+                _nombreParametro = parametro.Name.ToUpper();
 
                 NombreParametroSinIniFin();
                 SwitchIniFinParametros();
-            }
-
+            } 
+            
             AgregarBotonCheckBox();
             Controls.Add(_tableLayoutPanel);
+        }
+
+        private void AnadirValoresPredeterminadoParametroDiscreto(ComboBox comboBox)
+        {
+            if (_parametro.DefaultValues.Count > 0)
+            {
+                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues) comboBox.Items.Add(valorPredeterminado.Value);   
+            }
         }
         
         private void NombreParametroSinIniFin()
         {
-            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;
+            ExtrarPrefijoRangoDeParametro();
 
-            _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
+            if (_iniFinParametro == "INI" || _iniFinParametro == "FIN")
+            {
+                _nombreParametro = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
+            }
+            else if (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA")
+            {
+                _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
+            }
+            
+            _nombreLabel = _nombreParametro + ":";  
+        }
 
-            _nombreParametro = _iniFinParametro == "INI" || _iniFinParametro == "FIN" ? _nombreParametro.Substring(0, _nombreParametro.Length - 3) : _nombreParametro;
-            _nombreLabel = _nombreParametro + ":";
+        private void ExtrarPrefijoRangoDeParametro()
+        {
+            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;            
+            
+            if(_nombreParametro.Length > 3) _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
+            if (_nombreParametro.Length > 5) _desdeHastaParametro = _nombreParametro.Substring(0, 5).ToUpper().Trim();
         }
         private void SwitchIniFinParametros() 
         {
-            switch (_iniFinParametro)
+            string condicionSwitxh = (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") ? _desdeHastaParametro : _iniFinParametro;
+            
+            switch (condicionSwitxh)
             {
+                case "DESDE":
                 case "INI":
                     AgregarCampoParametroRangoIni();
                     break;
 
+                case "HASTA":
                 case "FIN":
                     AgregarCampoParametroRangoFin();
                     _incrementoLayoutFilas++;
@@ -107,11 +135,12 @@ namespace Capas
                 Tag = _parametro
             };
 
+
+            AnadirValoresPredeterminadoParametroDiscreto(comboBox);
             AgregarFila();
             _tableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
         }
-
         private void AgregarCampoParametroRangoIni()
         {
             Label labelDesde = new Label
@@ -127,6 +156,7 @@ namespace Capas
                 Tag = _parametro
             };
 
+            comboBoxDesde.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
@@ -146,6 +176,7 @@ namespace Capas
                 Tag = _parametro
             };
 
+            comboBoxHasta.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, false));
             AgregarFila();
             _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);

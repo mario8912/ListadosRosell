@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using Negocio;
 using System.Threading.Tasks;
 using Datos;
-using Entidades;
 
 namespace Presentacion
 {
@@ -18,19 +17,21 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Tasks();
+            TaskComprobarConexion();
             Application.Run(new MDI_Principal());
             
         }
 
-        private static void Tasks()
+        private static void TaskComprobarConexion()
         {
-            Task[] tasks = {
-                Task.Run(() => new Conexion().ComprobarConexion()),
-                Task.Run(() => Global.ConexionConsulta())
-            };
-
-            foreach (var task in tasks) if (task.IsCompleted) task.Dispose();
+            Task comprobarConexion = Task.Run(async () => 
+            {
+                using (Conexion cn = new Conexion())
+                {
+                    await cn.ComprobarConexion();
+                }
+            });
+            if (comprobarConexion.IsCompleted) comprobarConexion.Dispose();
         }
     }
 }
