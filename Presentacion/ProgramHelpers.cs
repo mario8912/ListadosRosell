@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 
 internal static class ProgramHelpers
 {
-
-    private static void TaskComprobarConexion()
+    public static void TaskComprobarConexion()
     {
         Task comprobarConexion = Task.Run(async () =>
         {

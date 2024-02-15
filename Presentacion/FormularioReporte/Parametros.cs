@@ -4,6 +4,7 @@ using Entidades;
 using Entidades.Modelos;
 using Negocio;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Capas
@@ -17,14 +18,18 @@ namespace Capas
         private Button _btnAceptar;
         private TableLayoutPanel _tableLayoutPanel;
 
-        private string _nombreLabel;
+        private int _incrementoLayoutFilas;
+
         private ParameterField _parametro;
+        private string _nombreLabel;
         private string _nombreParametro;
+
         private string _iniFinParametro;
         private string _desdeHastaParametro;
-        private string _valorPorDefecto;
 
-        private int _incrementoLayoutFilas;
+
+        Dictionary<string, string> _dict;
+        private string _nombreParametroDiccionario;
 
         public Parametros()
         {
@@ -39,14 +44,14 @@ namespace Capas
             _incrementoLayoutFilas = 0;
             foreach (ParameterField parametro in _reporte.ParameterFields)
             {
-                Console.WriteLine();
                 _parametro = parametro;
+                _nombreParametroDiccionario = parametro.Name;
                 _nombreParametro = parametro.Name.ToUpper();
 
                 NombreParametroSinIniFin();
                 SwitchIniFinParametros();
-            } 
-            
+            }
+
             AgregarBotonCheckBox();
             Controls.Add(_tableLayoutPanel);
         }
@@ -55,10 +60,10 @@ namespace Capas
         {
             if (_parametro.DefaultValues.Count > 0)
             {
-                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues) comboBox.Items.Add(valorPredeterminado.Value);   
+                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues) comboBox.Items.Add(valorPredeterminado.Value);
             }
         }
-        
+
         private void NombreParametroSinIniFin()
         {
             ExtrarPrefijoRangoDeParametro();
@@ -71,21 +76,21 @@ namespace Capas
             {
                 _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
             }
-            
-            _nombreLabel = _nombreParametro + ":";  
+
+            _nombreLabel = _nombreParametro + ":";
         }
 
         private void ExtrarPrefijoRangoDeParametro()
         {
-            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;            
-            
-            if(_nombreParametro.Length > 3) _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
+            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;
+
+            if (_nombreParametro.Length > 3) _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
             if (_nombreParametro.Length > 5) _desdeHastaParametro = _nombreParametro.Substring(0, 5).ToUpper().Trim();
         }
-        private void SwitchIniFinParametros() 
+        private void SwitchIniFinParametros()
         {
             string condicionSwitxh = (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") ? _desdeHastaParametro : _iniFinParametro;
-            
+
             switch (condicionSwitxh)
             {
                 case "DESDE":
@@ -126,13 +131,13 @@ namespace Capas
             {
                 Text = _nombreLabel,
                 TextAlign = System.Drawing.ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom
+                Dock = DockStyle.Bottom,
+                Tag = _nombreParametroDiccionario
             };
 
             ComboBox comboBox = new ComboBox
             {
-                Dock = DockStyle.Bottom,
-                Tag = _parametro
+                Dock = DockStyle.Bottom
             };
 
 
@@ -147,19 +152,32 @@ namespace Capas
             {
                 Text = _nombreLabel,
                 TextAlign = System.Drawing.ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom
-            };
-
-            ComboBox comboBoxDesde = new ComboBox
-            {
                 Dock = DockStyle.Bottom,
-                Tag = _parametro
+                Tag = _nombreParametroDiccionario
             };
 
-            comboBoxDesde.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
-            AgregarFila();
             _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
-            _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
+
+            if (_nombreLabel == "FECHA:")
+            {
+                DateTimePicker dtp = new DateTimePicker
+                {
+                    Dock = DockStyle.Bottom
+                };
+                _tableLayoutPanel.Controls.Add(dtp, 1, _incrementoLayoutFilas);
+            }
+            else
+            {
+                ComboBox comboBoxDesde = new ComboBox
+                {
+                    Dock = DockStyle.Bottom
+                };
+
+                comboBoxDesde.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
+                _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
+            }
+
+            AgregarFila();
         }
         private void AgregarCampoParametroRangoFin()
         {
@@ -167,19 +185,32 @@ namespace Capas
             {
                 Text = _nombreLabel,
                 TextAlign = System.Drawing.ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom
-            };
-
-            ComboBox comboBoxHasta = new ComboBox
-            {
                 Dock = DockStyle.Bottom,
-                Tag = _parametro
+                Tag = _nombreParametroDiccionario
             };
 
-            comboBoxHasta.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, false));
-            AgregarFila();
             _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
-            _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
+
+            if (_nombreLabel == "FECHA:")
+            {
+                DateTimePicker dtp = new DateTimePicker
+                {
+                    Dock = DockStyle.Bottom
+                };
+                _tableLayoutPanel.Controls.Add(dtp, 3, _incrementoLayoutFilas);
+            }
+            else
+            {
+                ComboBox comboBoxHasta = new ComboBox
+                {
+                    Dock = DockStyle.Bottom
+                };
+
+                comboBoxHasta.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, false));
+                _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
+            }
+
+            AgregarFila();
         }
         private void AgregarBotonCheckBox()
         {
@@ -211,8 +242,10 @@ namespace Capas
         }
         private void ClickAceptar()
         {
+            LeerControles();
             if (_chkBoxVistaPrevia.Checked)
             {
+                AsignaParametros();
                 RptViewer visorReporte = new RptViewer()
                 {
                     MdiParent = MDI_Principal.InstanciaMdiPrincipal
@@ -221,7 +254,31 @@ namespace Capas
             }
             else NegocioReporte.ImprimirReporte();
 
+
             Close();
+        }
+        private void LeerControles()
+        {
+            _dict = new Dictionary<string, string>();
+
+            for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
+            {
+                Control label = _tableLayoutPanel.Controls[i];
+                Control controlSiguiente = _tableLayoutPanel.Controls[i + 1];
+
+                if (label is Label) _dict.Add(label.Tag.ToString(), controlSiguiente.Text);
+            }
+        }
+
+        private void AsignaParametros()
+        {
+            ParameterFields paramFields = _reporte.ParameterFields;
+
+            // Asignar valores a los parámetros existentes
+            foreach (ParameterField parametro in paramFields)
+            {
+                parametro.
+            }
         }
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
         {

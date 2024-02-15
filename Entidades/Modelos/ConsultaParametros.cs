@@ -14,8 +14,10 @@ namespace Entidades.Modelos
        {
             _parametro = parametro;
             _minMax = minMax;
+
             Stopwatch sp = new Stopwatch();
             sp.Start();
+
             using (Conexion cn = new Conexion())
             {
                 cn.AbrirConexion();
@@ -50,13 +52,20 @@ namespace Entidades.Modelos
 
             switch(_parametro.ToLower())
             {
+                case "idcliente":
                 case "cliente":
                     return $"" +
                         $"SELECT {minMaxQuery}(idCliente)" +
                         $" FROM cliente" +
                         $" WHERE eliminado = 0";
 
+                case "idtipocliente":
+                case "tipocliente":
+                    return $"SELECT {minMaxQuery}(idTipoCliente)" +
+                        $" FROM tipocliente";
+
                 case "preventa":
+                case "preventista":
                     return $"" +
                         $"SELECT {minMaxQuery}(idPreventa)" +
                         $" FROM preventista" +
@@ -68,13 +77,24 @@ namespace Entidades.Modelos
                         $" FROM ruta AS r " +
                         $" INNER JOIN preventista AS p " +
                         $" ON p.idpreventa = r.idpreventa" +
-                        $" WHERE p.inactivo = 0";
+                        $" WHERE p.inactivo = 0" +
+                        $" AND r.idruta < 1000";
 
                 case "articulo":
                     return $"" +
                         $"SELECT {minMaxQuery}(idArticulo)" +
                         $" FROM articulo" +
                         $"W HERE eliminado = 0";
+
+                case "familia":
+                    return $"" +
+                        $" SELECT {minMaxQuery}(idFamilia)" +
+                        $" FROM familia";
+
+                case "proveedor":
+                    return $"" +
+                        $" SELECT {minMaxQuery}(idProveedor)" +
+                        $" FROM proveedor";
 
                 default:
                     return string.Empty; 

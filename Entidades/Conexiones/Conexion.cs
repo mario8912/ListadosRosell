@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Entidades;
+using System;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Datos
@@ -19,8 +21,8 @@ namespace Datos
         public Conexion()
         {
             EstablecerServidorBaseDeDatos();
-            _cadenaConexion = FormatoCadenaConexion();
-            _conexionSql = new SqlConnection(_cadenaConexion);
+            FormatoCadenaConexion();
+            _conexionSql = new SqlConnection(Global.CadenaConexion);
         }
 
         private void EstablecerServidorBaseDeDatos()
@@ -36,7 +38,7 @@ namespace Datos
         public async Task ComprobarConexion()
         {
             string connectionString = _cadenaConexion;
-
+            
             using (_conexionSql = new SqlConnection(connectionString))
             {
                 try { await _conexionSql.OpenAsync(); }
@@ -44,12 +46,12 @@ namespace Datos
             }
         }
 
-        public string FormatoCadenaConexion()
+        public void FormatoCadenaConexion()
         {
-            return string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
-            //return _cadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            Global.CadenaConexion = string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
+            //Global.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
-        
+
         public void Dispose()
         {
             Dispose(true);

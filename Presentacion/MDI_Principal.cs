@@ -30,5 +30,7 @@ namespace Capas
             formulario.MdiParent = this;
         }
         #endregion
+
+        
     }
 }

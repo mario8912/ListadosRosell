@@ -12,6 +12,7 @@ namespace Entidades
 {
     public static class Global
     {
+        public static string CadenaConexion;
         public static string RutaAplicacion = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string RutaDirectorioInformes = TryRutaInformes();
         public static string RutaReporte;
@@ -28,11 +29,9 @@ namespace Entidades
         {
             frmHijo.MdiParent = frmPadre;
         }
-
         
         public const string MONEDA= "EURO";
         public const float VALOR_MONEDA = 166.386f;
-        public static string[] CORREO = { "SINCORRREO", "CONCORREO", "TODOS" };
 
         public const string subfamiliaIni = " ";
         public const string subfamiliaFin = "ZZZZ";
@@ -45,24 +44,38 @@ namespace Entidades
         
         public static bool inactivo = true;
 
-        public static string clienteIni;
-        public static string clienteFin;
-
-        public static string rutaIni;
-        public static string rutaFin;
-
-        public static string preventaIni;
-        public static string preventaFin;
-
-        public static string tipoClienteIni;
-        public static string tipoClienteFin;
-
         public static DateTime fechaIni;
         public static DateTime fechaFin;
+    }
 
-        public static int valorMinimoBeneficio;
-        public static string idTipoCliente;
+    public static class StopGuach
+    {
+        private static readonly Stopwatch sp;
+        static StopGuach()
+        {
+            sp = new Stopwatch();
+        }
+
+        public static void Dale()
+        {
+            sp.Start();
+        }
+
+        public static void ParaY_Elased()
+        {
+            Para();
+            Elased();
+        }
+
+        private static void Para()
+        {
+            sp.Stop();
+        }
+
+        private static void Elased()
+        {
+            Console.WriteLine(sp.Elapsed);
+        }
 
     }
 }
-

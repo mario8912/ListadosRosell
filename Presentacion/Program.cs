@@ -17,21 +17,9 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            TaskComprobarConexion();
+            ProgramHelpers.TaskComprobarConexion();
             Application.Run(new MDI_Principal());
             
-        }
-
-        private static void TaskComprobarConexion()
-        {
-            Task comprobarConexion = Task.Run(async () => 
-            {
-                using (Conexion cn = new Conexion())
-                {
-                    await cn.ComprobarConexion();
-                }
-            });
-            if (comprobarConexion.IsCompleted) comprobarConexion.Dispose();
         }
     }
 }
