@@ -20,7 +20,7 @@ namespace Capas
 
         private int _incrementoLayoutFilas;
 
-        private ParameterField _parametro;
+        private ParameterFieldDefinition _parametro;
         private string _nombreLabel;
         private string _nombreParametro;
 
@@ -42,7 +42,7 @@ namespace Capas
             AgregarTableLayoutPanel();
 
             _incrementoLayoutFilas = 0;
-            foreach (ParameterField parametro in _reporte.ParameterFields)
+            foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
                 _parametro = parametro;
                 _nombreParametroDiccionario = parametro.Name;
@@ -55,15 +55,6 @@ namespace Capas
             AgregarBotonCheckBox();
             Controls.Add(_tableLayoutPanel);
         }
-
-        private void AnadirValoresPredeterminadoParametroDiscreto(ComboBox comboBox)
-        {
-            if (_parametro.DefaultValues.Count > 0)
-            {
-                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues) comboBox.Items.Add(valorPredeterminado.Value);
-            }
-        }
-
         private void NombreParametroSinIniFin()
         {
             ExtrarPrefijoRangoDeParametro();
@@ -145,6 +136,14 @@ namespace Capas
             AgregarFila();
             _tableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
+        }
+
+        private void AnadirValoresPredeterminadoParametroDiscreto(ComboBox comboBox)
+        {
+            if (_parametro.DefaultValues.Count > 0)
+            {
+                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues) comboBox.Items.Add(valorPredeterminado.Value);
+            }
         }
         private void AgregarCampoParametroRangoIni()
         {
@@ -254,7 +253,6 @@ namespace Capas
             }
             else NegocioReporte.ImprimirReporte();
 
-
             Close();
         }
         private void LeerControles()
@@ -272,12 +270,11 @@ namespace Capas
 
         private void AsignaParametros()
         {
-            ParameterFields paramFields = _reporte.ParameterFields;
 
-            // Asignar valores a los parámetros existentes
-            foreach (ParameterField parametro in paramFields)
+            foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
-                parametro.
+                var nombreParametro = parametro.Name;
+                _reporte.SetParameterValue(nombreParametro, _dict[nombreParametro]);
             }
         }
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
