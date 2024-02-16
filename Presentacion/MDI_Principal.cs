@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Entidades;
+using System;
 using System.Windows.Forms;
 
 namespace Capas
 {
     public partial class MDI_Principal : Form
     {
+        private Listados _formularioListados = null;
         public static MDI_Principal InstanciaMdiPrincipal {  get; private set; }
         public MDI_Principal()
         {
@@ -13,24 +15,45 @@ namespace Capas
         }
         private void listadosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CrearInstanciaFormListados().Show();
+            bool directorioEncontrado = TryGlobaDirectorioInfomes();
+            if (directorioEncontrado)
+            {
+                if (_formularioListados == null || _formularioListados.IsDisposed)
+                {
+                    CrearInstanciaFormListados().Show();
+                }
+            }
         }
 
-        #region MIS MÉTODOS
-        internal Listados CrearInstanciaFormListados()
+        private bool TryGlobaDirectorioInfomes()
         {
-            Listados formularioListados = new Listados();
-            EstablecerHijoMdi(formularioListados);
+            try
+            {
+                Global.TryRutaInformes();
+                return true;
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "No se ha encontrado la carpeta que contiene los informes.",
+                    "Directorio no encontrado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return false;
+            }
+        }
 
-            return formularioListados;
+        private Listados CrearInstanciaFormListados()
+        {
+            _formularioListados = new Listados();
+            EstablecerHijoMdi(_formularioListados);
+
+            return _formularioListados;
         }
         
         internal void EstablecerHijoMdi(Form formulario)
         {
             formulario.MdiParent = this;
         }
-        #endregion
-
-        
     }
 }

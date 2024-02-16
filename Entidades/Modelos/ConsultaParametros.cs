@@ -1,7 +1,5 @@
 ﻿using Datos;
-using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
 
 namespace Entidades.Modelos
 {
@@ -9,29 +7,55 @@ namespace Entidades.Modelos
     {
         private static string _parametro;
         private static bool _minMax;
+        private static string _consulta;
         
        public static string ConsultaParametro(string parametro, bool minMax)
        {
-            _parametro = parametro;
+            _parametro = parametro.ToLower();
             _minMax = minMax;
+            _consulta = SwitchParametro();
 
-            Stopwatch sp = new Stopwatch();
-            sp.Start();
+            var respuesta = "";
 
-            using (Conexion cn = new Conexion())
+            if (_consulta == string.Empty || _consulta == "")
             {
-                cn.AbrirConexion();
-
-                var consulta = SwitchParametro();
-
-                if(consulta != string.Empty)
+                switch (_parametro)
                 {
-                    using (SqlCommand commando = new SqlCommand(consulta, cn._conexionSql))
+                    case "dia":
+                        if (minMax) respuesta = "0";
+                        else respuesta = "5";
+                        break;
+
+                    case "anyo":
+                        if (minMax) respuesta = "2017";
+                        else respuesta = "2024";
+                        break;
+
+                    case "mes":
+                        if (minMax) respuesta = "enero";
+                        else respuesta = "diciembre";
+                        break;
+
+                    case "cp":
+                        respuesta = "12001";
+                        break;
+
+                    default:
+                        break;
+                }
+                return respuesta;
+            }
+            else
+            {
+                using (Conexion cn = new Conexion())
+                {
+                    cn.AbrirConexion();
+                    
+                    using (SqlCommand commando = new SqlCommand(_consulta, cn._conexionSql))
                     {
                         SqlDataReader reader = commando.ExecuteReader();
                         reader.Read();
-                        
-                        var respuesta = reader.GetValue(0).ToString();
+                        respuesta = reader.GetValue(0).ToString();
 
                         reader.Close();
                         cn.Dispose();
@@ -39,10 +63,6 @@ namespace Entidades.Modelos
                         return respuesta;
                     }
                 }
-                cn.Dispose();
-                sp.Stop();
-                Console.WriteLine(sp.Elapsed);
-                return "";
             }
        }
 
@@ -50,7 +70,7 @@ namespace Entidades.Modelos
         {
             string minMaxQuery = _minMax ? "MIN" : "MAX";
 
-            switch(_parametro.ToLower())
+            switch(_parametro)
             {
                 case "idcliente":
                 case "cliente":
@@ -60,6 +80,7 @@ namespace Entidades.Modelos
                         $" WHERE eliminado = 0";
 
                 case "idtipocliente":
+                case "tipo cliente":
                 case "tipocliente":
                     return $"SELECT {minMaxQuery}(idTipoCliente)" +
                         $" FROM tipocliente";
@@ -84,7 +105,7 @@ namespace Entidades.Modelos
                     return $"" +
                         $"SELECT {minMaxQuery}(idArticulo)" +
                         $" FROM articulo" +
-                        $"W HERE eliminado = 0";
+                        $" WHERE eliminado = 0";
 
                 case "familia":
                     return $"" +
@@ -96,6 +117,11 @@ namespace Entidades.Modelos
                         $" SELECT {minMaxQuery}(idProveedor)" +
                         $" FROM proveedor";
 
+                case "repartidor":
+                    return $"" +
+                        $"SELECT {minMaxQuery}(idRepartidor)" +
+                        $" FROM repartidor" +
+                        $" WHERE idRepartidor <> 100";
                 default:
                     return string.Empty; 
             }

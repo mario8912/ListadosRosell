@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Entidades;
+using System.Collections.Generic;
 using System.IO;
-using Entidades;
 
 namespace Negocio
 {
@@ -9,7 +9,7 @@ namespace Negocio
         public static Dictionary<string, string> DiccionarioSubdirectoriosInformes()
         {
             Dictionary<string, string> claveValorNombreRuta = new Dictionary<string, string>();
-            
+
             return LlenarDiccionario(claveValorNombreRuta);
         }
 
@@ -17,10 +17,11 @@ namespace Negocio
         {
             string[] rutaDirectorios = Directory.GetDirectories(Global.RutaDirectorioInformes);
 
-            foreach (string directorio in rutaDirectorios){
+            foreach (string directorio in rutaDirectorios)
+            {
                 claveValorNombreRuta.Add(Path.GetFileName(directorio).ToUpper(), directorio);
             }
-            
+
             return claveValorNombreRuta;
         }
     }

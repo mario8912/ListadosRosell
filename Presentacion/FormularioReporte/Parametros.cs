@@ -5,6 +5,7 @@ using Entidades.Modelos;
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Capas
@@ -18,7 +19,7 @@ namespace Capas
         private Button _btnAceptar;
         private TableLayoutPanel _tableLayoutPanel;
 
-        private int _incrementoLayoutFilas;
+        private int _incrementoLayoutFilas = 0;
 
         private ParameterFieldDefinition _parametro;
         private string _nombreLabel;
@@ -29,7 +30,7 @@ namespace Capas
         private DiscreteOrRangeKind _rangoDiscretoParametro;
 
 
-        Dictionary<string, string> _dict;
+        Dictionary<string, string> _diccionarioNombreParametroValorParametro;
         private string _nombreParametroDiccionario;
 
         public Parametros()
@@ -40,23 +41,57 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            AgregarTableLayoutPanel();
+            Text = FormatoNombreFormulario();
 
-            _incrementoLayoutFilas = 0;
+            CrearAgregarTableLayoutPanel();
+            GenerarCamposParametros();
+            AgregarBotonCheckBox();
+        }
+        private string FormatoNombreFormulario()
+        {
+            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
+            nombreFormulario = nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
+
+            return nombreFormulario;
+        }
+
+        private void CrearAgregarTableLayoutPanel()
+        {
+            _tableLayoutPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 4,
+                Padding = new Padding(0, 0, 30, 20),
+                AutoSize = true
+            };
+
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
+
+            Controls.Add(_tableLayoutPanel);
+        }
+
+        private void GenerarCamposParametros()
+        {
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
-                _rangoDiscretoParametro = parametro.DiscreteOrRangeKind;
-                _parametro = parametro;
-                _nombreParametroDiccionario = parametro.Name;
-                _nombreParametro = parametro.Name.ToUpper();
-
+                EstablecerValoresAtributos(parametro);
                 NombreParametroSinIniFin();
                 SwitchIniFinParametros();
             }
-
-            AgregarBotonCheckBox();
-            Controls.Add(_tableLayoutPanel);
         }
+
+        private void EstablecerValoresAtributos(ParameterFieldDefinition parametro)
+        {
+            _parametro = parametro;
+            _rangoDiscretoParametro = parametro.DiscreteOrRangeKind;
+            _nombreParametroDiccionario = parametro.Name;
+            _nombreParametro = parametro.Name.ToUpper();
+        }
+
+        
         private void NombreParametroSinIniFin()
         {
             ExtrarPrefijoRangoDeParametro();
@@ -82,19 +117,14 @@ namespace Capas
         }
         private void SwitchIniFinParametros()
         {
-            string condicionSwitxh = "";
+            switch (EstablecerValorParaCondicionDelSwitch())
+            {
+                case "RANGO":
+                    AgregarCampoParametroRangoIni();
+                    AgregarCampoParametroRangoFin();
+                    _incrementoLayoutFilas++;
+                    break;
 
-            if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
-            {
-                condicionSwitxh = (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") ? _desdeHastaParametro : _iniFinParametro;
-            }
-            else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
-            {
-                condicionSwitxh = "RANGO";
-            }
-
-            switch (condicionSwitxh)
-            {
                 case "DESDE":
                 case "INI":
                     AgregarCampoParametroRangoIni();
@@ -106,32 +136,30 @@ namespace Capas
                     _incrementoLayoutFilas++;
                     break;
 
-                case "RANGO":
-                    AgregarCampoParametroRangoIni();
-                    AgregarCampoParametroRangoFin();
-                    _incrementoLayoutFilas++;
-                    break;
                 default:
                     AgregarCampoParametroDiscreto();
                     _incrementoLayoutFilas++;
                     break;
             }
         }
-        private void AgregarTableLayoutPanel()
-        {
-            _tableLayoutPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 4,
-                Padding = new Padding(0, 0, 30, 20),
-                AutoSize = true
-            };
 
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200));
+        private string EstablecerValorParaCondicionDelSwitch()
+        {
+            var condicionSwitch = "";
+
+            if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+            {
+                if (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") condicionSwitch = _desdeHastaParametro;
+                else condicionSwitch = _iniFinParametro;
+            }
+            else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
+            {
+                condicionSwitch = "RANGO";
+            }
+
+            return condicionSwitch;
         }
+        
         private void AgregarCampoParametroDiscreto()
         {
             Label label = new Label
@@ -147,8 +175,8 @@ namespace Capas
                 Dock = DockStyle.Bottom
             };
 
-
             AnadirValoresPredeterminadoParametroDiscreto(comboBox);
+            comboBox.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
             AgregarFila();
             _tableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
@@ -158,8 +186,15 @@ namespace Capas
         {
             if (_parametro.DefaultValues.Count > 0)
             {
-                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues) comboBox.Items.Add(valorPredeterminado.Value);
+                foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues)
+                {
+                    comboBox.Items.Add(valorPredeterminado.Value);
+                }
             }
+        }
+        private void AgregarFila()
+        {
+            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
         private void AgregarCampoParametroRangoIni()
         {
@@ -177,8 +212,11 @@ namespace Capas
             {
                 DateTimePicker dtp = new DateTimePicker
                 {
-                    Dock = DockStyle.Bottom
+                    Dock = DockStyle.Bottom,
+                    CustomFormat = "dd-MM-yyyy",
+                    Format = DateTimePickerFormat.Custom
                 };
+                
                 _tableLayoutPanel.Controls.Add(dtp, 1, _incrementoLayoutFilas);
             }
             else
@@ -210,8 +248,11 @@ namespace Capas
             {
                 DateTimePicker dtp = new DateTimePicker
                 {
-                    Dock = DockStyle.Bottom
+                    Dock = DockStyle.Bottom,
+                    CustomFormat = "dd-MM-yyyy",
+                    Format = DateTimePickerFormat.Custom
                 };
+                
                 _tableLayoutPanel.Controls.Add(dtp, 3, _incrementoLayoutFilas);
             }
             else
@@ -247,13 +288,35 @@ namespace Capas
             _tableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, _incrementoLayoutFilas);
             _tableLayoutPanel.Controls.Add(_btnAceptar, 3, _incrementoLayoutFilas);
         }
-        private void AgregarFila()
-        {
-            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
-        }
+        
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            ClickAceptar();
+
+            if (HayCamposEnBlanco())
+            {
+                MessageBox.Show(
+                            "Rellena todos los campos para visualizar o imprimir el reporte.",
+                            "Campo en blanco",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+            }
+            else ClickAceptar();
+        }
+
+        private bool HayCamposEnBlanco()
+        {
+            foreach (Control control in _tableLayoutPanel.Controls)
+            {
+                if (!(control is Label) || !(control is TableLayoutPanel))
+                {
+                    if (control.Text == "")
+                    {
+                        control.Focus();
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         private void ClickAceptar()
         {
@@ -269,11 +332,11 @@ namespace Capas
             }
             else NegocioReporte.ImprimirReporte();
 
-            Close();
+            Dispose();
         }
         private void LeerControles()
         {
-            _dict = new Dictionary<string, string>();
+            _diccionarioNombreParametroValorParametro = new Dictionary<string, string>();
 
             for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
             {
@@ -282,15 +345,14 @@ namespace Capas
 
                 if (label is Label)
                 {
-                    try 
+                    try
                     {
-                        _dict.Add(label.Tag.ToString(), controlSiguiente.Text);
+                        _diccionarioNombreParametroValorParametro.Add(label.Tag.ToString(), controlSiguiente.Text);
                     }
-                    catch(ArgumentException)
+                    catch (ArgumentException)
                     {
-                        _dict.Add(label.Tag.ToString() + "range", controlSiguiente.Text);
+                        _diccionarioNombreParametroValorParametro.Add(label.Tag.ToString() + "range", controlSiguiente.Text);
                     }
-                    
                 }
             }
         }
@@ -304,36 +366,19 @@ namespace Capas
 
                 if (tipoDeValor is DiscreteOrRangeKind.DiscreteValue)
                 {
-                    _reporte.SetParameterValue(nombreParametro, _dict[nombreParametro]);
+                    _reporte.SetParameterValue(nombreParametro, _diccionarioNombreParametroValorParametro[nombreParametro]);
                 }
                 else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
                 {
                     ParameterRangeValue range = new ParameterRangeValue
                     {
-                        StartValue = _dict[nombreParametro],
-                        EndValue = _dict[nombreParametro + "range"]
+                        StartValue = _diccionarioNombreParametroValorParametro[nombreParametro],
+                        EndValue = _diccionarioNombreParametroValorParametro[nombreParametro + "range"]
                     };
 
                     _reporte.SetParameterValue(nombreParametro, range);
                 }
             }
-        }
-        private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)
-        {
-            var tipoParametro = item.ParameterType;
-            var tipoValorParametro = item.ValueType;
-            var tipoOtra = item.ParameterValueKind;
-            var nombre = item.Name;
-            var discretoRango = item.DiscreteOrRangeKind;
-
-            string str = string.Format(
-                "TipoParametro: {0} " + Environment.NewLine +
-                "ValueType: {1}" + Environment.NewLine +
-                "ValueKind: {2}" + Environment.NewLine +
-                "Nombre: {3}" + Environment.NewLine +
-                "Nombre Reporte: {4}",
-                tipoParametro, tipoValorParametro, tipoOtra, nombre, discretoRango);
-            MessageBox.Show(str);
         }
     }
 }

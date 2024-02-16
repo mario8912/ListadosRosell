@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Entidades;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Negocio;
-using Entidades;
-using CrystalDecisions.CrystalReports.Engine;
 
 
 namespace Capas
@@ -13,9 +12,6 @@ namespace Capas
     {
         private static string _rutaReporte;
         private DialogResult _respuesta;
-#pragma warning disable CS0649 // El campo 'Listados._listaParametros' nunca se asigna y siempre tendrá el valor predeterminado null
-        private HashSet<string> _listaParametros;
-#pragma warning restore CS0649 // El campo 'Listados._listaParametros' nunca se asigna y siempre tendrá el valor predeterminado null
 
         public Listados()
         {
@@ -28,8 +24,6 @@ namespace Capas
             CrearYAnadirNodosSubdirectoriosYReportes();
         }
 
-    #region RELLENAR NODOS
-
         private void CrearYAnadirNodosSubdirectoriosYReportes()
         {
             TreeNode nodoInformes = treeViewListados.Nodes[0];
@@ -37,8 +31,10 @@ namespace Capas
 
             foreach (KeyValuePair<string, string> subidorectoriosInformes in claveValorNombreRuta)
             {
-                TreeNode nodoSubdirectorio = new TreeNode(subidorectoriosInformes.Key);
-                nodoSubdirectorio.Tag = subidorectoriosInformes.Value;
+                TreeNode nodoSubdirectorio = new TreeNode(subidorectoriosInformes.Key)
+                {
+                    Tag = subidorectoriosInformes.Value
+                };
 
                 nodoInformes.Nodes.Add(nodoSubdirectorio);
                 AnadirNodosReportes(nodoSubdirectorio);
@@ -58,13 +54,10 @@ namespace Capas
                 }
             }
         }
-        #endregion
-
-        #region FILTROS REPORTE
 
         private readonly Func<bool> ComprobarExtensionRpt = () => Path.GetExtension(_rutaReporte) == ".rpt";
         private readonly Func<string> ReporteSinExtension = () => Path.GetFileName(_rutaReporte).ToUpper();
-        #endregion
+
 
         private void treeViewListados_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
@@ -98,7 +91,6 @@ namespace Capas
             if (NegocioReporte.ComprobarParametrosReporte())
             {
                 FormParametrosReporte();
-
                 #region GUARDADO PARAMETROS TXT
                 /*foreach (ParameterFieldDefinition item in Global.ReporteCargado.DataDefinition.ParameterFields)
                 {
@@ -126,7 +118,7 @@ namespace Capas
                 FormReportViewer();
             }
             else if (_respuesta == DialogResult.No) ImprimirReporte();
-            else BeginInvoke(new MethodInvoker(Close));
+            else BeginInvoke(new MethodInvoker(Dispose));
         }
 
         private void FormReportViewer()
@@ -153,12 +145,6 @@ namespace Capas
             Cursor = Cursors.Default;
             Text = "Listados";
             InterruptorEnabled();
-        }
-
-        private void GenerarGuardarParametrosTodos()
-        {
-            try { using (StreamWriter sw = new StreamWriter("parametrosTodos.txt")) foreach (string item in _listaParametros) sw.WriteLine(item, true); }
-            catch (Exception ex) { throw new Exception("Error de escritura parametros" + ex); }
         }
     }
 }
