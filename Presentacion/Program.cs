@@ -1,9 +1,6 @@
 ﻿using Capas;
 using System;
 using System.Windows.Forms;
-using Negocio;
-using System.Threading.Tasks;
-using Datos;
 
 namespace Presentacion
 {
@@ -17,7 +14,7 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            ProgramHelpers.TaskComprobarConexion();
+            _ = ProgramHelpers.ComprobarConexion();
             Application.Run(new MDI_Principal());
             
         }

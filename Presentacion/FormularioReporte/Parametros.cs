@@ -26,6 +26,7 @@ namespace Capas
 
         private string _iniFinParametro;
         private string _desdeHastaParametro;
+        private DiscreteOrRangeKind _rangoDiscretoParametro;
 
 
         Dictionary<string, string> _dict;
@@ -44,6 +45,7 @@ namespace Capas
             _incrementoLayoutFilas = 0;
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
+                _rangoDiscretoParametro = parametro.DiscreteOrRangeKind;
                 _parametro = parametro;
                 _nombreParametroDiccionario = parametro.Name;
                 _nombreParametro = parametro.Name.ToUpper();
@@ -80,7 +82,16 @@ namespace Capas
         }
         private void SwitchIniFinParametros()
         {
-            string condicionSwitxh = (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") ? _desdeHastaParametro : _iniFinParametro;
+            string condicionSwitxh = "";
+
+            if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+            {
+                condicionSwitxh = (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") ? _desdeHastaParametro : _iniFinParametro;
+            }
+            else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
+            {
+                condicionSwitxh = "RANGO";
+            }
 
             switch (condicionSwitxh)
             {
@@ -95,6 +106,11 @@ namespace Capas
                     _incrementoLayoutFilas++;
                     break;
 
+                case "RANGO":
+                    AgregarCampoParametroRangoIni();
+                    AgregarCampoParametroRangoFin();
+                    _incrementoLayoutFilas++;
+                    break;
                 default:
                     AgregarCampoParametroDiscreto();
                     _incrementoLayoutFilas++;
@@ -264,17 +280,42 @@ namespace Capas
                 Control label = _tableLayoutPanel.Controls[i];
                 Control controlSiguiente = _tableLayoutPanel.Controls[i + 1];
 
-                if (label is Label) _dict.Add(label.Tag.ToString(), controlSiguiente.Text);
+                if (label is Label)
+                {
+                    try 
+                    {
+                        _dict.Add(label.Tag.ToString(), controlSiguiente.Text);
+                    }
+                    catch(ArgumentException)
+                    {
+                        _dict.Add(label.Tag.ToString() + "range", controlSiguiente.Text);
+                    }
+                    
+                }
             }
         }
 
         private void AsignaParametros()
         {
-
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
+                var tipoDeValor = parametro.DiscreteOrRangeKind;
                 var nombreParametro = parametro.Name;
-                _reporte.SetParameterValue(nombreParametro, _dict[nombreParametro]);
+
+                if (tipoDeValor is DiscreteOrRangeKind.DiscreteValue)
+                {
+                    _reporte.SetParameterValue(nombreParametro, _dict[nombreParametro]);
+                }
+                else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
+                {
+                    ParameterRangeValue range = new ParameterRangeValue
+                    {
+                        StartValue = _dict[nombreParametro],
+                        EndValue = _dict[nombreParametro + "range"]
+                    };
+
+                    _reporte.SetParameterValue(nombreParametro, range);
+                }
             }
         }
         private void MuestraMensajeInfoParametros(ParameterFieldDefinition item)

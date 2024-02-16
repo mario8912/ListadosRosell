@@ -1,18 +1,17 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using System;
 
 namespace Datos
 {
     public class ConexionReporte : Conexion
     {
         private readonly ReportDocument _reporte;
-        
+
         public ConexionReporte(ReportDocument reporte)
         {
             _reporte = reporte;
             ConectarReporte();
-            this.Dispose();
+            Dispose();
         }
 
         private void ConectarReporte()
@@ -28,11 +27,11 @@ namespace Datos
             #endregion
 
             Tables tablas = _reporte.Database.Tables;
-            
+
             foreach (Table tabla in tablas)
             {
                 tabla.ApplyLogOnInfo(tableInfo);
-                 tabla.SetDataSource(tableInfo);
+                tabla.SetDataSource(tableInfo);
             }
         }
     }

@@ -47,35 +47,4 @@ namespace Entidades
         public static DateTime fechaIni;
         public static DateTime fechaFin;
     }
-
-    public static class StopGuach
-    {
-        private static readonly Stopwatch sp;
-        static StopGuach()
-        {
-            sp = new Stopwatch();
-        }
-
-        public static void Dale()
-        {
-            sp.Start();
-        }
-
-        public static void ParaY_Elased()
-        {
-            Para();
-            Elased();
-        }
-
-        private static void Para()
-        {
-            sp.Stop();
-        }
-
-        private static void Elased()
-        {
-            Console.WriteLine(sp.Elapsed);
-        }
-
-    }
 }

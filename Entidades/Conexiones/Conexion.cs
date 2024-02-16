@@ -15,7 +15,6 @@ namespace Datos
         public string Contrasenya { get; set;}
 
         public SqlConnection _conexionSql;
-        private readonly string _cadenaConexion;
         private readonly string nombreEquipo = Environment.MachineName;
 
         public Conexion()
@@ -28,28 +27,42 @@ namespace Datos
         private void EstablecerServidorBaseDeDatos()
         {
             if (nombreEquipo == "PUESTO012") Servidor = "server2017";
-            else Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+            else Servidor = @"PUESTO012\SQLEXPRESS";
 
-            Usuario = "sa";
+            Usuario = @"sa";
             Contrasenya = "";
             BaseDeDatos = "rosell";
             SeguridadIntegrada = true;
         }
         public async Task ComprobarConexion()
         {
-            string connectionString = _cadenaConexion;
-            
-            using (_conexionSql = new SqlConnection(connectionString))
+            using (_conexionSql = new SqlConnection(Global.CadenaConexion))
             {
-                try { await _conexionSql.OpenAsync(); }
-                finally { Dispose(); }
+                try 
+                {
+                    await _conexionSql.OpenAsync();
+                    _conexionSql.Close();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.ToString());
+                }
+                catch(Exception ex) 
+                {
+                    System.Windows.Forms.MessageBox.Show(ex.ToString()); 
+                }
+                finally 
+                {
+                    Console.WriteLine("Cerrado");
+                    this?.Dispose();  
+                }
             }
         }
 
         public void FormatoCadenaConexion()
         {
-            Global.CadenaConexion = string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
-            //Global.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            //Global.CadenaConexion = string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
+            Global.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
         public void Dispose()

@@ -1,17 +1,21 @@
 ﻿using Datos;
+using System;
 using System.Threading.Tasks;
 
 internal static class ProgramHelpers
 {
-    public static void TaskComprobarConexion()
+    public static async Task ComprobarConexion()
     {
-        Task comprobarConexion = Task.Run(async () =>
-        {
-            using (Conexion cn = new Conexion())
-            {
-                await cn.ComprobarConexion();
-            }
-        });
-        if (comprobarConexion.IsCompleted) comprobarConexion.Dispose();
+		try
+		{
+			using (Conexion cn = new Conexion())
+			{
+				await cn.ComprobarConexion();
+			}
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.ToString());
+		}
     }
 }
