@@ -42,13 +42,13 @@
             this.treeViewListados.TabIndex = 0;
             this.treeViewListados.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewListados_NodeMouseDoubleClick);
             // 
-            // FormListados
+            // Listados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 661);
             this.Controls.Add(this.treeViewListados);
-            this.Name = "FormListados";
+            this.Name = "Listados";
             this.Text = "Listados";
             this.Load += new System.EventHandler(this.FormListados_Load);
             this.ResumeLayout(false);

@@ -48,6 +48,8 @@ namespace Capas
             _visorReporte.Location = new System.Drawing.Point(0, 0);
             _visorReporte.Size = new System.Drawing.Size(Width-10, Height);
             _visorReporte.TabIndex = 0;
+            _visorReporte.ShowCloseButton = true;
+            _visorReporte.ShowZoomButton = true;
 
             Controls.Add(_visorReporte);
         }

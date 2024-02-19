@@ -1,8 +1,9 @@
-﻿using Entidades;
-using Negocio;
+﻿using Negocio;
+using SAPBusinessObjects.WPF.Viewer;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 
@@ -12,6 +13,7 @@ namespace Capas
     {
         private static string _rutaReporte;
         private DialogResult _respuesta;
+        private static TreeNode _nodoSeleccionado;
 
         public Listados()
         {
@@ -58,21 +60,36 @@ namespace Capas
         private readonly Func<bool> ComprobarExtensionRpt = () => Path.GetExtension(_rutaReporte) == ".rpt";
         private readonly Func<string> ReporteSinExtension = () => Path.GetFileName(_rutaReporte).ToUpper();
 
-
-        private void treeViewListados_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void treeViewListados_NodeMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //PONER TRY
-            _rutaReporte = e.Node.Tag.ToString();
-            if (VerificarEtiqueta(e) && ComprobarExtensionRpt())
+            _nodoSeleccionado = treeViewListados.SelectedNode;
+            GenerarListados();
+        }
+
+        private void Listados_KeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
             {
-                FormatoCargaFomrulario();
-                NegocioReporte.Reporte(_rutaReporte);
-                ComprobarParametros();
-                FormatoPostCargaFormulario();
+                _nodoSeleccionado = treeViewListados.SelectedNode;
+                GenerarListados();
+            }
+        }
+        private void GenerarListados()
+        {
+            if (_nodoSeleccionado.Text != "INFORMES")
+            {
+                _rutaReporte = _nodoSeleccionado.Tag.ToString();
+                if (VerificarEtiqueta() && ComprobarExtensionRpt())
+                {
+                    FormatoCargaFomrulario();
+                    NegocioReporte.Reporte(_rutaReporte);
+                    ComprobarParametros();
+                    FormatoPostCargaFormulario();
+                }
             }
         }
 
-        private readonly Func<TreeNodeMouseClickEventArgs, bool> VerificarEtiqueta = (e) => e.Node.Tag != null;
+        private readonly Func<bool> VerificarEtiqueta = () => _nodoSeleccionado.Tag != null;
 
         private void FormatoCargaFomrulario()
         {

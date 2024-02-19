@@ -112,6 +112,11 @@ namespace Entidades.Modelos
                         $" SELECT {minMaxQuery}(idFamilia)" +
                         $" FROM familia";
 
+                case "subfamilia":
+                    return $"" +
+                        $" SELECT {minMaxQuery}(subfamilia)" +
+                        $" FROM familia";
+
                 case "proveedor":
                     return $"" +
                         $" SELECT {minMaxQuery}(idProveedor)" +
@@ -122,6 +127,11 @@ namespace Entidades.Modelos
                         $"SELECT {minMaxQuery}(idRepartidor)" +
                         $" FROM repartidor" +
                         $" WHERE idRepartidor <> 100";
+
+                case "idprovgasto":
+                    return $"" +
+                        $"SELECT {minMaxQuery}(idprovgasto)" +
+                        $" FROM provgasto";
                 default:
                     return string.Empty; 
             }
