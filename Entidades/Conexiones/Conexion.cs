@@ -27,7 +27,7 @@ namespace Datos
         private void EstablecerServidorBaseDeDatos()
         {
             if (nombreEquipo == "PUESTO012") Servidor = "server2017";
-            else Servidor = @"PUESTO012\SQLEXPRESS";
+            else Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
 
             Usuario = "sa";
             Contrasenya = "";

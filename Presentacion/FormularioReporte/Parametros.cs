@@ -1,4 +1,5 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
+﻿using Capas.FormularioReporte;
+using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades;
 using Entidades.Modelos;
@@ -111,11 +112,11 @@ namespace Capas
         {
             ExtrarPrefijoRangoDeParametro();
 
-            if (!DiferenteDeINI() || !DiferenteDeFIN())
+            if (CondicionesParametros.IgualA_INI_O_FIN(_iniFinParametro))
             {
                 _nombreParametro = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
             }
-            else if (!DiferenteDeDESDE() || DiferenteDeHASTA())
+            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro))
             {
                 _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
             }
@@ -130,16 +131,18 @@ namespace Capas
             if (_nombreParametro.Length > 5) _desdeHastaParametro = _nombreParametro.Substring(0, 5).ToUpper().Trim();
         }
 
-        private bool ComprobarSiParametroEsRango()
-        {
-            return (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || DiferenteDeTodo());
-        }
 
         private void AgregarParametrosA_Listas()
         {
             if (ComprobarSiParametroEsRango()) _listaParametrosRango.Add(_parametro);
             else _listaParametrosDiscreto.Add(_parametro);
         }
+
+        private bool ComprobarSiParametroEsRango()
+        {
+            return (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || CondicionesParametros.IgualA_Todo(_iniFinParametro, _desdeHastaParametro));
+        }
+
 
         private void AnadirLabelDesdeHasta()
         {
@@ -236,7 +239,7 @@ namespace Capas
 
             if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
             {
-                if (!DiferenteDeDESDE() || !DiferenteDeHASTA()) condicionSwitch = _desdeHastaParametro;
+                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) condicionSwitch = _desdeHastaParametro;
                 else condicionSwitch = _iniFinParametro;
             }
             else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
@@ -450,7 +453,7 @@ namespace Capas
 
                 _labelTag = label.Tag?.ToString();
 
-                if (label is Label && DiferenteDeDESDE_O_HASTA() && _labelTag != null)
+                if (label is Label && (label.Tag != "DESDE" || label.Tag != "HASTA") && _labelTag != null)
                 {
                     try
                     {
