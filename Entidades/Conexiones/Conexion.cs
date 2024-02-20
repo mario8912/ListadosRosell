@@ -29,7 +29,7 @@ namespace Datos
             if (nombreEquipo == "PUESTO012") Servidor = "server2017";
             else Servidor = @"PUESTO012\SQLEXPRESS";
 
-            Usuario = @"sa";
+            Usuario = "sa";
             Contrasenya = "";
             BaseDeDatos = "rosell";
             SeguridadIntegrada = true;

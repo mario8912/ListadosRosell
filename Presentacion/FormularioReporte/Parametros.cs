@@ -30,6 +30,7 @@ namespace Capas
         private static string _iniFinParametro;
         private static string _desdeHastaParametro;
         private static DiscreteOrRangeKind _rangoDiscretoParametro;
+        private static string _labelTag;
 
         private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
         private string _nombreParametroDiccionario;
@@ -37,15 +38,6 @@ namespace Capas
         private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
         private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
 
-        private static readonly Func<bool> DiferenteDeINI = () => _iniFinParametro != "INI"; 
-        private static readonly Func<bool> DiferenteDeFIN = () => _iniFinParametro != "FIN";
-        private static readonly Func<bool> DiferenteDeDESDE = () => _desdeHastaParametro != "DESDE";
-        private static readonly Func<bool> DiferenteDeHASTA = () => _desdeHastaParametro != "HASTA";
-
-        private static readonly Func<bool> DiferenteDeINI_O_FIN = () => DiferenteDeFIN() || DiferenteDeINI();
-        private static readonly Func<bool> DiferenteDeDESDE_O_HASTA = () => DiferenteDeDESDE() || DiferenteDeHASTA();
-        private static readonly Func<bool> DiferenteDeTodo = () => DiferenteDeDESDE_O_HASTA() || DiferenteDeINI_O_FIN();
-        
         public TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
 
         public Parametros()
@@ -81,7 +73,7 @@ namespace Capas
                  ColumnCount = 4,
                  Padding = new Padding(0, 0, 30, 20),
                  AutoSize = true,
-                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
+                 //CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
              };
         }
 
@@ -119,11 +111,11 @@ namespace Capas
         {
             ExtrarPrefijoRangoDeParametro();
 
-            if (DiferenteDeINI_O_FIN())
+            if (!DiferenteDeINI() || !DiferenteDeFIN())
             {
                 _nombreParametro = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
             }
-            else if (DiferenteDeDESDE_O_HASTA())
+            else if (!DiferenteDeDESDE() || DiferenteDeHASTA())
             {
                 _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
             }
@@ -244,7 +236,7 @@ namespace Capas
 
             if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
             {
-                if (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA") condicionSwitch = _desdeHastaParametro;
+                if (!DiferenteDeDESDE() || !DiferenteDeHASTA()) condicionSwitch = _desdeHastaParametro;
                 else condicionSwitch = _iniFinParametro;
             }
             else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
@@ -456,15 +448,17 @@ namespace Capas
                 Control label = TableLayoutPanel.Controls[i];
                 Control controlSiguiente = TableLayoutPanel.Controls[i + 1];
 
-                if (label is Label && (label.Name != "DESDE" || label.Text != "HASTA") && label.Tag != null)
+                _labelTag = label.Tag?.ToString();
+
+                if (label is Label && DiferenteDeDESDE_O_HASTA() && _labelTag != null)
                 {
                     try
                     {
-                        _diccionarioNombreParametroValorParametro.Add(label.Tag.ToString(), controlSiguiente.Text);
+                        _diccionarioNombreParametroValorParametro.Add(_labelTag, controlSiguiente.Text);
                     }
                     catch (ArgumentException)
                     {
-                        _diccionarioNombreParametroValorParametro.Add(label.Tag.ToString() + "range", controlSiguiente.Text);
+                        _diccionarioNombreParametroValorParametro.Add(_labelTag + "range", controlSiguiente.Text);
                     }
                 }
             }
