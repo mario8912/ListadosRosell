@@ -1,7 +1,6 @@
 ﻿using Entidades;
 using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Datos
@@ -27,9 +26,9 @@ namespace Datos
         private void EstablecerServidorBaseDeDatos()
         {
             if (nombreEquipo == "PUESTO012") Servidor = "server2017";
-            else Servidor = @"PUESTO012\SQLEXPRESS";
+            else Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
 
-            Usuario = @"sa";
+            Usuario = "sa";
             Contrasenya = "";
             BaseDeDatos = "rosell";
             SeguridadIntegrada = true;
