@@ -13,8 +13,9 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
-        private readonly ReportDocument _reporte;
         private const int ALTURA_FILA = 50;
+
+        private readonly ReportDocument _reporte;
 
         private CheckBox _chkBoxVistaPrevia;
         private Button _btnAceptar = new Button();
@@ -26,16 +27,26 @@ namespace Capas
         private string _nombreLabel;
         private string _nombreParametro;
 
-        private string _iniFinParametro;
-        private string _desdeHastaParametro;
-        private DiscreteOrRangeKind _rangoDiscretoParametro;
-
+        private static string _iniFinParametro;
+        private static string _desdeHastaParametro;
+        private static DiscreteOrRangeKind _rangoDiscretoParametro;
 
         private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
         private string _nombreParametroDiccionario;
 
-        private List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
-        private List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
+        private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
+        private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
+
+        private static readonly Func<bool> DiferenteDeINI = () => _iniFinParametro != "INI"; 
+        private static readonly Func<bool> DiferenteDeFIN = () => _iniFinParametro != "FIN";
+        private static readonly Func<bool> DiferenteDeDESDE = () => _desdeHastaParametro != "DESDE";
+        private static readonly Func<bool> DiferenteDeHASTA = () => _desdeHastaParametro != "HASTA";
+
+        private static readonly Func<bool> DiferenteDeINI_O_FIN = () => DiferenteDeFIN() || DiferenteDeINI();
+        private static readonly Func<bool> DiferenteDeDESDE_O_HASTA = () => DiferenteDeDESDE() || DiferenteDeHASTA();
+        private static readonly Func<bool> DiferenteDeTodo = () => DiferenteDeDESDE_O_HASTA() || DiferenteDeINI_O_FIN();
+        
+        public TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
 
         public Parametros()
         {
@@ -45,10 +56,12 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            Text = FormatoNombreFormulario();
+            this.Text = FormatoNombreFormulario();
 
-            CrearAgregarTableLayoutPanel();
-            GenerarListaCamposParametros();
+            FormatoTableLayoutPanel();
+            FormatoColumnaTableLayoutPanel();
+
+            RellenarListasConParametrosRangoDiscreto();
             AgregarBotonCheckBox();
 
             _btnAceptar.TabIndex = 0;
@@ -56,139 +69,67 @@ namespace Capas
         private string FormatoNombreFormulario()
         {
             string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
-            nombreFormulario = nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
 
-            return nombreFormulario;
+            return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
 
-        private void CrearAgregarTableLayoutPanel()
+        private void FormatoTableLayoutPanel()
         {
             _tableLayoutPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                ColumnCount = 4,
-                Padding = new Padding(0, 0, 30, 20),
-                AutoSize = true
-            };
-
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
-            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
-
-            Controls.Add(_tableLayoutPanel);
+             {
+                 Dock = DockStyle.Fill,
+                 ColumnCount = 4,
+                 Padding = new Padding(0, 0, 30, 20),
+                 AutoSize = true,
+                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
+             };
         }
 
-        private void GenerarListaCamposParametros()
+        private void FormatoColumnaTableLayoutPanel()
+        {
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i%2 == 0) TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
+                else TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
+            }
+            Controls.Add(TableLayoutPanel);
+        }
+
+        private void RellenarListasConParametrosRangoDiscreto()
         {
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
-                EstablecerValoresAtributos(parametro);
-                NombreParametroSinIniFin();
+                EstablecerValoresDeLasPropiedadesDe(parametro);
+                AsignarNombreDeParametroSinPrefijoSiEsDeRango();
 
-                if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue ||
-                    _iniFinParametro == "INI" ||
-                    _iniFinParametro == "FIN" ||
-                    _desdeHastaParametro == "DESDE" ||
-                    _desdeHastaParametro == "HASTA")
-                {
-                    _listaParametrosRango.Add(_parametro);
-                }
-                else
-                {
-                    _listaParametrosDiscreto.Add(_parametro);
-                }
+                AgregarParametrosA_Listas();
             }
 
             BucleParametrosListasRangoDiscreto();
         }
 
-        private void BucleParametrosListasRangoDiscreto()
-        {
-            if (_listaParametrosDiscreto.Count > 0)
-            {
-                foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
-                {
-                    EstablecerValoresAtributos(parametro);
-                    NombreParametroSinIniFin();
-                    SwitchIniFinParametros();
-                }
-            }
-            
-            if (_listaParametrosRango.Count > 0)
-            {
-                AnadirLAbelDesdeHasta();
-                foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
-                {
-                    EstablecerValoresAtributos(parametro);
-                    NombreParametroSinIniFin();
-                    SwitchIniFinParametros();
-                }
-            }
-        }
-
-        private void AnadirLAbelDesdeHasta()
-        {
-            Label lblDsd = new Label
-            {
-                Text = "DESDE",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Bottom
-            };
-            
-            Label lblHst = new Label
-            {
-                Text = "HASTA",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Bottom
-            };
-
-            lblDsd.Font = new Font(lblDsd.Font, FontStyle.Bold);
-            lblDsd.ForeColor = Color.Blue; 
-
-            lblHst.Font = new Font(lblHst.Font, FontStyle.Bold);
-            lblHst.ForeColor = Color.Blue; 
-
-            _tableLayoutPanel.SetColumn(lblDsd, 0); // Comienza desde la columna 0
-            _tableLayoutPanel.SetRow(lblDsd, _incrementoLayoutFilas); // Comienza desde la fila especificada
-            _tableLayoutPanel.SetColumnSpan(lblDsd, 2); // ColSpan de 2 para abarcar 2 columnas
-            _tableLayoutPanel.Controls.Add(lblDsd, 0, _incrementoLayoutFilas);
-
-            // Define la posición y el tamaño del control lblHst en el TableLayoutPanel
-            _tableLayoutPanel.SetColumn(lblHst, 2); // Comienza desde la columna 2
-            _tableLayoutPanel.SetRow(lblHst, _incrementoLayoutFilas); // Comienza desde la fila especificada
-            _tableLayoutPanel.SetColumnSpan(lblHst, 2); // ColSpan de 2 para abarcar 2 columnas
-            _tableLayoutPanel.Controls.Add(lblHst, 2, _incrementoLayoutFilas);
-
-            AgregarFila();
-
-            _incrementoLayoutFilas++;
-        }
-
-        private void EstablecerValoresAtributos(ParameterFieldDefinition parametro)
+        private void EstablecerValoresDeLasPropiedadesDe(ParameterFieldDefinition parametro)
         {
             _parametro = parametro;
             _rangoDiscretoParametro = parametro.DiscreteOrRangeKind;
             _nombreParametroDiccionario = parametro.Name;
             _nombreParametro = parametro.Name.ToUpper();
         }
-
-        private void NombreParametroSinIniFin()
+        private void AsignarNombreDeParametroSinPrefijoSiEsDeRango()
         {
             ExtrarPrefijoRangoDeParametro();
 
-            if (_iniFinParametro == "INI" || _iniFinParametro == "FIN")
+            if (DiferenteDeINI_O_FIN())
             {
                 _nombreParametro = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
             }
-            else if (_desdeHastaParametro == "DESDE" || _desdeHastaParametro == "HASTA")
+            else if (DiferenteDeDESDE_O_HASTA())
             {
                 _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
             }
 
             _nombreLabel = _nombreParametro + ":";
         }
-
         private void ExtrarPrefijoRangoDeParametro()
         {
             _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;
@@ -196,6 +137,79 @@ namespace Capas
             if (_nombreParametro.Length > 3) _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
             if (_nombreParametro.Length > 5) _desdeHastaParametro = _nombreParametro.Substring(0, 5).ToUpper().Trim();
         }
+
+        private bool ComprobarSiParametroEsRango()
+        {
+            return (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || DiferenteDeTodo());
+        }
+
+        private void AgregarParametrosA_Listas()
+        {
+            if (ComprobarSiParametroEsRango()) _listaParametrosRango.Add(_parametro);
+            else _listaParametrosDiscreto.Add(_parametro);
+        }
+
+        private void AnadirLabelDesdeHasta()
+        {
+            Label lblDsd = new Label
+            {
+                Text = "DESDE",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Bottom,
+                ForeColor = Color.DarkGray,
+                Font = new Font("Micro Sans Serif", 14, FontStyle.Bold)
+            };
+
+            Label lblHst = new Label
+            {
+                Text = "HASTA",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Bottom,
+                ForeColor = Color.DarkGray,
+                Font = new Font("Micro Sans Serif", 14, FontStyle.Bold)
+            };
+
+            TableLayoutPanel.SetColumn(lblDsd, 0); // Comienza desde la columna 0
+            TableLayoutPanel.SetRow(lblDsd, _incrementoLayoutFilas); // Comienza desde la fila especificada
+            TableLayoutPanel.SetColumnSpan(lblDsd, 2); // ColSpan de 2 para abarcar 2 columnas
+            TableLayoutPanel.Controls.Add(lblDsd, 0, _incrementoLayoutFilas);
+
+            TableLayoutPanel.SetColumn(lblHst, 2); // Comienza desde la columna 2
+            TableLayoutPanel.SetRow(lblHst, _incrementoLayoutFilas); // Comienza desde la fila especificada
+            TableLayoutPanel.SetColumnSpan(lblHst, 2); // ColSpan de 2 para abarcar 2 columnas
+            TableLayoutPanel.Controls.Add(lblHst, 2, _incrementoLayoutFilas);
+
+            AgregarFila();
+
+            TableLayoutPanel.RowStyles[_incrementoLayoutFilas].Height = 20;
+
+            _incrementoLayoutFilas++;
+        }
+        private void BucleParametrosListasRangoDiscreto()
+        {
+            if (_listaParametrosDiscreto.Count > 0)
+            {
+                foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
+                {
+                    EstablecerValoresDeLasPropiedadesDe(parametro);
+                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
+                    SwitchIniFinParametros();
+                }
+            }
+
+            if (_listaParametrosRango.Count > 0)
+            {
+                AnadirLabelDesdeHasta();
+                foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
+                {
+                    EstablecerValoresDeLasPropiedadesDe(parametro);
+                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
+                    SwitchIniFinParametros();
+                }
+            }
+        }
+
+        
         private void SwitchIniFinParametros()
         {
             switch (EstablecerValorParaCondicionDelSwitch())
@@ -261,8 +275,8 @@ namespace Capas
             comboBox.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
             SeleccionarPrimerIndiceComboBox(comboBox);
             AgregarFila();
-            _tableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
-            _tableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
         }
 
         private void AnadirValoresPredeterminadoParametroDiscreto(ComboBox comboBox)
@@ -277,9 +291,9 @@ namespace Capas
         }
         private void AgregarFila()
         {
-            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+            TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
-        private void AgregarCampoParametroRangoIni() 
+        private void AgregarCampoParametroRangoIni()
         {
             Label labelDesde = new Label
             {
@@ -289,7 +303,7 @@ namespace Capas
                 Tag = _nombreParametroDiccionario
             };
 
-            _tableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
 
             if (_nombreLabel == "FECHA:")
             {
@@ -300,7 +314,7 @@ namespace Capas
                     Format = DateTimePickerFormat.Custom
                 };
 
-                _tableLayoutPanel.Controls.Add(dtp, 1, _incrementoLayoutFilas);
+                TableLayoutPanel.Controls.Add(dtp, 1, _incrementoLayoutFilas);
             }
             else
             {
@@ -313,7 +327,7 @@ namespace Capas
                 comboBoxDesde.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
                 SeleccionarPrimerIndiceComboBox(comboBoxDesde);
 
-                _tableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
+                TableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
             }
 
             AgregarFila();
@@ -337,7 +351,7 @@ namespace Capas
                 Tag = _nombreParametroDiccionario
             };
 
-            _tableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
 
             if (_nombreLabel == "FECHA:")
             {
@@ -348,7 +362,7 @@ namespace Capas
                     Format = DateTimePickerFormat.Custom
                 };
 
-                _tableLayoutPanel.Controls.Add(dtp, 3, _incrementoLayoutFilas);
+                TableLayoutPanel.Controls.Add(dtp, 3, _incrementoLayoutFilas);
             }
             else
             {
@@ -360,7 +374,7 @@ namespace Capas
 
                 comboBoxHasta.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, false));
                 SeleccionarPrimerIndiceComboBox(comboBoxHasta);
-                _tableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
+                TableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
             }
 
             AgregarFila();
@@ -382,8 +396,8 @@ namespace Capas
             _btnAceptar.Click += btnAceptar_Click;
 
             AgregarFila();
-            _tableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, _incrementoLayoutFilas);
-            _tableLayoutPanel.Controls.Add(_btnAceptar, 3, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(_btnAceptar, 3, _incrementoLayoutFilas);
 
             _btnAceptar.Focus();
         }
@@ -404,7 +418,7 @@ namespace Capas
 
         private bool HayCamposEnBlanco()
         {
-            foreach (Control control in _tableLayoutPanel.Controls)
+            foreach (Control control in TableLayoutPanel.Controls)
             {
                 if (!(control is Label) || !(control is TableLayoutPanel))
                 {
@@ -437,12 +451,12 @@ namespace Capas
         {
             _diccionarioNombreParametroValorParametro = new Dictionary<string, string>();
 
-            for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
+            for (int i = 0; i < TableLayoutPanel.Controls.Count - 3; i++)
             {
-                Control label = _tableLayoutPanel.Controls[i];
-                Control controlSiguiente = _tableLayoutPanel.Controls[i + 1];
+                Control label = TableLayoutPanel.Controls[i];
+                Control controlSiguiente = TableLayoutPanel.Controls[i + 1];
 
-                if (label is Label && ( label.Name != "DESDE" || label.Text != "HASTA" ))
+                if (label is Label && (label.Name != "DESDE" || label.Text != "HASTA") && label.Tag != null)
                 {
                     try
                     {

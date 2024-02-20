@@ -95,11 +95,9 @@ namespace Entidades.Modelos
                 case "ruta":
                     return $"" +
                         $" SELECT {minMaxQuery}(idRuta)" +
-                        $" FROM ruta AS r " +
-                        $" INNER JOIN preventista AS p " +
-                        $" ON p.idpreventa = r.idpreventa" +
-                        $" WHERE p.inactivo = 0" +
-                        $" AND r.idruta < 1000";
+                        $" FROM ruta " +
+                        $" WHERE 1 = 1 " +
+                        $" AND idruta < 90";
 
                 case "articulo":
                     return $"" +
