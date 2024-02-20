@@ -66,9 +66,6 @@
     <Compile Include="Conexiones\Conexion.cs" />
     <Compile Include="Conexiones\ConexionReporte.cs" />
     <Compile Include="Global.cs" />
-    <Compile Include="MiComboBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Modelos\ConsultaParametros.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
