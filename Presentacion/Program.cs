@@ -17,7 +17,9 @@ namespace Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             Task.Run(() => ComprobarConexion());
+
             Application.Run(new MDI_Principal());
             
         }

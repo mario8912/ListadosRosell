@@ -17,29 +17,51 @@ namespace Capas
         private const int ALTURA_FILA = 50;
 
         private readonly ReportDocument _reporte;
-
-        private CheckBox _chkBoxVistaPrevia;
-        private Button _btnAceptar = new Button();
-        private TableLayoutPanel _tableLayoutPanel;
-
         private int _incrementoLayoutFilas = 0;
 
         private ParameterFieldDefinition _parametro;
-        private string _nombreLabel;
+        private static string _nombreLabel;
         private string _nombreParametro;
 
         private static string _iniFinParametro;
         private static string _desdeHastaParametro;
+        private string _condicionSwitch;
         private static DiscreteOrRangeKind _rangoDiscretoParametro;
         private static string _labelTag;
 
         private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
-        private string _nombreParametroDiccionario;
+        private static string _nombreParametroDiccionario;
 
         private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
         private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
 
-        public TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
+        private CheckBox _chkBoxVistaPrevia;
+        private Button _btnAceptar = new Button();
+        private TableLayoutPanel _tableLayoutPanel = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 4,
+            Padding = new Padding(0, 0, 30, 20),
+            AutoSize = true
+        };
+
+        private Label _label = new Label
+        {
+            Text = _nombreLabel,
+            TextAlign = ContentAlignment.MiddleRight,
+            Dock = DockStyle.Bottom,
+            Tag = _nombreParametroDiccionario
+        };
+
+        private ComboBox _comboBox = new ComboBox
+        {
+            Dock = DockStyle.Bottom,
+            DropDownStyle = ComboBoxStyle.DropDown
+        };
+
+        private TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
+        private Label Label { get => _label; set => _label = value; }
+        private ComboBox ComboBox { get => _comboBox; set => _comboBox = value; }
 
         public Parametros()
         {
@@ -51,8 +73,8 @@ namespace Capas
         {
             this.Text = FormatoNombreFormulario();
 
-            FormatoTableLayoutPanel();
             FormatoColumnaTableLayoutPanel();
+            Controls.Add(TableLayoutPanel);
 
             RellenarListasConParametrosRangoDiscreto();
             AgregarBotonCheckBox();
@@ -66,18 +88,6 @@ namespace Capas
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
 
-        private void FormatoTableLayoutPanel()
-        {
-            _tableLayoutPanel = new TableLayoutPanel
-             {
-                 Dock = DockStyle.Fill,
-                 ColumnCount = 4,
-                 Padding = new Padding(0, 0, 30, 20),
-                 AutoSize = true,
-                 //CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
-             };
-        }
-
         private void FormatoColumnaTableLayoutPanel()
         {
             for (int i = 0; i <= 4; i++)
@@ -85,7 +95,6 @@ namespace Capas
                 if (i%2 == 0) TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
                 else TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
             }
-            Controls.Add(TableLayoutPanel);
         }
 
         private void RellenarListasConParametrosRangoDiscreto()
@@ -134,51 +143,21 @@ namespace Capas
 
         private void AgregarParametrosA_Listas()
         {
-            if (ComprobarSiParametroEsRango()) _listaParametrosRango.Add(_parametro);
+            if (ParametroEsRango()) _listaParametrosRango.Add(_parametro);
             else _listaParametrosDiscreto.Add(_parametro);
         }
 
-        private bool ComprobarSiParametroEsRango()
+        private bool ParametroEsRango()
         {
             return (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || CondicionesParametros.IgualA_Todo(_iniFinParametro, _desdeHastaParametro));
         }
 
-
-        private void AnadirLabelDesdeHasta()
+        private void FormatoLabelDesdeHasta(Label label, int posicionFila)
         {
-            Label lblDsd = new Label
-            {
-                Text = "DESDE",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Bottom,
-                ForeColor = Color.DarkGray,
-                Font = new Font("Micro Sans Serif", 14, FontStyle.Bold)
-            };
-
-            Label lblHst = new Label
-            {
-                Text = "HASTA",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Bottom,
-                ForeColor = Color.DarkGray,
-                Font = new Font("Micro Sans Serif", 14, FontStyle.Bold)
-            };
-
-            TableLayoutPanel.SetColumn(lblDsd, 0); // Comienza desde la columna 0
-            TableLayoutPanel.SetRow(lblDsd, _incrementoLayoutFilas); // Comienza desde la fila especificada
-            TableLayoutPanel.SetColumnSpan(lblDsd, 2); // ColSpan de 2 para abarcar 2 columnas
-            TableLayoutPanel.Controls.Add(lblDsd, 0, _incrementoLayoutFilas);
-
-            TableLayoutPanel.SetColumn(lblHst, 2); // Comienza desde la columna 2
-            TableLayoutPanel.SetRow(lblHst, _incrementoLayoutFilas); // Comienza desde la fila especificada
-            TableLayoutPanel.SetColumnSpan(lblHst, 2); // ColSpan de 2 para abarcar 2 columnas
-            TableLayoutPanel.Controls.Add(lblHst, 2, _incrementoLayoutFilas);
-
-            AgregarFila();
-
-            TableLayoutPanel.RowStyles[_incrementoLayoutFilas].Height = 20;
-
-            _incrementoLayoutFilas++;
+            TableLayoutPanel.SetColumn(label, 0); 
+            TableLayoutPanel.SetRow(label, _incrementoLayoutFilas);
+            TableLayoutPanel.SetColumnSpan(label, 2);
+            TableLayoutPanel.Controls.Add(label, posicionFila, _incrementoLayoutFilas);
         }
         private void BucleParametrosListasRangoDiscreto()
         {
@@ -188,7 +167,7 @@ namespace Capas
                 {
                     EstablecerValoresDeLasPropiedadesDe(parametro);
                     AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    SwitchIniFinParametros();
+                    SwitchCreacionComponentesFormulario();
                 }
             }
 
@@ -199,15 +178,40 @@ namespace Capas
                 {
                     EstablecerValoresDeLasPropiedadesDe(parametro);
                     AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    SwitchIniFinParametros();
+                    SwitchCreacionComponentesFormulario();
                 }
             }
         }
-
-        
-        private void SwitchIniFinParametros()
+        private void AnadirLabelDesdeHasta()
         {
-            switch (EstablecerValorParaCondicionDelSwitch())
+            CrearLabelDesdeHasta("DESDE");
+            CrearLabelDesdeHasta("HASTA");
+
+            AgregarFila();
+
+            TableLayoutPanel.RowStyles[_incrementoLayoutFilas].Height = 40;
+
+            _incrementoLayoutFilas++;
+        }
+
+        private void CrearLabelDesdeHasta(string desdeHasta)
+        {
+            Label label = new Label
+            {
+                Text = desdeHasta,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Bottom,
+                ForeColor = Color.DarkGray,
+                Font = new Font("Micro Sans Serif", 14, FontStyle.Bold)
+            };
+
+            if (desdeHasta == "DESDE") FormatoLabelDesdeHasta(label, 0);
+            else FormatoLabelDesdeHasta(label, 2);
+        }
+        private void SwitchCreacionComponentesFormulario()
+        {
+            EstablecerValorParaCondicionDelSwitch();
+            switch (_condicionSwitch)
             {
                 case "RANGO":
                     AgregarCampoParametroRangoIni();
@@ -233,21 +237,17 @@ namespace Capas
             }
         }
 
-        private string EstablecerValorParaCondicionDelSwitch()
+        private void EstablecerValorParaCondicionDelSwitch()
         {
-            var condicionSwitch = "";
-
             if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
             {
-                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) condicionSwitch = _desdeHastaParametro;
-                else condicionSwitch = _iniFinParametro;
+                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) _condicionSwitch = _desdeHastaParametro;
+                else _condicionSwitch = _iniFinParametro;
             }
             else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
             {
-                condicionSwitch = "RANGO";
+                _condicionSwitch = "RANGO";
             }
-
-            return condicionSwitch;
         }
 
         private void AgregarCampoParametroDiscreto()
@@ -268,8 +268,11 @@ namespace Capas
 
             AnadirValoresPredeterminadoParametroDiscreto(comboBox);
             comboBox.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
+
             SeleccionarPrimerIndiceComboBox(comboBox);
+
             AgregarFila();
+
             TableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
             TableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
         }
@@ -282,6 +285,14 @@ namespace Capas
                 {
                     comboBox.Items.Add(valorPredeterminado.Value);
                 }
+            }
+        }
+        private void SeleccionarPrimerIndiceComboBox(ComboBox comboBox)
+        {
+            if (comboBox.Items.Count > 0)
+            {
+                comboBox.SelectedIndex = 0;
+                _btnAceptar.Focus();
             }
         }
         private void AgregarFila()
@@ -326,15 +337,6 @@ namespace Capas
             }
 
             AgregarFila();
-        }
-
-        private void SeleccionarPrimerIndiceComboBox(ComboBox comboBox)
-        {
-            if (comboBox.Items.Count > 0)
-            {
-                comboBox.SelectedIndex = 0;
-                _btnAceptar.Focus();
-            }
         }
         private void AgregarCampoParametroRangoFin()
         {
@@ -452,16 +454,18 @@ namespace Capas
                 Control controlSiguiente = TableLayoutPanel.Controls[i + 1];
 
                 _labelTag = label.Tag?.ToString();
-
-                if (label is Label && (label.Tag != "DESDE" || label.Tag != "HASTA") && _labelTag != null)
+                if (_labelTag != null)
                 {
-                    try
+                    if (label is Label && CondicionesParametros.DiferenteDeDESDE_O_HASTA(label.Tag.ToString()))
                     {
-                        _diccionarioNombreParametroValorParametro.Add(_labelTag, controlSiguiente.Text);
-                    }
-                    catch (ArgumentException)
-                    {
-                        _diccionarioNombreParametroValorParametro.Add(_labelTag + "range", controlSiguiente.Text);
+                        try
+                        {
+                            _diccionarioNombreParametroValorParametro.Add(_labelTag, controlSiguiente.Text);
+                        }
+                        catch (ArgumentException)
+                        {
+                            _diccionarioNombreParametroValorParametro.Add(_labelTag + "range", controlSiguiente.Text);
+                        }
                     }
                 }
             }

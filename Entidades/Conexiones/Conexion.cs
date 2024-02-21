@@ -52,7 +52,6 @@ namespace Datos
                 }
                 finally 
                 {
-                    Console.WriteLine("Cerrado");
                     this?.Dispose();  
                 }
             }
