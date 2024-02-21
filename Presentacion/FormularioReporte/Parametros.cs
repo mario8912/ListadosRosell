@@ -16,12 +16,13 @@ namespace Capas
     {
         private const int ALTURA_FILA = 50;
 
-        private readonly ReportDocument _reporte;
+        private ReportDocument _reporte;
         private int _incrementoLayoutFilas = 0;
 
         private ParameterFieldDefinition _parametro;
         private static string _nombreLabel;
         private string _nombreParametro;
+        private string _nombreParametroSubreporte;
 
         private static string _iniFinParametro;
         private static string _desdeHastaParametro;
@@ -37,6 +38,7 @@ namespace Capas
 
         private CheckBox _chkBoxVistaPrevia;
         private Button _btnAceptar = new Button();
+
         private TableLayoutPanel _tableLayoutPanel = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -71,16 +73,18 @@ namespace Capas
 
         private void FormParametrosReporte_Load(object sender, EventArgs e)
         {
-            this.Text = FormatoNombreFormulario();
-
+            Text = FormatoNombreFormulario();
+            
             FormatoColumnaTableLayoutPanel();
             Controls.Add(TableLayoutPanel);
 
             RellenarListasConParametrosRangoDiscreto();
             AgregarBotonCheckBox();
 
-            _btnAceptar.TabIndex = 0;
+            FocoBoton();
         }
+
+        
         private string FormatoNombreFormulario()
         {
             string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
@@ -102,9 +106,14 @@ namespace Capas
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
                 EstablecerValoresDeLasPropiedadesDe(parametro);
-                AsignarNombreDeParametroSinPrefijoSiEsDeRango();
 
-                AgregarParametrosA_Listas();
+                if (ComprobarSiNoEsSubreprote())
+                {
+                    EstablecerValoresDeLasPropiedadesDe(parametro);
+                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
+
+                    AgregarParametrosA_Listas();
+                }
             }
 
             BucleParametrosListasRangoDiscreto();
@@ -116,6 +125,12 @@ namespace Capas
             _rangoDiscretoParametro = parametro.DiscreteOrRangeKind;
             _nombreParametroDiccionario = parametro.Name;
             _nombreParametro = parametro.Name.ToUpper();
+            _nombreParametroSubreporte = parametro.ReportName;
+        }
+
+        private bool ComprobarSiNoEsSubreprote()
+        {
+            return (_nombreParametroSubreporte == "" || _nombreParametroSubreporte == null);
         }
         private void AsignarNombreDeParametroSinPrefijoSiEsDeRango()
         {
@@ -180,12 +195,13 @@ namespace Capas
                     AsignarNombreDeParametroSinPrefijoSiEsDeRango();
                     SwitchCreacionComponentesFormulario();
                 }
+
             }
         }
         private void AnadirLabelDesdeHasta()
         {
-            CrearLabelDesdeHasta("DESDE");
-            CrearLabelDesdeHasta("HASTA");
+            CrearLabelConTexto("DESDE");
+            CrearLabelConTexto("HASTA");
 
             AgregarFila();
 
@@ -194,7 +210,7 @@ namespace Capas
             _incrementoLayoutFilas++;
         }
 
-        private void CrearLabelDesdeHasta(string desdeHasta)
+        private void CrearLabelConTexto(string desdeHasta)
         {
             Label label = new Label
             {
@@ -292,7 +308,6 @@ namespace Capas
             if (comboBox.Items.Count > 0)
             {
                 comboBox.SelectedIndex = 0;
-                _btnAceptar.Focus();
             }
         }
         private void AgregarFila()
@@ -395,8 +410,6 @@ namespace Capas
             AgregarFila();
             TableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, _incrementoLayoutFilas);
             TableLayoutPanel.Controls.Add(_btnAceptar, 3, _incrementoLayoutFilas);
-
-            _btnAceptar.Focus();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -475,24 +488,40 @@ namespace Capas
         {
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {
-                var tipoDeValor = parametro.DiscreteOrRangeKind;
-                var nombreParametro = parametro.Name;
+                _nombreParametroSubreporte = parametro.ReportName;
+                if (ComprobarSiNoEsSubreprote())
+                { 
+                    var tipoDeValor = parametro.DiscreteOrRangeKind;
+                    var nombreParametro = parametro.Name;
 
-                if (tipoDeValor is DiscreteOrRangeKind.DiscreteValue)
-                {
-                    _reporte.SetParameterValue(nombreParametro, _diccionarioNombreParametroValorParametro[nombreParametro]);
-                }
-                else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
-                {
-                    ParameterRangeValue range = new ParameterRangeValue
+                    if (tipoDeValor is DiscreteOrRangeKind.DiscreteValue)
                     {
-                        StartValue = _diccionarioNombreParametroValorParametro[nombreParametro],
-                        EndValue = _diccionarioNombreParametroValorParametro[nombreParametro + "range"]
-                    };
+                        _reporte.SetParameterValue(nombreParametro, _diccionarioNombreParametroValorParametro[nombreParametro]);
+                    }
+                    else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
+                    {
+                        ParameterRangeValue range = new ParameterRangeValue
+                        {
+                            StartValue = _diccionarioNombreParametroValorParametro[nombreParametro],
+                            EndValue = _diccionarioNombreParametroValorParametro[nombreParametro + "range"]
+                        };
 
-                    _reporte.SetParameterValue(nombreParametro, range);
+                        _reporte.SetParameterValue(nombreParametro, range);
+                    }
+                }
+            }
+        }
+
+        private void FocoBoton()
+        {
+            foreach (Control item in _tableLayoutPanel.Controls)
+            {
+                if (!(item is Button))
+                {
+                    SendKeys.Send("{tab}");
                 }
             }
         }
     }
+
 }
