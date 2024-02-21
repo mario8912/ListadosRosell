@@ -1,0 +1,14 @@
+Consumo Articulos.rpt
+Consumo ArticulosClientes.rpt
+Consumo codigoPostal.rpt
+Consumo codigoPostalClientes.rpt
+Consumo codigoPostalFamilia.rpt
+Consumo codigoPostalFamiliaClientes.rpt
+Consumo Familias.rpt
+Consumo FamiliasClientes.rpt
+Consumo FamiliasCodPostal.rpt
+Consumo FamiliasCodPostalClientes.rpt
+listado--.txt
+listado.txt
+listado.xls
+listadoMNO.txt

@@ -1,0 +1,25 @@
+sub informe articulocarga
+CuentaArticuloCarga
+
+@idcarga
+vercajas
+
+
+subinforme envasecarga
+cuentaenvases
+
+@idcarga
+vercajas
+
+
+ruta crystal 11
+C:\Program Files (x86)\Common Files\Business Objects\3.0\bin\craxdrt.dll
+
+
+1
+agosto
+
+
+frmFichaCarga
+cmdImprimir_Click
+"\..\informes\carga\carga.rpt")

@@ -1,0 +1,9 @@
+IdCabecProv	Number
+IdArticulo	String	4
+Descripcion	String	50
+Precio		Number
+Cajas		Number
+TipoLinea	String	1
+BaseIVA		Number
+BaseIVASIG	Number
+baseplastico	Number

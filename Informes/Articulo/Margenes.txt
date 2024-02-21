@@ -1,0 +1,7 @@
+@FamiliaIni|StringParameter|DiscreteValue
+@FamiliaFin|StringParameter|DiscreteValue
+@SubFamiliaIni|StringParameter|DiscreteValue
+@SubFamiliaFin|StringParameter|DiscreteValue
+@ArticuloIni|StringParameter|DiscreteValue
+@ArticuloFin|StringParameter|DiscreteValue
+IdCliente|NumberParameter|DiscreteValue

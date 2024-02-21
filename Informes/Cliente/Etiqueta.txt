@@ -1,0 +1,2 @@
+Ruta|NumberParameter|RangeValue
+Tipo Cliente|StringParameter|DiscreteValue

@@ -1,0 +1,8 @@
+ValorMoneda|NumberParameter|DiscreteValue
+Moneda|StringParameter|DiscreteValue
+Fecha|DateParameter|RangeValue
+Ruta|NumberParameter|RangeValue
+Cliente|NumberParameter|RangeValue
+Familia|StringParameter|RangeValue
+Subfamilia|StringParameter|RangeValue
+Articulo|StringParameter|RangeValue

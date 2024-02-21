@@ -1,0 +1,236 @@
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+
+
+ALTER       Procedure dbo.ListadoRapCliArt_2
+@FormaPago VARCHAR(1)='',
+@FechaFin DATETIME =NULL,
+@FamiliaIni VARCHAR(3)='',
+@FamiliaFin VARCHAR(3)='',
+@ArticuloIni VARCHAR(4)='',
+@ArticuloFin VARCHAR(4)='',
+@ClienteIni SMALLINT=0,
+@ClienteFin SMALLINT=0
+
+AS
+
+/* LA SELECCION LA REALIZO SOBRE LOS DATOS DE CABECERA Y LINEAS, 
+	EL ALBARAN DEBE ESTAR SERVIDO
+	SE COMPARA CON LA FECHASERVIDO
+	LINEAS NO DEBE SER ENVASE
+	LINEAS SOLO PUEDE SER '' O 'R'
+	RGN_20110429 No deben aparecer ni las promociones ni los lotes TipoRegalo=PR or LO
+
+	-SOLO SE INTRODUCE UNA FECHA, EL CONSUMO SE OBTIENE CON ESA FECHA FINAL
+	Y SE LE RESTA A LA FECHA LO QUE PROCEDA, 	
+- no se puede hacer restando la cantidad de meses porque si sacamos a fecha 30 de noviembre incluiria los datos del 30 y 31 de octubre 	
+		1 MES SI FORMA DE PAGO ES MENSUAL, 
+		3 MESES SI FORMA DE PAGO ES TRIMESTRAL 
+		ETC...	
+- para solucionarlo la fecha inicial es siempre el dia 1, mes correspondiente, anyo correspondiente 
+*/
+SET NOCOUNT ON
+
+CREATE TABLE #AuxFormaPago
+(
+	FormaPago		VARCHAR (1)	NOT NULL
+)	
+
+IF ( @FormaPago  IN ('M','T', 'S','A') )
+	INSERT INTO #AuxFormaPago (FormaPago) VALUES ('M')
+IF ( @FormaPago  IN ('T', 'S','A') )
+	INSERT INTO #AuxFormaPago (FormaPago) VALUES ('T')
+IF ( @FormaPago  IN ( 'S','A') )
+	INSERT INTO #AuxFormaPago (FormaPago) VALUES ('S')
+IF ( @FormaPago  IN ('A') )
+	INSERT INTO #AuxFormaPago (FormaPago) VALUES ('A')
+
+SET NOCOUNT OFF
+
+-- Tipos de cliente con rappel
+SELECT 	'TC' AS Tipo, 
+	TC.FormaPago, 
+	C.IdCliente, 
+	C.NombreComercial, 
+	L.IdArticulo, 
+	L.Descripcion, 
+	--231115
+	
+	l.idcabecera,
+	l.idlinea,
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN L.Unidades ELSE 0 END AS Venta, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN 'R' THEN L.Unidades ELSE 0 END AS Regalo, 
+	-- Si el rappel es al cliente y al proveedor se aplica a la Base (con otros dtos caja incluidos) si es solo a Proveedor se aplica a Bruto (Base ya incluye el dto rappel)
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN 
+		CASE LTRIM(UPPER(TC.AProveedor)) WHEN 'S' THEN L.Bruto ELSE L.Base END
+	ELSE 0 END AS ImporteVenta, 	
+	TC.ImporteRappel,
+	TC.RappelPorcentaje,
+	TC.DescripcionRappel,
+	TC.AProveedor,
+	A.idproveedor
+FROM TipoCliente TC JOIN Cabecera C ON TC.IdTipoCliente=C.IdTipoCliente JOIN Lineas L ON C.IdCabecera=L.IdCabecera JOIN Articulo A ON L.IdArticulo=A.IdArticulo
+WHERE C.Servido<>0
+AND TC.FormaPago IN (SELECT Aux.FormaPago FROM #AuxFormaPago Aux)
+AND DATEDIFF(day, C.FechaServido, @FechaFin) >=0
+-- A la fecha final le resto la cantidad de meses indicados por FormaPago --> M=0, T=-2 ...
+AND DATEDIFF(day, C.FechaServido, 
+		CONVERT (VARCHAR(2), DAY(0)) + '-' + 			-- DIA 1
+		CONVERT (VARCHAR(2), 					-- MES CORRESPONDIENTE
+			MONTH(DATEADD (m, (SELECT CASE TC.FormaPago 
+						WHEN 'M' THEN 0 		-- el primer dia del mes introducido
+						WHEN 'T' THEN -2 		-- si es trimestre la fecha ini es el primer dia de hace dos meses
+						WHEN 'S' THEN -5 
+						WHEN 'A' THEN -11 END),  @FechaFin) ) ) + '-'+ 
+		CONVERT (VARCHAR(4), YEAR(@FechaFin)) )<=0
+AND UPPER(L.TipoArticulo) <> 'ENV'
+AND (LTRIM(UPPER(L.TipoLinea)) = '' OR LTRIM(UPPER(L.TipoLinea)) = 'R')
+AND (LTRIM(UPPER(L.TipoRegalo)) <> 'PR' AND LTRIM(UPPER(L.TipoRegalo)) <> 'LO' AND LTRIM(UPPER(L.TipoRegalo)) <> 'PD')
+AND C.IdCliente BETWEEN @ClienteIni AND @ClienteFin
+AND L.IdArticulo BETWEEN @ArticuloIni AND @ArticuloFin
+AND A.IdFamilia BETWEEN @FamiliaIni AND @FamiliaFin
+
+UNION ALL
+-- Tipo de cliente con rappel en articulos concretos
+SELECT 	'TA' AS Tipo, 
+	TA.FormaPago, 
+	C.IdCliente, 
+	C.NombreComercial, 
+	L.IdArticulo, 
+	L.Descripcion, 
+	--231115
+
+	l.idcabecera,
+	l.idlinea,
+
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN L.Unidades ELSE 0 END AS Venta, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN 'R' THEN L.Unidades ELSE 0 END AS Regalo, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN
+		CASE LTRIM(UPPER(TA.AProveedor)) WHEN 'S' THEN L.Bruto ELSE L.Base END 
+	ELSE 0 END AS ImporteVenta, 
+	TA.ImporteRappel,
+	TA.RappelPorcentaje,
+	TA.DescripcionRappel,
+	TA.AProveedor,
+	A.idproveedor
+FROM TipoCliArticulo TA JOIN Cabecera C ON TA.IdTipoCliente=C.IdTipoCliente JOIN Lineas L ON (C.IdCabecera=L.IdCabecera AND L.IdArticulo=TA.IdArticulo) JOIN Articulo A ON L.IdArticulo=A.IdArticulo
+WHERE C.Servido<>0
+AND TA.FormaPago IN (SELECT Aux.FormaPago FROM #AuxFormaPago Aux)
+AND DATEDIFF(day, C.FechaServido, @FechaFin) >=0
+-- A la fecha final le resto la cantidad de meses indicados por FormaPago --> M=-1, T=-3 ...
+AND DATEDIFF(day, C.FechaServido, 
+		CONVERT (VARCHAR(2), DAY(0)) + '-' + 			-- DIA 1
+		CONVERT (VARCHAR(2), 					-- MES CORRESPONDIENTE
+			MONTH(DATEADD (m, (SELECT CASE TA.FormaPago 
+						WHEN 'M' THEN 0 		-- el primer dia del mes introducido
+						WHEN 'T' THEN -2 		-- si es trimestre la fecha ini es el primer dia de hace dos meses
+						WHEN 'S' THEN -5 
+						WHEN 'A' THEN -11 END),  @FechaFin) ) ) + '-'+ 
+		CONVERT (VARCHAR(4), YEAR(@FechaFin)) )<=0
+AND UPPER(L.TipoArticulo) <> 'ENV'
+AND (LTRIM(UPPER(L.TipoLinea)) = '' OR LTRIM(UPPER(L.TipoLinea)) = 'R')
+AND (LTRIM(UPPER(L.TipoRegalo)) <> 'PR' AND LTRIM(UPPER(L.TipoRegalo)) <> 'LO' AND LTRIM(UPPER(L.TipoRegalo)) <> 'PD')
+AND C.IdCliente BETWEEN @ClienteIni AND @ClienteFin
+AND L.IdArticulo BETWEEN @ArticuloIni AND @ArticuloFin
+AND A.IdFamilia BETWEEN @FamiliaIni AND @FamiliaFin
+
+UNION ALL
+-- Clientes con rappel en articulos concretos
+SELECT 	'CA' AS Tipo, 
+	CA.FormaPago,  
+	C.IdCliente, 
+	C.NombreComercial, 
+	L.IdArticulo, 
+	L.Descripcion, 
+	--231115
+
+	l.idcabecera,
+	l.idlinea,
+
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN L.Unidades ELSE 0 END AS Venta, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN 'R' THEN L.Unidades ELSE 0 END AS Regalo, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN 
+		CASE LTRIM(UPPER(CA.AProveedor)) WHEN 'S' THEN L.Bruto ELSE L.Base END
+	ELSE 0 END AS ImporteVenta, 
+	CA.ImporteRappel,
+	CA.RappelPorcentaje,
+	CA.DescripcionRappel,
+	CA.AProveedor,
+A.idproveedor
+FROM ClienteArticulo CA JOIN Cabecera C ON CA.IdCliente=C.IdCliente JOIN Lineas L ON  (C.IdCabecera=L.IdCabecera AND L.IdArticulo=CA.IdArticulo) JOIN Articulo A ON L.IdArticulo=A.IdArticulo
+WHERE C.Servido<>0
+AND CA.FormaPago IN (SELECT Aux.FormaPago FROM #AuxFormaPago Aux)
+AND DATEDIFF(day, C.FechaServido, @FechaFin) >=0
+-- A la fecha final le resto la cantidad de meses indicados por FormaPago --> M=-1, T=-3 ...
+AND DATEDIFF(day, C.FechaServido, 
+		CONVERT (VARCHAR(2), DAY(0)) + '-' + 			-- DIA 1
+		CONVERT (VARCHAR(2), 					-- MES CORRESPONDIENTE
+			MONTH(DATEADD (m, (SELECT CASE CA.FormaPago 
+						WHEN 'M' THEN 0 		-- el primer dia del mes introducido
+						WHEN 'T' THEN -2 		-- si es trimestre la fecha ini es el primer dia de hace dos meses
+						WHEN 'S' THEN -5 
+						WHEN 'A' THEN -11 END),  @FechaFin) ) ) + '-'+ 
+		CONVERT (VARCHAR(4), YEAR(@FechaFin)) )<=0
+AND UPPER(L.TipoArticulo) <> 'ENV'
+AND (LTRIM(UPPER(L.TipoLinea)) = '' OR LTRIM(UPPER(L.TipoLinea)) = 'R')
+AND (LTRIM(UPPER(L.TipoRegalo)) <> 'PR' AND LTRIM(UPPER(L.TipoRegalo)) <> 'LO' AND LTRIM(UPPER(L.TipoRegalo)) <> 'PD')
+AND C.IdCliente BETWEEN @ClienteIni AND @ClienteFin
+AND L.IdArticulo BETWEEN @ArticuloIni AND @ArticuloFin
+AND A.IdFamilia BETWEEN @FamiliaIni AND @FamiliaFin
+
+union all
+--las promociones de damm
+SELECT 	'PD' AS Tipo, 
+	'm' as formapago,
+	--l.idlinea,  
+	C.IdCliente, 
+	C.NombreComercial, 
+	L.IdArticulo, 
+	L.Descripcion, 
+	--231115
+	l.idcabecera,
+	l.idlinea,
+
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN L.Unidades ELSE 0 END AS Venta, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN 'R' THEN L.Unidades ELSE 0 END AS Regalo, 
+	CASE LTRIM(UPPER(L.TipoLinea)) WHEN '' THEN l.bruto ELSE 0 END AS ImporteVenta, 
+	promo.dtocaja,
+	promo.dtoporcentaje,
+	promo.DESCRIPCIONPROMO,
+	's' as aproveedor,
+	A.idproveedor
+from Cabecera C
+ JOIN Lineas L ON  (C.IdCabecera=L.IdCabecera)
+ JOIN Articulo A ON L.IdArticulo=A.IdArticulo
+LEFT OUTER JOIN 
+	(select pd.idpromocion, PD.DESCRIPCION AS DESCRIPCIONPROMO, pda.idarticulo, pdc.idcliente, pda.precio,pda.dtoporcentaje,pda.dtocaja
+	from PromocionDamm pd
+	inner join PromocionDammclientes pdc on pd.idpromocion = pdc.idpromocion
+	inner join promocionDammArticulo pda on pd.idpromocion = pda.idpromocion
+	)  promo
+	on ((l.idarticulo = promo.idarticulo and c.Idcliente = promo.idcliente) and promo.idpromocion = l.idpromocion)
+WHERE C.Servido<>0
+AND DATEDIFF(day, C.FechaServido, @FechaFin) >=0
+--aqui siempre se cuenta todo el ultimo mes
+AND DATEDIFF(day, C.FechaServido, (dateadd(d,1,(dateadd(m, -1, @FechaFin))))) <=0
+AND UPPER(L.TipoArticulo) <> 'ENV'
+AND (LTRIM(UPPER(L.TipoLinea)) = '' OR LTRIM(UPPER(L.TipoLinea)) = 'R')
+AND (LTRIM(UPPER(L.TipoRegalo)) = 'PD')
+AND C.IdCliente BETWEEN @ClienteIni AND @ClienteFin
+AND L.IdArticulo BETWEEN @ArticuloIni AND @ArticuloFin
+AND A.IdFamilia BETWEEN @FamiliaIni AND @FamiliaFin
+
+drop TABLE #AuxFormaPago
+
+RETURN
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

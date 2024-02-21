@@ -1,0 +1,10 @@
+..\Informes\consumos\Consumo Articulos.rpt
+..\Informes\consumos\Consumo ArticulosClientes.rpt
+..\Informes\consumos\Consumo codigoPostal.rpt
+..\Informes\consumos\Consumo codigoPostalClientes.rpt
+..\Informes\consumos\Consumo codigoPostalFamilia.rpt
+..\Informes\consumos\Consumo codigoPostalFamiliaClientes.rpt
+..\Informes\consumos\Consumo Familias.rpt
+..\Informes\consumos\Consumo FamiliasClientes.rpt
+..\Informes\consumos\Consumo FamiliasCodPostal.rpt
+..\Informes\consumos\Consumo FamiliasCodPostalClientes.rpt

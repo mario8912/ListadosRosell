@@ -1,0 +1,10 @@
+@PreventaIni|NumberParameter|DiscreteValue
+@PreventaFin|NumberParameter|DiscreteValue
+@RutaIni|NumberParameter|DiscreteValue
+@RutaFin|NumberParameter|DiscreteValue
+@ClienteIni|NumberParameter|DiscreteValue
+@ClienteFin|NumberParameter|DiscreteValue
+@FamiliaIni|StringParameter|DiscreteValue
+@FamiliaFin|StringParameter|DiscreteValue
+@ProveedorIni|NumberParameter|DiscreteValue
+@ProveedorFin|NumberParameter|DiscreteValue

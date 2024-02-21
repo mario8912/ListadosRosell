@@ -1,0 +1,5 @@
+correo|StringParameter|DiscreteValue
+PREVENTAINI|NumberParameter|DiscreteValue
+PREVENTAFIN|NumberParameter|DiscreteValue
+RUTAINI|NumberParameter|DiscreteValue
+RUTAFIN|NumberParameter|DiscreteValue

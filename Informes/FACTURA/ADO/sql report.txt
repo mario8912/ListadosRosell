@@ -1,0 +1,49 @@
+SELECT
+    Cabecera."IdCabecera",
+    Cabecera."Situacion",
+    Cabecera."IdCliente",
+    Cabecera."CodContable",
+    Cabecera."Nombre",
+    Cabecera."NombreComercial",
+    Cabecera."Telefono",
+    Cabecera."Direccion",
+    Cabecera."CP",
+    Cabecera."Poblacion",
+    Cabecera."CIF_DNI",
+    Cabecera."FormaPago",
+    Cabecera."IdTipoCliente",
+    Cabecera."IdRuta",
+    Cabecera."IdPreventa",
+    Cabecera."DtosEnTarifa",
+    Cabecera."DeudaActual",
+    Cabecera."Observacion",
+    Cabecera."FechaAlbaran",
+    Cabecera."FechaFactura",
+    Cabecera."NumFactura",
+    Cabecera."TotDto1",
+    Cabecera."TotDto2",
+    Cabecera."Portes",
+    Cabecera."Liquido",
+    Cabecera."idserie",
+    Lineas."IdArticulo",
+    Lineas."Descripcion",
+    Lineas."Precio",
+    Lineas."TipoArticulo",
+    Lineas."PorcentIVA",
+    Lineas."PrecioSIG",
+    Lineas."PorcentIVASIG",
+    Lineas."Cajas",
+    Lineas."Botellas",
+    Lineas."Unidades",
+    Lineas."TipoLinea",
+    Lineas."Bruto",
+    Lineas."Base",
+    Lineas."BaseSIG"
+FROM
+    rosell.dbo.Cabecera Cabecera LEFT OUTER JOIN rosell.dbo.Lineas Lineas ON
+        Cabecera."IdCabecera" = Lineas."IdCabecera"
+WHERE
+    Cabecera."IdCabecera" BETWEEN 20063 and 20063
+AND Cabecera."Situacion" = 0
+ORDER BY
+    Cabecera."IdCabecera" ASC

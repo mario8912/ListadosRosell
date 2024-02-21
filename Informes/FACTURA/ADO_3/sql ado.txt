@@ -1,0 +1,23 @@
+factura
+
+SELECT C.IdCabecera,C.Situacion,C.IdCliente,C.CodContable, C.Nombre,C.NombreComercial ,C.Telefono , 
+                              C.Direccion,C.CP,C.Poblacion,C.CIF_DNI,C.FormaPago,C.IdTipoCliente,C.IdRuta,
+                              C.IdPreventa,C.DtosEnTarifa,C.DeudaActual,C.Observacion,C.FechaAlbaran,C.FechaFactura, 
+                              C.NumFactura,C.TotDto1,C.TotDto2,C.Portes,C.Liquido,C.IdSerie, L.IdArticulo,L.Descripcion, 
+                              L.Precio,L.TipoArticulo,L.PorcentIVA,L.PrecioSIG,L.PorcentIVASIG,L.Cajas,L.Botellas, 
+                              L.Unidades,L.TipoLinea,L.Bruto,L.Base,L.BaseSIG 
+                            From Cabecera C LEFT OUTER JOIN Lineas L ON C.IdCabecera = L.IdCabecera 
+                            Where C.IdCabecera IN ('20062')
+                            AND C.NumCopiasImprimir = 0 
+                            Order By C.IdCabecera ASC
+ 
+
+
+
+pie
+SELECT C.IdCabecera,C.idiva,C.PorcentIVA,C.PorcentRE,C.BaseProd,C.BaseEnvase,C.BaseSIG,
+                              C.BasePortes,C.BaseRappel,C.CuotaIVAProd,C.CuotaIVAEnvase,C.CuotaIvaSIG,C.CuotaIVAPortes,
+                              C.CuotaIVARappel,C.CuotaREProd,C.CuotaREEnvase,C.CuotaRESIG,C.CuotaREPortes,C.CuotaRERappel
+                            From CabeceraIva as C 
+                            Where C.IdCabecera IN ('20062')
+                            Order By C.IdCabecera ASC,C.idiva  ASC

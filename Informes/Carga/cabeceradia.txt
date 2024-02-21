@@ -1,0 +1,2 @@
+Desde Preventa|NumberParameter|DiscreteValue
+Hasta preventa|NumberParameter|DiscreteValue

@@ -1,0 +1,14 @@
+IdArticulo	String	4
+Descripcion	String	50
+Hoja		Number
+Orden		Number
+entidad		Number
+nombre		string	50
+documento	Number
+IdFamilia	String	4
+Subfamilia	String	4
+unidades	Number
+Precio		Number
+importe		Number
+fecha		string 	10
+tipo		number

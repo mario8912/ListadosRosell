@@ -1,0 +1,4 @@
+if minimum({ListadoComparaFamiliasCp;1.clienteact},{ListadoComparaFamiliasCp;1.cp}) = 0 then
+    distinctcount({ListadoComparaFamiliasCp;1.clienteact},{ListadoComparaFamiliasCp;1.cp})-1
+else
+    ({ListadoComparaFamiliasCp;1.clienteact},{ListadoComparaFamiliasCp;1.cp})

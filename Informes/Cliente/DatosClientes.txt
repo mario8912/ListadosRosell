@@ -1,0 +1,4 @@
+Tipo Cliente|StringParameter|DiscreteValue
+Cliente|NumberParameter|RangeValue
+Ruta|NumberParameter|RangeValue
+Preventista|NumberParameter|RangeValue

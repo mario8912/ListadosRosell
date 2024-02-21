@@ -1,0 +1,51 @@
+if (recordnumber) mod 2 = 0 then
+//Color (197,251 ,254 )
+crNoColor
+else
+//crNoColor
+Color (197,251 ,254 )
+
+
+azul
+197,251 ,254
+
+naranja
+255,224,193
+
+verde
+225,255,225
+
+
+if (recordnumber) mod 2 = 0 then
+crNoColor
+else
+//crNoColor azul
+Color (197,251 ,254 )
+
+if (recordnumber) mod 2 = 0 then
+crNoColor
+else
+//crNoColor naranja
+Color (255,224,193)
+
+
+if (recordnumber) mod 2 = 0 then
+crNoColor
+else
+//crNoColor verde
+Color (225,255,225)
+
+
+cuentapreventacuenta
+
+if (cuentapreventacuenta) mod 2 = 0 then
+crNoColor
+else
+//crNoColor azul
+Color (197,251 ,254 )
+
+//amarillo
+color (255, 255,200)
+
+//rosa
+color (255,202,255)

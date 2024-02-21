@@ -1,0 +1,2 @@
+Nombre parametro: Carga Y tipo parametro NumberParameter
+Nombre parametro: Articulo Y tipo parametro StringParameter

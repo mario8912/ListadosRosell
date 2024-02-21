@@ -1,0 +1,3 @@
+%%%%ShowDescOnly	0
+ 	Familia mínima
+ZZZ	Família máxima

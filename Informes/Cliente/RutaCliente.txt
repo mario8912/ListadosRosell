@@ -1,0 +1,3 @@
+Preventista|NumberParameter|RangeValue
+Ruta|NumberParameter|RangeValue
+Cliente|NumberParameter|RangeValue

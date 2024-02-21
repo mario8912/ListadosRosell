@@ -1,0 +1,3 @@
+%%%%ShowDescOnly	0
+1,00	Preventista mínimo
+32.767,00	Preventista máximo

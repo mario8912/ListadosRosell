@@ -1,0 +1,4 @@
+@PreventaIni|NumberParameter|DiscreteValue
+@PreventaFin|NumberParameter|DiscreteValue
+@DiaINI|NumberParameter|DiscreteValue
+@DiaFin|NumberParameter|DiscreteValue

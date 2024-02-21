@@ -6,6 +6,7 @@ using Entidades.Modelos;
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -35,10 +36,19 @@ namespace Capas
 
         private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
         private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
+            
 
-        private CheckBox _chkBoxVistaPrevia;
-        private Button _btnAceptar = new Button();
-
+        private CheckBox _chkBoxVistaPrevia = new CheckBox
+        {
+            Text = "Vista Previa",
+            Dock = DockStyle.Bottom,
+            Checked = true
+        };
+        private Button _btnAceptar = new Button
+        {
+            Text = "ACEPTAR",
+            Dock = DockStyle.Bottom
+        };
         private TableLayoutPanel _tableLayoutPanel = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -46,25 +56,44 @@ namespace Capas
             Padding = new Padding(0, 0, 30, 20),
             AutoSize = true
         };
-
-        private Label _label = new Label
-        {
-            Text = _nombreLabel,
-            TextAlign = ContentAlignment.MiddleRight,
-            Dock = DockStyle.Bottom,
-            Tag = _nombreParametroDiccionario
-        };
-
-        private ComboBox _comboBox = new ComboBox
-        {
-            Dock = DockStyle.Bottom,
-            DropDownStyle = ComboBoxStyle.DropDown
-        };
-
+        
+        private CheckBox CheckBoxVistaPrevia { get => _chkBoxVistaPrevia; set => _chkBoxVistaPrevia = value; }
+        private Button BotonAceptar { get => _btnAceptar; set => _btnAceptar = value; }
         private TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
-        private Label Label { get => _label; set => _label = value; }
-        private ComboBox ComboBox { get => _comboBox; set => _comboBox = value; }
 
+        private Label _label;
+        private ComboBox _comboBox;
+        private DateTimePicker _datePicker;
+
+        private Label Label()
+        {
+            return new Label
+            {
+                Text = _nombreLabel,
+                TextAlign = ContentAlignment.MiddleRight,
+                Dock = DockStyle.Bottom,
+                Tag = _nombreParametroDiccionario
+            };
+        }
+
+        private ComboBox ComboBox()
+        {
+            return new ComboBox
+            {
+                Dock = DockStyle.Bottom,
+                DropDownStyle = ComboBoxStyle.DropDown
+            };
+        }
+
+        private DateTimePicker DateTimePicker()
+        {
+            return new DateTimePicker
+            {
+                Dock = DockStyle.Bottom,
+                CustomFormat = "dd-MM-yyyy",
+                Format = DateTimePickerFormat.Custom
+            };
+        }
         public Parametros()
         {
             _reporte = Global.ReporteCargado;
@@ -84,7 +113,6 @@ namespace Capas
             FocoBoton();
         }
 
-        
         private string FormatoNombreFormulario()
         {
             string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
@@ -209,7 +237,6 @@ namespace Capas
 
             _incrementoLayoutFilas++;
         }
-
         private void CrearLabelConTexto(string desdeHasta)
         {
             Label label = new Label
@@ -230,19 +257,19 @@ namespace Capas
             switch (_condicionSwitch)
             {
                 case "RANGO":
-                    AgregarCampoParametroRangoIni();
-                    AgregarCampoParametroRangoFin();
+                    AgregarCampoParametroRango(0, 1);
+                    AgregarCampoParametroRango(2, 3);
                     _incrementoLayoutFilas++;
                     break;
 
                 case "DESDE":
                 case "INI":
-                    AgregarCampoParametroRangoIni();
+                    AgregarCampoParametroRango(0, 1);
                     break;
 
                 case "HASTA":
                 case "FIN":
-                    AgregarCampoParametroRangoFin();
+                    AgregarCampoParametroRango(2, 3);
                     _incrementoLayoutFilas++;
                     break;
 
@@ -268,38 +295,26 @@ namespace Capas
 
         private void AgregarCampoParametroDiscreto()
         {
-            Label label = new Label
-            {
-                Text = _nombreLabel,
-                TextAlign = ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom,
-                Tag = _nombreParametroDiccionario
-            };
+            _comboBox = ComboBox();
 
-            ComboBox comboBox = new ComboBox
-            {
-                Dock = DockStyle.Bottom,
-                DropDownStyle = ComboBoxStyle.DropDown
-            };
+            AnadirValoresPredeterminadoParametroDiscreto();
+            _comboBox.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
 
-            AnadirValoresPredeterminadoParametroDiscreto(comboBox);
-            comboBox.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
-
-            SeleccionarPrimerIndiceComboBox(comboBox);
+            SeleccionarPrimerIndiceComboBox(_comboBox);
 
             AgregarFila();
 
-            TableLayoutPanel.Controls.Add(label, 0, _incrementoLayoutFilas);
-            TableLayoutPanel.Controls.Add(comboBox, 1, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(Label(), 0, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(_comboBox, 1, _incrementoLayoutFilas);
         }
 
-        private void AnadirValoresPredeterminadoParametroDiscreto(ComboBox comboBox)
+        private void AnadirValoresPredeterminadoParametroDiscreto()
         {
             if (_parametro.DefaultValues.Count > 0)
             {
                 foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues)
                 {
-                    comboBox.Items.Add(valorPredeterminado.Value);
+                    _comboBox.Items.Add(valorPredeterminado.Value);
                 }
             }
         }
@@ -314,102 +329,29 @@ namespace Capas
         {
             TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
-        private void AgregarCampoParametroRangoIni()
+        
+        private void AgregarCampoParametroRango(int numColumnaLabel, int numColumnaComboBoxDatePicker)
         {
-            Label labelDesde = new Label
-            {
-                Text = _nombreLabel,
-                TextAlign = ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom,
-                Tag = _nombreParametroDiccionario
-            };
+            TableLayoutPanel.Controls.Add(Label(), numColumnaLabel, _incrementoLayoutFilas);
 
-            TableLayoutPanel.Controls.Add(labelDesde, 0, _incrementoLayoutFilas);
-
-            if (_nombreLabel == "FECHA:")
-            {
-                DateTimePicker dtp = new DateTimePicker
-                {
-                    Dock = DockStyle.Bottom,
-                    CustomFormat = "dd-MM-yyyy",
-                    Format = DateTimePickerFormat.Custom
-                };
-
-                TableLayoutPanel.Controls.Add(dtp, 1, _incrementoLayoutFilas);
-            }
+            if (_nombreLabel == "FECHA:") TableLayoutPanel.Controls.Add(DateTimePicker(), numColumnaComboBoxDatePicker, _incrementoLayoutFilas);
             else
             {
-                ComboBox comboBoxDesde = new ComboBox
-                {
-                    Dock = DockStyle.Bottom,
-                    DropDownStyle = ComboBoxStyle.DropDown
-                };
-
-                comboBoxDesde.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, true));
-                SeleccionarPrimerIndiceComboBox(comboBoxDesde);
-
-                TableLayoutPanel.Controls.Add(comboBoxDesde, 1, _incrementoLayoutFilas);
-            }
-
-            AgregarFila();
-        }
-        private void AgregarCampoParametroRangoFin()
-        {
-            Label labelHasta = new Label
-            {
-                Text = _nombreLabel,
-                TextAlign = ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom,
-                Tag = _nombreParametroDiccionario
-            };
-
-            TableLayoutPanel.Controls.Add(labelHasta, 2, _incrementoLayoutFilas);
-
-            if (_nombreLabel == "FECHA:")
-            {
-                DateTimePicker dtp = new DateTimePicker
-                {
-                    Dock = DockStyle.Bottom,
-                    CustomFormat = "dd-MM-yyyy",
-                    Format = DateTimePickerFormat.Custom
-                };
-
-                TableLayoutPanel.Controls.Add(dtp, 3, _incrementoLayoutFilas);
-            }
-            else
-            {
-                ComboBox comboBoxHasta = new ComboBox
-                {
-                    Dock = DockStyle.Bottom,
-                    DropDownStyle = ComboBoxStyle.DropDown
-                };
-
-                comboBoxHasta.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, false));
-                SeleccionarPrimerIndiceComboBox(comboBoxHasta);
-                TableLayoutPanel.Controls.Add(comboBoxHasta, 3, _incrementoLayoutFilas);
+                _comboBox = ComboBox();
+                _comboBox.Items.Add(ConsultaParametros.ConsultaParametro(_nombreParametro, false));
+                SeleccionarPrimerIndiceComboBox(_comboBox);
+                TableLayoutPanel.Controls.Add(_comboBox, numColumnaComboBoxDatePicker, _incrementoLayoutFilas);
             }
 
             AgregarFila();
         }
         private void AgregarBotonCheckBox()
         {
-            _chkBoxVistaPrevia = new CheckBox
-            {
-                Text = "Vista Previa",
-                Dock = DockStyle.Bottom,
-                Checked = true
-            };
-
-            _btnAceptar = new Button
-            {
-                Text = "ACEPTAR",
-                Dock = DockStyle.Bottom
-            };
-            _btnAceptar.Click += btnAceptar_Click;
+            BotonAceptar.Click += btnAceptar_Click;
 
             AgregarFila();
-            TableLayoutPanel.Controls.Add(_chkBoxVistaPrevia, 2, _incrementoLayoutFilas);
-            TableLayoutPanel.Controls.Add(_btnAceptar, 3, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(CheckBoxVistaPrevia, 2, _incrementoLayoutFilas);
+            TableLayoutPanel.Controls.Add(BotonAceptar, 3, _incrementoLayoutFilas);
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)

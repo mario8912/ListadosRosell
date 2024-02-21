@@ -1,0 +1,5 @@
+ValorMoneda|NumberParameter|DiscreteValue
+Moneda|StringParameter|DiscreteValue
+Familia|StringParameter|RangeValue
+Subfamilia|StringParameter|RangeValue
+Articulo|StringParameter|RangeValue

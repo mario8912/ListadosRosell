@@ -9,7 +9,7 @@ bin/
 obj/
 .vs/
 debug/
-
+Informes/*
 #ARCHIVOS
 
 #EXCEPCIONES
