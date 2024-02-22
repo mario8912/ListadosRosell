@@ -3,6 +3,7 @@ using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades;
 using Entidades.Modelos;
+using FormularioParametros;
 using Negocio;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,15 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
+        private ControlesParametros ControlesParametros;
+        private ModeloParametros _parametro;
+
         private const int ALTURA_FILA = 50;
 
         private readonly ReportDocument _reporte;
         private int _nFila = 0;
 
-        private ParameterFieldDefinition _parametro;
+        
         private static string _nombreLabel;
         private string _nombreParametro;
         private string _nombreParametroSubreporte;
@@ -36,64 +40,19 @@ namespace Capas
         private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
         private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
 
-        private bool _minMaxQuery = true;
-
+        private readonly TableLayoutPanel _tableLayoutPanel;
+        private Button _botonAceptar;
         private ComboBox _comboBox;
+        private CheckBox _checkBoxVistaPrevia;
+        private DateTimePicker _dateTimePicker;
 
-        private CheckBox _chkBoxVistaPrevia = new CheckBox
-        {
-            Text = "Vista Previa",
-            Dock = DockStyle.Bottom,
-            Checked = true
-        };
-        private Button _btnAceptar = new Button
-        {
-            Text = "ACEPTAR",
-            Dock = DockStyle.Bottom
-        };
-        private TableLayoutPanel _tableLayoutPanel = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            ColumnCount = 4,
-            Padding = new Padding(0, 0, 30, 20),
-            AutoSize = true
-        };
-
-        private ComboBox ComboBox { get => _comboBox; set => _comboBox = value; } //asignar directamente NewComboBox();
-        private CheckBox CheckBoxVistaPrevia { get => _chkBoxVistaPrevia; set => _chkBoxVistaPrevia = value; }
-        private Button BotonAceptar { get => _btnAceptar; set => _btnAceptar = value; }
-        private TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
-
-        private Label Label()
-        {
-            return new Label
-            {
-                Text = _nombreLabel,
-                TextAlign = ContentAlignment.MiddleRight,
-                Dock = DockStyle.Bottom,
-                Tag = _nombreParametroDiccionario
-            };
-        }
-        private ComboBox NewComboBox()
-        {
-            return new ComboBox
-            {
-                Dock = DockStyle.Bottom,
-                DropDownStyle = ComboBoxStyle.DropDown
-            };
-        }
-        private DateTimePicker DateTimePicker()
-        {
-            return new DateTimePicker
-            {
-                Dock = DockStyle.Bottom,
-                CustomFormat = "dd-MM-yyyy",
-                Format = DateTimePickerFormat.Custom
-            };
-        }
-
+        private bool _minMaxQuery = true;
+        
         public Parametros()
         {
+            ControlesParametros = new ControlesParametros();
+            _tableLayoutPanel = ControlesParametros.TableLayoutPanel;
+
             _reporte = Global.ReporteCargado;
             InitializeComponent();
         }
@@ -101,8 +60,7 @@ namespace Capas
         {
             Text = FormatoNombreFormulario();
 
-            FormatoColumnaTableLayoutPanel();
-            Controls.Add(TableLayoutPanel);
+            Controls.Add(_tableLayoutPanel);
 
             RellenarListasConParametrosRangoDiscreto();//recoleccion datos
             AgregarBotonCheckBox();
@@ -116,14 +74,7 @@ namespace Capas
 
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
-        private void FormatoColumnaTableLayoutPanel()
-        {
-            for (int i = 0; i <= 4; i++)
-            {
-                if (i % 2 == 0) TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 140));
-                else TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 220));
-            }
-        }
+     
         private void RellenarListasConParametrosRangoDiscreto()
         {
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
@@ -141,11 +92,7 @@ namespace Capas
 
         private void EstablecerValoresDeLasPropiedadesDe(ParameterFieldDefinition parametro)
         {
-            _parametro = parametro;
-            _rangoDiscretoParametro = parametro.DiscreteOrRangeKind;
-            _nombreParametroDiccionario = parametro.Name;
-            _nombreParametro = parametro.Name.ToUpper();
-            _nombreParametroSubreporte = parametro.ReportName;
+            _parametro = new ModeloParametros();
         }
         private bool NoEsSubreprote()
         {
@@ -175,8 +122,8 @@ namespace Capas
         }
         private void AgregarParametrosA_Listas()
         {
-            if (ParametroEsRango()) _listaParametrosRango.Add(_parametro);
-            else _listaParametrosDiscreto.Add(_parametro);
+            if (ParametroEsRango()) _listaParametrosRango.Add(_parametro.Parametro);
+            else _listaParametrosDiscreto.Add(_parametro.Parametro);
         }
         private bool ParametroEsRango()
         {
@@ -184,10 +131,10 @@ namespace Capas
         }
         private void FormatoLabelDesdeHasta(Label label, int posicionFila)
         {
-            TableLayoutPanel.SetColumn(label, 0);
-            TableLayoutPanel.SetRow(label, _nFila);
-            TableLayoutPanel.SetColumnSpan(label, 2);
-            TableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
+            _tableLayoutPanel.SetColumn(label, 0);
+            _tableLayoutPanel.SetRow(label, _nFila);
+            _tableLayoutPanel.SetColumnSpan(label, 2);
+            _tableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
         }
         private void BucleParametrosListasRangoDiscreto()
         {
@@ -203,7 +150,7 @@ namespace Capas
 
             if (_listaParametrosRango.Count > 0)
             {
-                AnadirLabelDesdeHasta();
+                AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos();
                 foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
                 {
                     EstablecerValoresDeLasPropiedadesDe(parametro);
@@ -212,14 +159,14 @@ namespace Capas
                 }
             }
         }
-        private void AnadirLabelDesdeHasta()
+        private void AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos()
         {
             CrearLabelConTexto("DESDE");
             CrearLabelConTexto("HASTA");
 
             AgregarFila();
 
-            TableLayoutPanel.RowStyles[_nFila].Height = 40;
+            _tableLayoutPanel.RowStyles[_nFila].Height = 40;
 
             _nFila++;
         }
@@ -255,31 +202,31 @@ namespace Capas
             switch (_condicionSwitch)
             {
                 case "RANGO":
-                    AgregarCampoParametroRango(0, true);
-                    AgregarCampoParametroRango(2, false);
+                    AgregarCampoParametro(0, true);
+                    AgregarCampoParametro(2, false);
                     _nFila++;
                     break;
 
                 case "DESDE":
                 case "INI":
-                    AgregarCampoParametroRango(0, true);
+                    AgregarCampoParametro(0, true);
                     break;
 
                 case "HASTA":
                 case "FIN":
-                    AgregarCampoParametroRango(2, false);
+                    AgregarCampoParametro(2, false);
                     _nFila++;
                     break;
 
                 default:
-                    AgregarCampoParametroRango(0, true);
+                    AgregarCampoParametro(0, true);
                     _nFila++;
                     break;
             }
         }
         private void AnadirValoresPredeterminadoParametroDiscreto()
         {
-            foreach (ParameterDiscreteValue valorPredeterminado in _parametro.DefaultValues)
+            foreach (ParameterDiscreteValue valorPredeterminado in _parametro.Parametro.DefaultValues)
             {
                 var val = valorPredeterminado.Value;
                 AnadirResultadoConsultaAlComboBox(val.ToString());
@@ -288,44 +235,44 @@ namespace Capas
         }
         private void AnadirResultadoConsultaAlComboBox(string val)
         {
-            if (val != null && val != "" && val != string.Empty) ComboBox.Items.Add(val);
+            if (val != null && val != "" && val != string.Empty) _comboBox.Items.Add(val);
         }
         private void SeleccionarPrimerIndiceComboBox()
         {
-            if (ComboBox.Items.Count > 0) ComboBox.SelectedIndex = 0;
+            if (_comboBox.Items.Count > 0) _comboBox.SelectedIndex = 0;
         }
         private void AgregarFila()
         {
-            TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
         }
-        private void AgregarCampoParametroRango(int nColumna, bool minMaxQuery)
+        private void AgregarCampoParametro(int nColumna, bool minMaxQuery)
         {
             var nColumnaSiguiente = nColumna + 1;
             _minMaxQuery = minMaxQuery;
 
-            AnadirElementoAlTableLayout(Label(), nColumna);
+            AnadirElementoAlTableLayout(ControlesParametros.Label, nColumna);
 
             if (_nombreLabel == "FECHA:")
             {
-                AnadirElementoAlTableLayout(DateTimePicker(), nColumnaSiguiente);
+                AnadirElementoAlTableLayout(ControlesParametros.DateTimePicker, nColumnaSiguiente);
             }
             else
             {
-                ComboBox = NewComboBox();
+                _comboBox = ControlesParametros.ComboBox;
 
                 AnadirResultadoConsultaAlComboBox(Consulta());
 
-                if (_parametro.DefaultValues.Count > 0) AnadirValoresPredeterminadoParametroDiscreto();
+                if (_parametro.Parametro.DefaultValues.Count > 0) AnadirValoresPredeterminadoParametroDiscreto();
 
 
                 SeleccionarPrimerIndiceComboBox();
-                AnadirElementoAlTableLayout(ComboBox, nColumnaSiguiente);
+                AnadirElementoAlTableLayout(_comboBox, nColumnaSiguiente);
             }
             AgregarFila();
         }
         private void AnadirElementoAlTableLayout(Control elemento, int nColumna)
         {
-            TableLayoutPanel.Controls.Add(elemento, nColumna, _nFila);
+            _tableLayoutPanel.Controls.Add(elemento, nColumna, _nFila);
         }
         private string Consulta()
         {
@@ -333,11 +280,13 @@ namespace Capas
         }
         private void AgregarBotonCheckBox()
         {
-            BotonAceptar.Click += btnAceptar_Click;
+            _botonAceptar = ControlesParametros.BotonAceptar;
+            _checkBoxVistaPrevia = ControlesParametros.CheckBoxVistaPrevia;
+            _botonAceptar.Click += btnAceptar_Click;
 
             AgregarFila();
-            TableLayoutPanel.Controls.Add(CheckBoxVistaPrevia, 2, _nFila);
-            TableLayoutPanel.Controls.Add(BotonAceptar, 3, _nFila);
+            _tableLayoutPanel.Controls.Add(ControlesParametros.CheckBoxVistaPrevia, 2, _nFila);
+            _tableLayoutPanel.Controls.Add(_botonAceptar, 3, _nFila);
         }
         private void btnAceptar_Click(object sender, EventArgs e)
         {
@@ -354,7 +303,7 @@ namespace Capas
         }
         private bool HayCamposEnBlanco()
         {
-            foreach (Control control in TableLayoutPanel.Controls)
+            foreach (Control control in _tableLayoutPanel.Controls)
             {
                 if (!(control is Label) || !(control is TableLayoutPanel))
                 {
@@ -370,7 +319,7 @@ namespace Capas
         private void ClickAceptar()
         {
             LeerControles();
-            if (_chkBoxVistaPrevia.Checked)
+            if (_checkBoxVistaPrevia.Checked)
             {
                 AsignaParametros();
                 RptViewer visorReporte = new RptViewer()
@@ -387,10 +336,10 @@ namespace Capas
         {
             _diccionarioNombreParametroValorParametro = new Dictionary<string, string>();
 
-            for (int i = 0; i < TableLayoutPanel.Controls.Count - 3; i++)
+            for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
             {
-                Control label = TableLayoutPanel.Controls[i];
-                Control controlSiguiente = TableLayoutPanel.Controls[i + 1];
+                Control label = _tableLayoutPanel.Controls[i];
+                Control controlSiguiente = _tableLayoutPanel.Controls[i + 1];
 
                 _labelTag = label.Tag?.ToString();
                 if (_labelTag != null)

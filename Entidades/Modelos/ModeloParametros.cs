@@ -3,7 +3,7 @@ using CrystalDecisions.Shared;
 
 namespace Entidades.Modelos
 {
-    public class Parametros
+    public class ModeloParametros
     {
         private ParameterFieldDefinition _parametro;
         private static DiscreteOrRangeKind _rangoDiscretoParametro;
