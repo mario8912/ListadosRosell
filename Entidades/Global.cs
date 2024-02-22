@@ -22,7 +22,7 @@ namespace Entidades
 
         public static string TryRutaInformes()
         {
-            string dirInformes = Path.Combine(RutaAplicacion, "Informes");
+            string dirInformes = Path.Combine(RutaAplicacion, "Informes__");
 
             if (Directory.Exists(dirInformes)) return dirInformes;
             else throw new DirectoryNotFoundException("El directorio Informes no existe");

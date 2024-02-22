@@ -30,7 +30,7 @@ namespace Datos
 
             Usuario = "sa";
             Contrasenya = "";
-            BaseDeDatos = "rosell";
+            BaseDeDatos = "rosell2023";
             SeguridadIntegrada = true;
         }
         public async Task ComprobarConexion()
