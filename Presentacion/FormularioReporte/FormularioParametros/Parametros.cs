@@ -59,7 +59,7 @@ namespace Capas
             AutoSize = true
         };
 
-        private ComboBox ComboBox { get => _comboBox; set => _comboBox = value; }
+        private ComboBox ComboBox { get => _comboBox; set => _comboBox = value; } //asignar directamente NewComboBox();
         private CheckBox CheckBoxVistaPrevia { get => _chkBoxVistaPrevia; set => _chkBoxVistaPrevia = value; }
         private Button BotonAceptar { get => _btnAceptar; set => _btnAceptar = value; }
         private TableLayoutPanel TableLayoutPanel { get => _tableLayoutPanel; set => _tableLayoutPanel = value; }
@@ -104,7 +104,7 @@ namespace Capas
             FormatoColumnaTableLayoutPanel();
             Controls.Add(TableLayoutPanel);
 
-            RellenarListasConParametrosRangoDiscreto();
+            RellenarListasConParametrosRangoDiscreto();//recoleccion datos
             AgregarBotonCheckBox();
 
             FocoBoton();
@@ -210,7 +210,6 @@ namespace Capas
                     AsignarNombreDeParametroSinPrefijoSiEsDeRango();
                     SwitchCreacionComponentesFormulario();
                 }
-
             }
         }
         private void AnadirLabelDesdeHasta()

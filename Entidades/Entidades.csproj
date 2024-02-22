@@ -67,6 +67,7 @@
     <Compile Include="Conexiones\ConexionReporte.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Modelos\ConsultaParametros.cs" />
+    <Compile Include="Modelos\Parametros.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -85,11 +85,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormularioReporte\CondicionesParametros.cs" />
-    <Compile Include="FormularioReporte\Parametros.cs">
+    <Compile Include="FormularioReporte\FormularioParametros\CondicionesParametros.cs" />
+    <Compile Include="FormularioReporte\FormularioParametros\ControlesParametros.cs" />
+    <Compile Include="FormularioReporte\FormularioParametros\Parametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormularioReporte\Parametros.designer.cs">
+    <Compile Include="FormularioReporte\FormularioParametros\Parametros.designer.cs">
       <DependentUpon>Parametros.cs</DependentUpon>
     </Compile>
     <Compile Include="FormularioReporte\ReportViewer.cs">
@@ -112,7 +113,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormularioReporte\Parametros.resx">
+    <EmbeddedResource Include="FormularioReporte\FormularioParametros\Parametros.resx">
       <DependentUpon>Parametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormularioReporte\ReportViewer.resx">
