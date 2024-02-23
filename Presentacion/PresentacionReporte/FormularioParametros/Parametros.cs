@@ -20,31 +20,27 @@ namespace Capas
 
         private const int ALTURA_FILA = 50;
 
-        private readonly ReportDocument _reporte;
         private int _nFila = 0;
 
-        
         private static string _nombreLabel;
-        private string _nombreParametro;
-        private string _nombreParametroSubreporte;
+        //private string _nombreParametro;
+        //private string _nombreParametroSubreporte;
 
-        private static string _iniFinParametro;
-        private static string _desdeHastaParametro;
-        private string _condicionSwitch;
-        private static DiscreteOrRangeKind _rangoDiscretoParametro;
+        //private static string _iniFinParametro;
+        //private static string _desdeHastaParametro;
+        //private string _condicionSwitch;
+        //private static DiscreteOrRangeKind _rangoDiscretoParametro;
         private static string _labelTag;
 
         private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
         private static string _nombreParametroDiccionario;
 
-        private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
-        private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
+        
 
         private readonly TableLayoutPanel _tableLayoutPanel;
         private Button _botonAceptar;
         private ComboBox _comboBox;
         private CheckBox _checkBoxVistaPrevia;
-        private DateTimePicker _dateTimePicker;
 
         private bool _minMaxQuery = true;
         
@@ -52,8 +48,6 @@ namespace Capas
         {
             ControlesParametros = new ControlesParametros();
             _tableLayoutPanel = ControlesParametros.TableLayoutPanel;
-
-            _reporte = Global.ReporteCargado;
             InitializeComponent();
         }
         private void FormParametrosReporte_Load(object sender, EventArgs e)
@@ -62,7 +56,7 @@ namespace Capas
 
             Controls.Add(_tableLayoutPanel);
 
-            //RellenarListasConParametrosRangoDiscreto();//recoleccion datos
+            
             AgregarBotonCheckBox();
 
             FocoBoton();
@@ -107,21 +101,34 @@ namespace Capas
             _tableLayoutPanel.SetColumnSpan(label, 2);
             _tableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
         }
-        private string EstablecerValorParaCondicionDelSwitch()
+
+        private void BucleParametrosListasRangoDiscreto() //pasar estructura ciclica a presentacion y logica se queda aquí
         {
-            if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+            if (_listaParametrosDiscreto.Count > 0)
             {
-                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) return _desdeHastaParametro;
-                else return _iniFinParametro;
+                foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
+                {
+                    //new parametro?
+                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
+                    //return de algo
+                }
             }
-            else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
+
+            if (_listaParametrosRango.Count > 0)
             {
-                return "RANGO";
+                //AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos();
+                foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
+                {
+                    //new parametro?
+                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
+                    //return de algo
+                }
             }
         }
+
         private void SwitchCreacionComponentesFormulario() //dudoso
         {
-            EstablecerValorParaCondicionDelSwitch();
+            //_condicionSwitch = modeloParametros.ConcidionSwitch
             switch (_condicionSwitch)
             {
                 case "RANGO":
@@ -178,7 +185,7 @@ namespace Capas
                 AnadirResultadoConsultaAlComboBox(Consulta());
 
                 //lista parametros default si tiene
-                if (_parametro.Parametro.DefaultValues.Count > 0) AnadirValoresPredeterminadoParametroDiscreto();
+                if (_parametro.Parametro.DefaultValues.Count > 0) //ModeloParametros.AnadirValoresPredeterminadoParametroDiscreto();
 
 
                 SeleccionarPrimerIndiceComboBox();
@@ -206,7 +213,11 @@ namespace Capas
         }
         private void btnAceptar_Click(object sender, EventArgs e)
         {
+            VerificarEspaciosEnBlanco();
+        }
 
+        private void VerificarEspaciosEnBlanco()
+        {
             if (HayCamposEnBlanco())
             {
                 MessageBox.Show(
@@ -217,6 +228,7 @@ namespace Capas
             }
             else ClickAceptar();
         }
+
         private bool HayCamposEnBlanco()
         {
             foreach (Control control in _tableLayoutPanel.Controls)
@@ -237,7 +249,7 @@ namespace Capas
             LeerControles();
             if (_checkBoxVistaPrevia.Checked)
             {
-                AsignaParametros();
+                //ModeloParametros.AsignaParametros();
                 RptViewer visorReporte = new RptViewer()
                 {
                     MdiParent = MDI_Principal.InstanciaMdiPrincipal
@@ -274,6 +286,7 @@ namespace Capas
                 }
             }
         }
+        /*
         private void AsignaParametros() //pasar mitad alli (pasarle una lista idk)
         {
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
@@ -300,7 +313,7 @@ namespace Capas
                     }
                 }
             }
-        }
+        }*/
         private void FocoBoton()
         {
             foreach (Control item in _tableLayoutPanel.Controls)

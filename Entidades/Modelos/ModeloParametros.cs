@@ -9,7 +9,7 @@ namespace Entidades.Modelos
     {
         private ReportDocument _reporte;
         private ModeloParametros _this;
-        
+
         private ParameterFieldDefinition _parametro;
         private static DiscreteOrRangeKind _rangoDiscretoParametro;
         private string _nombreParametroDiccionario;
@@ -19,14 +19,14 @@ namespace Entidades.Modelos
         private string _iniFinParametro;
         private string _desdeHastaParametro;
 
-        private readonly List<ParameterFieldDefinition> _listaParametrosRango = new List<ParameterFieldDefinition>();
-        private readonly List<ParameterFieldDefinition> _listaParametrosDiscreto = new List<ParameterFieldDefinition>();
+        private readonly List<ModeloParametros> _listaParametrosRango = new List<ModeloParametros>();
+        private readonly List<ModeloParametros> _listaParametrosDiscreto = new List<ModeloParametros>();
 
-        public ModeloParametros(ReportDocument reporte)
+        public ModeloParametros()
         {
-            _reporte = reporte;
+            _reporte = Global.ReporteCargado;
         }
-        
+
         public ParameterFieldDefinition Parametro
         {
             get
@@ -34,11 +34,11 @@ namespace Entidades.Modelos
                 return _parametro;
             }
 
-            private set
+            set
             {
                 _parametro = value;
 
-                if(_parametro != null)
+                if (_parametro != null)
                 {
                     _rangoDiscretoParametro = _parametro.DiscreteOrRangeKind;
                     _nombreParametro = _parametro.Name.ToUpper();
@@ -50,85 +50,38 @@ namespace Entidades.Modelos
 
         public DiscreteOrRangeKind RaangoDiscretoParametro => _rangoDiscretoParametro;
         public string NombreParametroDiccionario => _nombreParametroDiccionario;
-        public string NombreParametro => _nombreParametro;
+        public string NombreParametro { get; set; }
         public string NombreParametroSubreporte => _nombreSubreporteDeParametro;
+        public string IniFinParametro { get; set; }
+        public string DesdeHastaParametro => _desdeHastaParametro;
 
-        private void RellenarListasConParametrosRangoDiscreto()
+        public List<ModeloParametros> ListaParametrosRango { get; private set; }
+        public List<ModeloParametros> ListaParametrosDiscreto { get; private set; }
+
+        public List<List<ModeloParametros>> AmbasListas 
         {
-            foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
+            get
             {
-                _this = new ModeloParametros(_reporte);
-                _this.Parametro = parametro;
-
-                if (NoEsSubreprote())
-                {
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    AgregarParametrosA_Listas();
-                }
-            }
-            BucleParametrosListasRangoDiscreto();
+                GetListas();
+                return AmbasListas;
+            } 
         }
-        private void AsignarNombreDeParametroSinPrefijoSiEsDeRango()
+
+        public void AgregarParametrosA_Listas(ModeloParametros _modeloParametros)
         {
-            ExtrarPrefijoRangoDeParametro();
-
-            if (CondicionesParametros.IgualA_INI_O_FIN(_iniFinParametro))
-            {
-                _nombreParametro = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
-            }
-            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro))
-            {
-                _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
-            }
-
-            //return nombre para label
-            //_nombreLabel = _nombreParametro + ":";
-        }
-        private void ExtrarPrefijoRangoDeParametro()
-        {
-            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;
-
-            if (_nombreParametro.Length > 3) _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
-            if (_nombreParametro.Length > 5) _desdeHastaParametro = _nombreParametro.Substring(0, 5).ToUpper().Trim();
+            if (ParametroEsRango()) ListaParametrosRango.Add(_modeloParametros);
+            else ListaParametrosDiscreto.Add(_modeloParametros);
         }
 
-        private void BucleParametrosListasRangoDiscreto()
-        {
-            if (_listaParametrosDiscreto.Count > 0)
-            {
-                foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
-                {
-                    //new parametro?
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    //return de algo
-                }
-            }
-
-            if (_listaParametrosRango.Count > 0)
-            {
-                //AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos();
-                foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
-                {
-                    //new parametro?
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    //return de algo
-                }
-            }
-        }
-
-        private bool NoEsSubreprote()
-        {
-            return (_nombreSubreporteDeParametro == "" || _nombreSubreporteDeParametro == null);
-        }
-
-        private void AgregarParametrosA_Listas()
-        {
-            if (ParametroEsRango()) _listaParametrosRango.Add(_this.Parametro);
-            else _listaParametrosDiscreto.Add(_this.Parametro);
-        }
         private bool ParametroEsRango()
         {
-            return (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || CondicionesParametros.IgualA_Todo(_iniFinParametro, _desdeHastaParametro));
+            return (RaangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || CondicionesParametros.IgualA_Todo(_iniFinParametro, _desdeHastaParametro));
+        }
+
+        private void GetListas()
+        {
+            AmbasListas.Add(ListaParametrosDiscreto);
+            AmbasListas.Add(ListaParametrosRango);
         }
 
         internal List<string> ValoresPredeterminadoParametroDiscreto()
@@ -140,6 +93,16 @@ namespace Entidades.Modelos
             }
 
             return valoresPredeterminados;
+        }
+
+        public string EstablecerValorParaCondicionDelSwitch()
+        {
+            if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+            {
+                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) return _desdeHastaParametro;
+                else return _iniFinParametro;
+            }
+            else return "RANGO";
         }
     }
 }
