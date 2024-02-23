@@ -85,7 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PresentacionReporte\FormularioParametros\CondicionesParametros.cs" />
     <Compile Include="PresentacionReporte\FormularioParametros\ControlesParametros.cs" />
     <Compile Include="PresentacionReporte\FormularioParametros\Parametros.cs">
       <SubType>Form</SubType>

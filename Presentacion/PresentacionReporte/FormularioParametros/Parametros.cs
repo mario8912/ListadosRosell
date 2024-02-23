@@ -62,7 +62,7 @@ namespace Capas
 
             Controls.Add(_tableLayoutPanel);
 
-            RellenarListasConParametrosRangoDiscreto();//recoleccion datos
+            //RellenarListasConParametrosRangoDiscreto();//recoleccion datos
             AgregarBotonCheckBox();
 
             FocoBoton();
@@ -71,94 +71,9 @@ namespace Capas
         private string FormatoNombreFormulario()
         {
             string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
-
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
      
-        private void RellenarListasConParametrosRangoDiscreto()
-        {
-            foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
-            {
-                EstablecerValoresDeLasPropiedadesDe(parametro);
-
-                if (NoEsSubreprote())
-                {
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    AgregarParametrosA_Listas();
-                }
-            }
-                BucleParametrosListasRangoDiscreto();
-        }//mover a fuera de presentacion
-
-        private void EstablecerValoresDeLasPropiedadesDe(ParameterFieldDefinition parametro)
-        {
-            _parametro = new ModeloParametros();
-        }
-        private bool NoEsSubreprote()
-        {
-            return (_nombreParametroSubreporte == "" || _nombreParametroSubreporte == null);
-        }
-        private void AsignarNombreDeParametroSinPrefijoSiEsDeRango()
-        {
-            ExtrarPrefijoRangoDeParametro();
-
-            if (CondicionesParametros.IgualA_INI_O_FIN(_iniFinParametro))
-            {
-                _nombreParametro = _nombreParametro.Substring(0, _nombreParametro.Length - 3);
-            }
-            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro))
-            {
-                _nombreParametro = _nombreParametro.Substring(5).Replace(" ", "");
-            }
-
-            _nombreLabel = _nombreParametro + ":";
-        }
-        private void ExtrarPrefijoRangoDeParametro()
-        {
-            _nombreParametro = _nombreParametro.Substring(0, 1) == "@" ? _nombreParametro.Substring(1) : _nombreParametro;
-
-            if (_nombreParametro.Length > 3) _iniFinParametro = _nombreParametro.Substring(_nombreParametro.Length - 3).ToUpper();
-            if (_nombreParametro.Length > 5) _desdeHastaParametro = _nombreParametro.Substring(0, 5).ToUpper().Trim();
-        }
-        private void AgregarParametrosA_Listas()
-        {
-            if (ParametroEsRango()) _listaParametrosRango.Add(_parametro.Parametro);
-            else _listaParametrosDiscreto.Add(_parametro.Parametro);
-        }
-        private bool ParametroEsRango()
-        {
-            return (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || CondicionesParametros.IgualA_Todo(_iniFinParametro, _desdeHastaParametro));
-        }
-        private void FormatoLabelDesdeHasta(Label label, int posicionFila)
-        {
-            _tableLayoutPanel.SetColumn(label, 0);
-            _tableLayoutPanel.SetRow(label, _nFila);
-            _tableLayoutPanel.SetColumnSpan(label, 2);
-            _tableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
-        }
-        private void BucleParametrosListasRangoDiscreto()
-        {
-            if (_listaParametrosDiscreto.Count > 0)
-            {
-                foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
-                {
-                    EstablecerValoresDeLasPropiedadesDe(parametro);
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    SwitchCreacionComponentesFormulario();
-                }
-            }
-
-            if (_listaParametrosRango.Count > 0)
-            {
-                AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos();
-                foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
-                {
-                    EstablecerValoresDeLasPropiedadesDe(parametro);
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    SwitchCreacionComponentesFormulario();
-                }
-            }
-        }
         private void AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos()
         {
             CrearLabelConTexto("DESDE");
@@ -184,19 +99,27 @@ namespace Capas
             if (desdeHasta == "DESDE") FormatoLabelDesdeHasta(label, 0);
             else FormatoLabelDesdeHasta(label, 2);
         }
-        private void EstablecerValorParaCondicionDelSwitch()
+
+        private void FormatoLabelDesdeHasta(Label label, int posicionFila)
+        {
+            _tableLayoutPanel.SetColumn(label, 0);
+            _tableLayoutPanel.SetRow(label, _nFila);
+            _tableLayoutPanel.SetColumnSpan(label, 2);
+            _tableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
+        }
+        private string EstablecerValorParaCondicionDelSwitch()
         {
             if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
             {
-                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) _condicionSwitch = _desdeHastaParametro;
-                else _condicionSwitch = _iniFinParametro;
+                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) return _desdeHastaParametro;
+                else return _iniFinParametro;
             }
             else if (_rangoDiscretoParametro is DiscreteOrRangeKind.RangeValue)
             {
-                _condicionSwitch = "RANGO";
+                return "RANGO";
             }
         }
-        private void SwitchCreacionComponentesFormulario()
+        private void SwitchCreacionComponentesFormulario() //dudoso
         {
             EstablecerValorParaCondicionDelSwitch();
             switch (_condicionSwitch)
@@ -224,15 +147,7 @@ namespace Capas
                     break;
             }
         }
-        private void AnadirValoresPredeterminadoParametroDiscreto()
-        {
-            foreach (ParameterDiscreteValue valorPredeterminado in _parametro.Parametro.DefaultValues)
-            {
-                var val = valorPredeterminado.Value;
-                AnadirResultadoConsultaAlComboBox(val.ToString());
-            }
-
-        }
+        
         private void AnadirResultadoConsultaAlComboBox(string val)
         {
             if (val != null && val != "" && val != string.Empty) _comboBox.Items.Add(val);
@@ -262,6 +177,7 @@ namespace Capas
 
                 AnadirResultadoConsultaAlComboBox(Consulta());
 
+                //lista parametros default si tiene
                 if (_parametro.Parametro.DefaultValues.Count > 0) AnadirValoresPredeterminadoParametroDiscreto();
 
 
@@ -358,7 +274,7 @@ namespace Capas
                 }
             }
         }
-        private void AsignaParametros()
+        private void AsignaParametros() //pasar mitad alli (pasarle una lista idk)
         {
             foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
             {

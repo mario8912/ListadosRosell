@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using EnParametros = Entidades.Modelos.ModeloParametros;
+using Entidades;
 
 namespace FormularioParametros
 {
@@ -9,7 +10,7 @@ namespace FormularioParametros
         private readonly EnParametros _parametros;
         public ControlesParametros() 
         {
-            _parametros = new EnParametros();
+            _parametros = new EnParametros(Global.ReporteCargado);
         }
 
         internal TableLayoutPanel TableLayoutPanel{ get{return NewTableLayoutPanel();} }
