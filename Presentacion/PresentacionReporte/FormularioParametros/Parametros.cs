@@ -7,6 +7,7 @@ using FormularioParametros;
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -15,14 +16,14 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
-        private ControlesParametros ControlesParametros;
-        private ModeloParametros _parametro;
-
+        private readonly ControlesParametros ControlesParametros;
+        private readonly ModeloParametros _parametro;
+        private readonly List<List<ModeloParametros>> _ambasListas;
         private const int ALTURA_FILA = 50;
 
         private int _nFila = 0;
 
-        private static string _nombreLabel;
+        private static readonly string _nombreLabel;
         //private string _nombreParametro;
         //private string _nombreParametroSubreporte;
 
@@ -48,6 +49,8 @@ namespace Capas
         {
             ControlesParametros = new ControlesParametros();
             _tableLayoutPanel = ControlesParametros.TableLayoutPanel;
+
+            _ambasListas = NegocioParametrosReporte.NegocioGetAmbasListas();
             InitializeComponent();
         }
         private void FormParametrosReporte_Load(object sender, EventArgs e)
@@ -55,8 +58,6 @@ namespace Capas
             Text = FormatoNombreFormulario();
 
             Controls.Add(_tableLayoutPanel);
-
-            
             AgregarBotonCheckBox();
 
             FocoBoton();
@@ -104,6 +105,18 @@ namespace Capas
 
         private void BucleParametrosListasRangoDiscreto() //pasar estructura ciclica a presentacion y logica se queda aquí
         {
+
+            foreach (List<ModeloParametros> lista in _ambasListas) 
+            {
+                if (lista.Count > 0) 
+                {
+                    foreach (var item in collection)
+                    {
+
+                    }
+                }
+                
+            }
             if (_listaParametrosDiscreto.Count > 0)
             {
                 foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)

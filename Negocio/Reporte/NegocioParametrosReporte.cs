@@ -2,15 +2,21 @@
 using CrystalDecisions.CrystalReports.Engine;
 using Entidades;
 using Entidades.Modelos;
+using System.Collections.Generic;
 
 namespace Negocio
 {
     public static class NegocioParametrosReporte
     {
-
         private static ModeloParametros _modeloParametros;
         private static ParameterFieldDefinitions _camposDelParametro;
-        public static void RellenarListasConParametrosRangoDiscreto()
+
+        public static List<List<ModeloParametros>> NegocioGetAmbasListas()
+        {
+            RellenarListasConParametrosRangoDiscreto();
+            return _modeloParametros.AmbasListas;
+        }
+        private static void RellenarListasConParametrosRangoDiscreto()
         {
             _camposDelParametro = Global.ReporteCargado.DataDefinition.ParameterFields;
             foreach (ParameterFieldDefinition parametro in _camposDelParametro)
