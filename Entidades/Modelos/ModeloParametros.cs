@@ -1,31 +1,17 @@
 ﻿using Capas.FormularioReporte;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
+using System;
 using System.Collections.Generic;
 
 namespace Entidades.Modelos
 {
-    public class ModeloParametros
+    public class ModeloParametros //: IDisposable
     {
-        private ReportDocument _reporte;
         private ModeloParametros _this;
 
         private ParameterFieldDefinition _parametro;
-        private static DiscreteOrRangeKind _rangoDiscretoParametro;
-        private string _nombreParametroDiccionario;
-        private string _nombreParametro;
-        private string _nombreSubreporteDeParametro;
-
-        private string _iniFinParametro;
-        private string _desdeHastaParametro;
-
-        private readonly List<ModeloParametros> _listaParametrosRango = new List<ModeloParametros>();
-        private readonly List<ModeloParametros> _listaParametrosDiscreto = new List<ModeloParametros>();
-
-        public ModeloParametros()
-        {
-            _reporte = Global.ReporteCargado;
-        }
+        //private bool disposed = false;
 
         public ParameterFieldDefinition Parametro
         {
@@ -35,55 +21,37 @@ namespace Entidades.Modelos
             }
 
             set
-            {
+                {
                 _parametro = value;
 
                 if (_parametro != null)
                 {
-                    _rangoDiscretoParametro = _parametro.DiscreteOrRangeKind;
-                    _nombreParametro = _parametro.Name.ToUpper();
-                    _nombreParametroDiccionario = _parametro.Name;
-                    _nombreSubreporteDeParametro = _parametro.ReportName;
+                    RangoDiscretoParametro = _parametro.DiscreteOrRangeKind;
+                    NombreParametro= _parametro.Name.ToUpper();
+                    NombreParametroDiccionario = _parametro.Name;
+                    NombreParametroSubreporte = _parametro.ReportName;
+                    ExtrarPrefijoRangoDeParametro();
+                    EstablecerValorParaCondicionDelSwitch();
                 }
             }
         }
 
-        public DiscreteOrRangeKind RaangoDiscretoParametro => _rangoDiscretoParametro;
-        public string NombreParametroDiccionario => _nombreParametroDiccionario;
-        public string NombreParametro { get; set; }
-        public string NombreParametroSubreporte => _nombreSubreporteDeParametro;
-        public string IniFinParametro { get; set; }
-        public string DesdeHastaParametro => _desdeHastaParametro;
+        public DiscreteOrRangeKind RangoDiscretoParametro { get; private set; }
+        public string NombreParametroDiccionario { get; private set; }
+        public string NombreParametro { get; private set; }
+        public string NombreParametroSubreporte { get; private set; }
+        public string IniFinParametro { get; private set; }
+        public string DesdeHastaParametro { get; private set; }
+        public string CondicionSwitch { get; private set; }
 
-        public List<ModeloParametros> ListaParametrosRango { get; private set; }
-        public List<ModeloParametros> ListaParametrosDiscreto { get; private set; }
-
-        public List<List<ModeloParametros>> AmbasListas 
+        public void ExtrarPrefijoRangoDeParametro()
         {
-            get
-            {
-                GetListas();
-                return AmbasListas;
-            } 
-        }
+            var nombreParam = NombreParametro;
+            NombreParametro = nombreParam.Substring(0, 1) == "@" ? nombreParam.Substring(1) : nombreParam;
 
-        public void AgregarParametrosA_Listas(ModeloParametros _modeloParametros)
-        {
-            if (ParametroEsRango()) ListaParametrosRango.Add(_modeloParametros);
-            else ListaParametrosDiscreto.Add(_modeloParametros);
+            if (nombreParam.Length > 3) IniFinParametro = NombreParametro.Substring(NombreParametro.Length - 3).ToUpper();
+            if (nombreParam.Length > 5) DesdeHastaParametro = NombreParametro.Substring(0, 5).ToUpper().Trim();
         }
-
-        private bool ParametroEsRango()
-        {
-            return (RaangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || CondicionesParametros.IgualA_Todo(_iniFinParametro, _desdeHastaParametro));
-        }
-
-        private void GetListas()
-        {
-            AmbasListas.Add(ListaParametrosDiscreto);
-            AmbasListas.Add(ListaParametrosRango);
-        }
-
         internal List<string> ValoresPredeterminadoParametroDiscreto()
         {
             List<string> valoresPredeterminados = new List<string>();
@@ -95,14 +63,45 @@ namespace Entidades.Modelos
             return valoresPredeterminados;
         }
 
-        public string EstablecerValorParaCondicionDelSwitch()
+        public void EstablecerValorParaCondicionDelSwitch()
         {
-            if (_rangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+            if (RangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
             {
-                if (CondicionesParametros.IgualA_DESDE_O_HASTA(_desdeHastaParametro)) return _desdeHastaParametro;
-                else return _iniFinParametro;
+                if (CondicionesParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro)) CondicionSwitch = DesdeHastaParametro;
+                else CondicionSwitch = IniFinParametro;
             }
-            else return "RANGO";
+            else CondicionSwitch = "RANGO";
         }
+        /*
+        #region DISPOSE
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    // Liberar recursos gestionados aquí
+                    Console.WriteLine("Recursos gestionados liberados...");
+                }
+
+                // Liberar recursos no gestionados aquí
+                Console.WriteLine("Recursos no gestionados liberados...");
+
+                disposed = true;
+            }
+        }
+
+        // Destructor para asegurar que Dispose se llama si no se ha llamado explícitamente
+        ~ModeloParametros()
+        {
+            Dispose(false);
+        }
+        #endregion*/
     }
 }

@@ -1,16 +1,15 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using EnParametros = Entidades.Modelos.ModeloParametros;
-using Entidades;
+using Entidades.Modelos;
 
 namespace FormularioParametros
 {
     internal class ControlesParametros
     {
-        private readonly EnParametros _parametros;
-        public ControlesParametros() 
+        private readonly ModeloParametros _parametro;
+        public ControlesParametros(ModeloParametros parametro = null) 
         {
-            _parametros = new EnParametros(Global.ReporteCargado);
+            _parametro = parametro; 
         }
 
         internal TableLayoutPanel TableLayoutPanel{ get{return NewTableLayoutPanel();} }
@@ -42,10 +41,10 @@ namespace FormularioParametros
         {
             return new Label
             {
-                Text = _parametros.NombreParametro,
+                Text = _parametro.NombreParametro,
                 TextAlign = ContentAlignment.MiddleRight,
                 Dock = DockStyle.Bottom,
-                Tag = _parametros.NombreParametroDiccionario
+                Tag = _parametro.NombreParametroDiccionario
             };
         }
         private ComboBox NewComboBox()

@@ -1,5 +1,6 @@
 ﻿using Capas.FormularioReporte;
 using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using Entidades;
 using Entidades.Modelos;
 using System.Collections.Generic;
@@ -8,59 +9,66 @@ namespace Negocio
 {
     public static class NegocioParametrosReporte
     {
-        private static ModeloParametros _modeloParametros;
-        private static ParameterFieldDefinitions _camposDelParametro;
+        private static ModeloParametros _modeloParametro;
+
+        private static List<ModeloParametros> _listaParametrosRango = new List<ModeloParametros>();
+        private static List<ModeloParametros> _listaParametrosDiscreto = new List<ModeloParametros>();
+        private static List<List<ModeloParametros>> _ambasListas = new List<List<ModeloParametros>>();
 
         public static List<List<ModeloParametros>> NegocioGetAmbasListas()
         {
             RellenarListasConParametrosRangoDiscreto();
-            return _modeloParametros.AmbasListas;
+            return _ambasListas;
         }
         private static void RellenarListasConParametrosRangoDiscreto()
         {
-            _camposDelParametro = Global.ReporteCargado.DataDefinition.ParameterFields;
-            foreach (ParameterFieldDefinition parametro in _camposDelParametro)
+            foreach (ParameterFieldDefinition parametro in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
-                _modeloParametros = new ModeloParametros()
-                {
-                    Parametro = parametro
-                };
+                _modeloParametro = new ModeloParametros();
+                _modeloParametro.Parametro = parametro;
 
                 if (NoEsSubreprote())
                 {
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    _modeloParametros.AgregarParametrosA_Listas(_modeloParametros);
+                    //AsignarNombreDeParametroSinPrefijoSiEsDeRango();
+                    AgregarParametroA_ListaRangoO_Discreto();
                 }
             }
+            _ambasListas.Add(_listaParametrosDiscreto);
+            _ambasListas.Add(_listaParametrosRango);
             //BucleParametrosListasRangoDiscreto();
         }
         private static bool NoEsSubreprote()
         {
-            return (_modeloParametros.NombreParametroSubreporte == "" || _modeloParametros.NombreParametroSubreporte == null);
+            return (_modeloParametro.NombreParametroSubreporte == "" || _modeloParametro.NombreParametroSubreporte == null);
         }
-        private static string AsignarNombreDeParametroSinPrefijoSiEsDeRango() //Se usa para establecer el text del label
+
+        private static void AgregarParametroA_ListaRangoO_Discreto()
         {
-            ExtrarPrefijoRangoDeParametro();
+            if (ParametroEsRango()) _listaParametrosRango.Add(_modeloParametro);
+            else _listaParametrosDiscreto.Add(_modeloParametro);
+        }
 
-            if (CondicionesParametros.IgualA_INI_O_FIN(_modeloParametros.IniFinParametro))
+        private static bool ParametroEsRango()
+        {
+            return (_modeloParametro.RangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || 
+                CondicionesParametros.IgualA_Todo(_modeloParametro.IniFinParametro, _modeloParametro.DesdeHastaParametro));
+        }
+
+        public static string AsignarNombreDeParametroSinPrefijoSiEsDeRango() //Se usa para establecer el text del label
+        {
+            
+            if (CondicionesParametros.IgualA_INI_O_FIN(_modeloParametro.IniFinParametro))
             {
-                return _modeloParametros.NombreParametro.Substring(0, _modeloParametros.NombreParametro.Length - 3) + ":";
+                return _modeloParametro.NombreParametro.Substring(0, _modeloParametro.NombreParametro.Length - 3) + ":";
             }
-            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(_modeloParametros.DesdeHastaParametro))
+            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(_modeloParametro.DesdeHastaParametro))
             {
-                return _modeloParametros.NombreParametro.Substring(5).Replace(" ", "") + ":";
+                return _modeloParametro.NombreParametro.Substring(5).Replace(" ", "") + ":";
             }
 
-            return _modeloParametros.NombreParametro + ":";
+            return _modeloParametro.NombreParametro + ":";
             //_nombreLabel = _nombreParametro + ":";
         }
-        private static void ExtrarPrefijoRangoDeParametro()
-        {
-            var nombreParam = _modeloParametros.NombreParametro;
-            _modeloParametros.NombreParametro = nombreParam.Substring(0, 1) == "@" ? nombreParam.Substring(1) : nombreParam;
-
-            if (nombreParam.Length > 3) _modeloParametros.IniFinParametro = _modeloParametros.NombreParametro.Substring(_modeloParametros.NombreParametro.Length - 3).ToUpper();
-            if (nombreParam.Length > 5) _modeloParametros.NombreParametro = _modeloParametros.NombreParametro.Substring(0, 5).ToUpper().Trim();
-        }
+        
     }
 }

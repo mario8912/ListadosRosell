@@ -17,7 +17,7 @@ namespace Capas
     public partial class Parametros : Form
     {
         private readonly ControlesParametros ControlesParametros;
-        private readonly ModeloParametros _parametro;
+        private ModeloParametros _parametro;
         private readonly List<List<ModeloParametros>> _ambasListas;
         private const int ALTURA_FILA = 50;
 
@@ -35,7 +35,6 @@ namespace Capas
 
         private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
         private static string _nombreParametroDiccionario;
-
         
 
         private readonly TableLayoutPanel _tableLayoutPanel;
@@ -68,7 +67,6 @@ namespace Capas
             string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
-     
         private void AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos()
         {
             CrearLabelConTexto("DESDE");
@@ -103,20 +101,23 @@ namespace Capas
             _tableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
         }
 
-        private void BucleParametrosListasRangoDiscreto() //pasar estructura ciclica a presentacion y logica se queda aquí
+        private void BucleParametrosListasRangoDiscreto() 
         {
 
             foreach (List<ModeloParametros> lista in _ambasListas) 
             {
                 if (lista.Count > 0) 
                 {
-                    foreach (var item in collection)
+                    foreach (ModeloParametros parametros in lista)
                     {
-
+                        _parametro = parametros;
+                        SwitchCreacionComponentesFormulario();
                     }
                 }
                 
             }
+            
+            /*
             if (_listaParametrosDiscreto.Count > 0)
             {
                 foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
@@ -136,13 +137,12 @@ namespace Capas
                     AsignarNombreDeParametroSinPrefijoSiEsDeRango();
                     //return de algo
                 }
-            }
+            }*/
         }
 
         private void SwitchCreacionComponentesFormulario() //dudoso
         {
-            //_condicionSwitch = modeloParametros.ConcidionSwitch
-            switch (_condicionSwitch)
+            switch (_parametro.CondicionSwitch)
             {
                 case "RANGO":
                     AgregarCampoParametro(0, true);
@@ -182,18 +182,19 @@ namespace Capas
         }
         private void AgregarCampoParametro(int nColumna, bool minMaxQuery)
         {
+            ControlesParametros controlesParametros = new ControlesParametros(_parametro);
             var nColumnaSiguiente = nColumna + 1;
             _minMaxQuery = minMaxQuery;
 
-            AnadirElementoAlTableLayout(ControlesParametros.Label, nColumna);
+            AnadirElementoAlTableLayout(controlesParametros.Label, nColumna);
 
             if (_nombreLabel == "FECHA:")
             {
-                AnadirElementoAlTableLayout(ControlesParametros.DateTimePicker, nColumnaSiguiente);
+                AnadirElementoAlTableLayout(controlesParametros.DateTimePicker, nColumnaSiguiente);
             }
             else
             {
-                _comboBox = ControlesParametros.ComboBox;
+                _comboBox = controlesParametros.ComboBox;
 
                 AnadirResultadoConsultaAlComboBox(Consulta());
 
@@ -212,7 +213,7 @@ namespace Capas
         }
         private string Consulta()
         {
-            return ConsultaParametros.ConsultaParametro(_nombreParametro, _minMaxQuery);
+            return ConsultaParametros.ConsultaParametro(_parametro.NombreParametro, _minMaxQuery);
         }
         private void AgregarBotonCheckBox()
         {
