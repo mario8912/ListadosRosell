@@ -64,6 +64,7 @@ namespace Negocio
         {
             _ambasListas = new List<List<ModeloParametros>>();
             VaciarListas(_ambasListas);
+
             _ambasListas.Add(_listaParametrosDiscreto);
             _ambasListas.Add(_listaParametrosRango);
         }

@@ -41,7 +41,7 @@ namespace FormularioParametros
         {
             return new Label
             {
-                Text = _parametro.NombreLabel,
+                Text = _parametro.NombreParametrosSinPrefijoIniFin + ":",
                 TextAlign = ContentAlignment.MiddleRight,
                 Dock = DockStyle.Bottom,
                 Tag = _parametro.NombreParametroDiccionario

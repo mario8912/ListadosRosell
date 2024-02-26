@@ -9,8 +9,6 @@ namespace Entidades.Modelos
     public class ModeloParametros //: IDisposable
     {
         private ParameterFieldDefinition _parametro;
-        //private bool disposed = false;
-
         public ParameterFieldDefinition Parametro
         {
             get { return _parametro; }
@@ -25,9 +23,10 @@ namespace Entidades.Modelos
                     NombreParametroDiccionario = _parametro.Name;
                     NombreParametroSubreporte = _parametro.ReportName;
                     ExtrarPrefijoRangoDeParametro();
-                    ValoresPredeterminadoParametroDiscreto();
+                    AnadirValoresPredeterminadoParametroDiscreto();
                     EstablecerValorParaCondicionDelSwitch();
-                    NombreLabel = NombreDelLabel();
+                    NombreParametrosSinPrefijoIniFin = NombreDelLabel();
+                    NumeroValoresPredeterminados = ContadorValoresPredeterminados();
                 }
             }
         }
@@ -45,17 +44,19 @@ namespace Entidades.Modelos
         public string IniFinParametro { get; private set; }
         public string DesdeHastaParametro { get; private set; }
         public string CondicionSwitch { get; private set; }
-        public string NombreLabel { get; private set; }
+        public string NombreParametrosSinPrefijoIniFin { get; private set; }
+        public int NumeroValoresPredeterminados { get; private set; }
+        public bool TieneValoresPredeterminados { get {return VerificarSiTieneValoresPredeterminados();} }
 
         public void ExtrarPrefijoRangoDeParametro()
         {
             var nombreParam = NombreParametro;
-            NombreParametro = nombreParam.Substring(0, 1) == "@" ? nombreParam.Substring(1) : nombreParam;
+            NombreParametro = nombreParam.Substring(0, 1) == "@" ? nombreParam.Substring(1) : nombreParam; 
 
             if (nombreParam.Length > 3) IniFinParametro = NombreParametro.Substring(NombreParametro.Length - 3).ToUpper();
             if (nombreParam.Length > 5) DesdeHastaParametro = NombreParametro.Substring(0, 5).ToUpper().Trim();
         }
-        private void ValoresPredeterminadoParametroDiscreto()
+        private void AnadirValoresPredeterminadoParametroDiscreto()
         {
             foreach (ParameterDiscreteValue valorPredeterminado in Parametro.DefaultValues)
             {
@@ -73,18 +74,29 @@ namespace Entidades.Modelos
             else CondicionSwitch = "RANGO";
         }
 
-        public string NombreDelLabel()//AsignarNombreDeParametroSinPrefijoSiEsDeRango() //Se usa para establecer el text del label
+        public string NombreDelLabel()
         {
             if (CondicionesParametros.IgualA_INI_O_FIN(IniFinParametro))
             {
-                return NombreParametro.Substring(0, NombreParametro.Length - 3) + ":";
+                return NombreParametro.Substring(0, NombreParametro.Length - 3);
             }
             else if (CondicionesParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro))
             {
-                return NombreParametro.Substring(5).Replace(" ", "") + ":";
+                return NombreParametro.Substring(5).Replace(" ", "");
             }
 
-            return NombreParametro + ":";
+            return NombreParametro;
+        }
+
+        private int ContadorValoresPredeterminados()
+        {
+            return Parametro.DefaultValues.Count;
+        }
+
+       private bool VerificarSiTieneValoresPredeterminados()
+        {
+            if (NumeroValoresPredeterminados > 0) return true;
+            else return false;
         }
         /*
         #region DISPOSE

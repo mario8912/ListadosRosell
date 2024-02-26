@@ -24,14 +24,8 @@ namespace Capas
         private int _nFila = 0;
 
         private static readonly string _nombreLabel;
-        //private string _nombreParametro;
-        //private string _nombreParametroSubreporte;
-
-        //private static string _iniFinParametro;
-        //private static string _desdeHastaParametro;
-        //private string _condicionSwitch;
-        //private static DiscreteOrRangeKind _rangoDiscretoParametro;
         private static string _labelTag;
+        private bool _labelDesdeHastaAnadido = false;
 
         private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
         private static string _nombreParametroDiccionario;
@@ -62,11 +56,25 @@ namespace Capas
 
             FocoBoton();
         }
-
         private string FormatoNombreFormulario()
         {
             string nombreFormulario = Path.GetFileName(Path.ChangeExtension(Global.RutaReporte, ""));
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
+        }
+        private void BucleParametrosListasRangoDiscreto()
+        {
+            foreach (List<ModeloParametros> lista in _ambasListas)
+            {
+                if (lista.Count > 0)
+                {
+                    foreach (ModeloParametros parametro in lista)
+                    {
+                        _parametro = parametro;
+                        SwitchCreacionComponentesFormulario();
+                    }
+                }
+                if(!_labelDesdeHastaAnadido && _ambasListas[1].Count > 0) AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos();
+            }
         }
         private void AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos()
         {
@@ -93,55 +101,16 @@ namespace Capas
             if (desdeHasta == "DESDE") FormatoLabelDesdeHasta(label, 0);
             else FormatoLabelDesdeHasta(label, 2);
         }
-
         private void FormatoLabelDesdeHasta(Label label, int posicionFila)
         {
             _tableLayoutPanel.SetColumn(label, 0);
             _tableLayoutPanel.SetRow(label, _nFila);
             _tableLayoutPanel.SetColumnSpan(label, 2);
             _tableLayoutPanel.Controls.Add(label, posicionFila, _nFila);
+
+            _labelDesdeHastaAnadido = true;
         }
-
-        private void BucleParametrosListasRangoDiscreto() 
-        {
-
-            foreach (List<ModeloParametros> lista in _ambasListas) 
-            {
-                if (lista.Count > 0) 
-                {
-                    foreach (ModeloParametros parametro in lista)
-                    {
-                        _parametro = parametro;
-                        SwitchCreacionComponentesFormulario();
-                    }
-                }
-                
-            }
-            
-            /*
-            if (_listaParametrosDiscreto.Count > 0)
-            {
-                foreach (ParameterFieldDefinition parametro in _listaParametrosDiscreto)
-                {
-                    //new parametro?
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    //return de algo
-                }
-            }
-
-            if (_listaParametrosRango.Count > 0)
-            {
-                //AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos();
-                foreach (ParameterFieldDefinition parametro in _listaParametrosRango)
-                {
-                    //new parametro?
-                    AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    //return de algo
-                }
-            }*/
-        }
-
-        private void SwitchCreacionComponentesFormulario() //dudoso
+        private void SwitchCreacionComponentesFormulario()
         {
             switch (_parametro.CondicionSwitch)
             {
@@ -168,7 +137,6 @@ namespace Capas
                     break;
             }
         }
-        
         private void AnadirResultadoConsultaAlComboBox(string val)
         {
             if (val != null && val != "" && val != string.Empty) _comboBox.Items.Add(val);
@@ -197,11 +165,8 @@ namespace Capas
             {
                 _comboBox = controlesParametros.ComboBox;
 
+                AnadirValoresPredeterminadosComboBox();
                 AnadirResultadoConsultaAlComboBox(Consulta());
-
-                //lista parametros default si tiene
-                if (_parametro.Parametro.DefaultValues.Count > 0) //ModeloParametros.AnadirValoresPredeterminadoParametroDiscreto();
-
 
                 SeleccionarPrimerIndiceComboBox();
                 AnadirElementoAlTableLayout(_comboBox, nColumnaSiguiente);
@@ -212,9 +177,16 @@ namespace Capas
         {
             _tableLayoutPanel.Controls.Add(elemento, nColumna, _nFila);
         }
+        private void AnadirValoresPredeterminadosComboBox()
+        {
+            if (_parametro.TieneValoresPredeterminados && _parametro.RangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+            {
+                foreach (string valPred in _parametro.ValoresPredeterminados) _comboBox.Items.Add(valPred);
+            }
+        }
         private string Consulta()
         {
-            return ConsultaParametros.ConsultaParametro(_parametro.NombreParametro, _minMaxQuery);
+            return ConsultaParametros.ConsultaParametro(_parametro.NombreParametrosSinPrefijoIniFin, _minMaxQuery);
         }
         private void AgregarBotonCheckBox()
         {
