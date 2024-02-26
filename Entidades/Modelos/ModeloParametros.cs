@@ -8,34 +8,36 @@ namespace Entidades.Modelos
 {
     public class ModeloParametros //: IDisposable
     {
-        private ModeloParametros _this;
-
         private ParameterFieldDefinition _parametro;
         //private bool disposed = false;
 
         public ParameterFieldDefinition Parametro
         {
-            get
-            {
-                return _parametro;
-            }
-
+            get { return _parametro; }
             set
-                {
+            {
                 _parametro = value;
 
                 if (_parametro != null)
                 {
                     RangoDiscretoParametro = _parametro.DiscreteOrRangeKind;
-                    NombreParametro= _parametro.Name.ToUpper();
+                    NombreParametro = _parametro.Name.ToUpper();
                     NombreParametroDiccionario = _parametro.Name;
                     NombreParametroSubreporte = _parametro.ReportName;
                     ExtrarPrefijoRangoDeParametro();
+                    ValoresPredeterminadoParametroDiscreto();
                     EstablecerValorParaCondicionDelSwitch();
+                    NombreLabel = NombreDelLabel();
                 }
             }
         }
 
+        private List<string> valoresPredeterminados = new List<string>();
+        public List<string> ValoresPredeterminados 
+        {
+            get { return valoresPredeterminados; }
+            private set { valoresPredeterminados = value; }
+        }
         public DiscreteOrRangeKind RangoDiscretoParametro { get; private set; }
         public string NombreParametroDiccionario { get; private set; }
         public string NombreParametro { get; private set; }
@@ -43,6 +45,7 @@ namespace Entidades.Modelos
         public string IniFinParametro { get; private set; }
         public string DesdeHastaParametro { get; private set; }
         public string CondicionSwitch { get; private set; }
+        public string NombreLabel { get; private set; }
 
         public void ExtrarPrefijoRangoDeParametro()
         {
@@ -52,15 +55,12 @@ namespace Entidades.Modelos
             if (nombreParam.Length > 3) IniFinParametro = NombreParametro.Substring(NombreParametro.Length - 3).ToUpper();
             if (nombreParam.Length > 5) DesdeHastaParametro = NombreParametro.Substring(0, 5).ToUpper().Trim();
         }
-        internal List<string> ValoresPredeterminadoParametroDiscreto()
+        private void ValoresPredeterminadoParametroDiscreto()
         {
-            List<string> valoresPredeterminados = new List<string>();
-            foreach (ParameterDiscreteValue valorPredeterminado in _this.Parametro.DefaultValues)
+            foreach (ParameterDiscreteValue valorPredeterminado in Parametro.DefaultValues)
             {
-                valoresPredeterminados.Add(valorPredeterminado.Value.ToString());
+                ValoresPredeterminados.Add(valorPredeterminado.Value.ToString());
             }
-
-            return valoresPredeterminados;
         }
 
         public void EstablecerValorParaCondicionDelSwitch()
@@ -71,6 +71,20 @@ namespace Entidades.Modelos
                 else CondicionSwitch = IniFinParametro;
             }
             else CondicionSwitch = "RANGO";
+        }
+
+        public string NombreDelLabel()//AsignarNombreDeParametroSinPrefijoSiEsDeRango() //Se usa para establecer el text del label
+        {
+            if (CondicionesParametros.IgualA_INI_O_FIN(IniFinParametro))
+            {
+                return NombreParametro.Substring(0, NombreParametro.Length - 3) + ":";
+            }
+            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro))
+            {
+                return NombreParametro.Substring(5).Replace(" ", "") + ":";
+            }
+
+            return NombreParametro + ":";
         }
         /*
         #region DISPOSE

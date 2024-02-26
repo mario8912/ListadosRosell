@@ -57,6 +57,7 @@ namespace Capas
             Text = FormatoNombreFormulario();
 
             Controls.Add(_tableLayoutPanel);
+            BucleParametrosListasRangoDiscreto();
             AgregarBotonCheckBox();
 
             FocoBoton();
@@ -108,9 +109,9 @@ namespace Capas
             {
                 if (lista.Count > 0) 
                 {
-                    foreach (ModeloParametros parametros in lista)
+                    foreach (ModeloParametros parametro in lista)
                     {
-                        _parametro = parametros;
+                        _parametro = parametro;
                         SwitchCreacionComponentesFormulario();
                     }
                 }

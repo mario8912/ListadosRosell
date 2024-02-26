@@ -3,7 +3,9 @@ using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades;
 using Entidades.Modelos;
+using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Negocio
 {
@@ -11,31 +13,35 @@ namespace Negocio
     {
         private static ModeloParametros _modeloParametro;
 
-        private static List<ModeloParametros> _listaParametrosRango = new List<ModeloParametros>();
-        private static List<ModeloParametros> _listaParametrosDiscreto = new List<ModeloParametros>();
-        private static List<List<ModeloParametros>> _ambasListas = new List<List<ModeloParametros>>();
+        private static List<ModeloParametros> _listaParametrosRango;
+        private static List<ModeloParametros> _listaParametrosDiscreto;
+        private static List<List<ModeloParametros>> _ambasListas;
 
         public static List<List<ModeloParametros>> NegocioGetAmbasListas()
         {
             RellenarListasConParametrosRangoDiscreto();
+            LlenarAmbasListasConListasDeParametros();
             return _ambasListas;
         }
         private static void RellenarListasConParametrosRangoDiscreto()
         {
+            InstanciaY_VaciaListas();
+
             foreach (ParameterFieldDefinition parametro in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _modeloParametro = new ModeloParametros();
                 _modeloParametro.Parametro = parametro;
 
-                if (NoEsSubreprote())
-                {
-                    //AsignarNombreDeParametroSinPrefijoSiEsDeRango();
-                    AgregarParametroA_ListaRangoO_Discreto();
-                }
+                if (NoEsSubreprote()) AgregarParametroA_ListaRangoO_Discreto();
             }
-            _ambasListas.Add(_listaParametrosDiscreto);
-            _ambasListas.Add(_listaParametrosRango);
-            //BucleParametrosListasRangoDiscreto();
+        }
+
+        private static void InstanciaY_VaciaListas()
+        {
+            _listaParametrosRango = new List<ModeloParametros>();
+            _listaParametrosDiscreto = new List<ModeloParametros>();
+
+            VaciarListas(_listaParametrosRango, _listaParametrosDiscreto);
         }
         private static bool NoEsSubreprote()
         {
@@ -54,21 +60,17 @@ namespace Negocio
                 CondicionesParametros.IgualA_Todo(_modeloParametro.IniFinParametro, _modeloParametro.DesdeHastaParametro));
         }
 
-        public static string AsignarNombreDeParametroSinPrefijoSiEsDeRango() //Se usa para establecer el text del label
+        private static void LlenarAmbasListasConListasDeParametros()
         {
-            
-            if (CondicionesParametros.IgualA_INI_O_FIN(_modeloParametro.IniFinParametro))
-            {
-                return _modeloParametro.NombreParametro.Substring(0, _modeloParametro.NombreParametro.Length - 3) + ":";
-            }
-            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(_modeloParametro.DesdeHastaParametro))
-            {
-                return _modeloParametro.NombreParametro.Substring(5).Replace(" ", "") + ":";
-            }
-
-            return _modeloParametro.NombreParametro + ":";
-            //_nombreLabel = _nombreParametro + ":";
+            _ambasListas = new List<List<ModeloParametros>>();
+            VaciarListas(_ambasListas);
+            _ambasListas.Add(_listaParametrosDiscreto);
+            _ambasListas.Add(_listaParametrosRango);
         }
-        
+
+        private static void VaciarListas<T>(params List<T>[] args)
+        {
+            foreach (List<T> lista in args) lista?.Clear();
+        }
     }
 }
