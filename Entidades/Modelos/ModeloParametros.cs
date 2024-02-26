@@ -2,6 +2,7 @@
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 
 namespace Entidades.Modelos
@@ -9,10 +10,14 @@ namespace Entidades.Modelos
     public class ModeloParametros //: IDisposable
     {
         private ParameterFieldDefinition _parametro;
+        public ModeloParametros(ParameterFieldDefinition parametro) 
+        {
+            Parametro = parametro;
+        }
         public ParameterFieldDefinition Parametro
         {
             get { return _parametro; }
-            set
+            private set
             {
                 _parametro = value;
 
@@ -26,7 +31,8 @@ namespace Entidades.Modelos
                     AnadirValoresPredeterminadoParametroDiscreto();
                     EstablecerValorParaCondicionDelSwitch();
                     NombreParametrosSinPrefijoIniFin = NombreDelLabel();
-                    NumeroValoresPredeterminados = ContadorValoresPredeterminados();
+                    NumeroValoresPredeterminados = Parametro.DefaultValues.Count;
+                    RangoDiscretoFuncionalParametro = GetRangoDiscretoFuncionalParametro();
                 }
             }
         }
@@ -38,6 +44,7 @@ namespace Entidades.Modelos
             private set { valoresPredeterminados = value; }
         }
         public DiscreteOrRangeKind RangoDiscretoParametro { get; private set; }
+        public EnumRangoDiscreto RangoDiscretoFuncionalParametro { get; private set; } //establece el tratado del valor en funcion de su uso, no de su DiscreteOrRangeKind
         public string NombreParametroDiccionario { get; private set; }
         public string NombreParametro { get; private set; }
         public string NombreParametroSubreporte { get; private set; }
@@ -87,16 +94,22 @@ namespace Entidades.Modelos
 
             return NombreParametro;
         }
-
-        private int ContadorValoresPredeterminados()
-        {
-            return Parametro.DefaultValues.Count;
-        }
-
        private bool VerificarSiTieneValoresPredeterminados()
         {
             if (NumeroValoresPredeterminados > 0) return true;
             else return false;
+        }
+
+        private EnumRangoDiscreto GetRangoDiscretoFuncionalParametro()
+        {
+            if (CondicionesParametros.IgualA_Todo(IniFinParametro, DesdeHastaParametro) || this.RangoDiscretoParametro is DiscreteOrRangeKind.RangeValue) return EnumRangoDiscreto.Rango;
+            else return EnumRangoDiscreto.Discreto;
+        }
+
+        public enum EnumRangoDiscreto
+        {
+            Rango, 
+            Discreto
         }
         /*
         #region DISPOSE

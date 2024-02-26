@@ -1,26 +1,30 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Entidades.Modelos;
 
 namespace FormularioParametros
 {
-    internal class ControlesParametros
+    internal class ControlesParametros : IDisposable
     {
+        private bool disposed = false; // Bandera para controlar si Dispose() ya se llamó.
         private readonly ModeloParametros _parametro;
-        public ControlesParametros(ModeloParametros parametro = null) 
+
+        public ControlesParametros(ModeloParametros parametro = null)
         {
-            _parametro = parametro; 
+            _parametro = parametro;
         }
 
-        internal TableLayoutPanel TableLayoutPanel{ get{return NewTableLayoutPanel();} }
-        internal Label Label { get{return NewLabel();} }
-        internal ComboBox ComboBox { get{return NewComboBox();} } 
-        internal DateTimePicker DateTimePicker{ get{return NewDateTimePicker();} }
-        internal CheckBox CheckBoxVistaPrevia { get{return NewCheckBox();} }
-        internal Button BotonAceptar { get{return NewBotonAceptar();} }
+        internal TableLayoutPanel TableLayoutPanel { get { return NewTableLayoutPanel(); } }
+        internal Label Label { get { return NewLabel(); } }
+        internal ComboBox ComboBox { get { return NewComboBox(); } }
+        internal DateTimePicker DateTimePicker { get { return NewDateTimePicker(); } }
+        internal CheckBox CheckBoxVistaPrevia { get { return NewCheckBox(); } }
+        internal Button BotonAceptar { get { return NewBotonAceptar(); } }
 
         internal TableLayoutPanel NewTableLayoutPanel()
         {
+            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -39,16 +43,18 @@ namespace FormularioParametros
 
         private Label NewLabel()
         {
+            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
             return new Label
             {
-                Text = _parametro.NombreParametrosSinPrefijoIniFin + ":",
+                Text = _parametro?.NombreParametrosSinPrefijoIniFin + ":",
                 TextAlign = ContentAlignment.MiddleRight,
                 Dock = DockStyle.Bottom,
-                Tag = _parametro.NombreParametroDiccionario
+                Tag = _parametro?.NombreParametroDiccionario
             };
         }
         private ComboBox NewComboBox()
         {
+            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
             return new ComboBox
             {
                 Dock = DockStyle.Bottom,
@@ -57,6 +63,7 @@ namespace FormularioParametros
         }
         private DateTimePicker NewDateTimePicker()
         {
+            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
             return new DateTimePicker
             {
                 Dock = DockStyle.Bottom,
@@ -67,6 +74,7 @@ namespace FormularioParametros
 
         private CheckBox NewCheckBox()
         {
+            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
             return new CheckBox
             {
                 Text = "Vista Previa",
@@ -77,11 +85,45 @@ namespace FormularioParametros
 
         private Button NewBotonAceptar()
         {
+            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
             return new Button
             {
                 Text = "ACEPTAR",
                 Dock = DockStyle.Bottom
             };
+        }
+
+        // Método para verificar si Dispose() ya se llamó.
+        private void VerifyNotDisposed()
+        {
+            if (disposed)
+                throw new ObjectDisposedException("ControlesParametros", "Esta instancia ya ha sido eliminada.");
+        }
+
+        // Implementación del método Dispose()
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Método Dispose(bool) para liberar recursos
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    TableLayoutPanel?.Dispose();
+                    Label?.Dispose();
+                    ComboBox?.Dispose();
+                    DateTimePicker?.Dispose();
+                    CheckBoxVistaPrevia?.Dispose();
+                    BotonAceptar?.Dispose();
+                }
+
+                disposed = true;
+            }
         }
     }
 }

@@ -29,8 +29,7 @@ namespace Negocio
 
             foreach (ParameterFieldDefinition parametro in Global.ReporteCargado.DataDefinition.ParameterFields)
             {
-                _modeloParametro = new ModeloParametros();
-                _modeloParametro.Parametro = parametro;
+                _modeloParametro = new ModeloParametros(parametro);
 
                 if (NoEsSubreprote()) AgregarParametroA_ListaRangoO_Discreto();
             }

@@ -22,8 +22,8 @@ namespace Datos
             tableInfo.ConnectionInfo.IntegratedSecurity = SeguridadIntegrada;
 
             #region CONEXIÓN LOCAL
-            /*tableInfo.ConnectionInfo.UserID = Usuario;
-            tableInfo.ConnectionInfo.Password = Contrasenya;*/
+            //tableInfo.ConnectionInfo.UserID = Usuario;
+            //tableInfo.ConnectionInfo.Password = Contrasenya;
             #endregion
 
             Tables tablas = _reporte.Database.Tables;
