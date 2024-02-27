@@ -5,7 +5,7 @@ using CrystalDecisions.CrystalReports.Engine;
 namespace Entidades
 {
     public static class Global
-    {
+    {                           
         public static string RutaAplicacion = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string RutaDirectorioInformes = TryRutaInformes();
 

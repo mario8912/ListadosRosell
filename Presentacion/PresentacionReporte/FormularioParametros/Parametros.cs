@@ -1,10 +1,12 @@
 ﻿using Capas.FormularioReporte;
+using CrystalDecisions.CrystalReports.Engine;
 using Entidades;
 using Entidades.Modelos;
 using FormularioParametros;
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -13,24 +15,19 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
-        private readonly string _nombreFormulario = NombreFormulario();
         private static readonly string _rutaReporte = Global.RutaReporte;
+        private Stopwatch _stopwatch;
 
         private const int ALTURA_FILA = 50;
         private int _nFila = 0;
 
-        private readonly TableLayoutPanel _tableLayoutPanel;
+        private TableLayoutPanel _tableLayoutPanel;
 
         private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioParametrosReporte.NegocioGetAmbasListas();
         private ModeloParametros _parametro;
 
-        private static readonly string _nombreLabel;
-        private static string _labelTag;
         private bool _labelDesdeHastaAnadido = false;
 
-        private Dictionary<string, string> _diccionarioNombreParametroValorParametro;
-        private static string _nombreParametroDiccionario;
-        
         private Button _botonAceptar;
         private ComboBox _comboBox;
         private CheckBox _checkBoxVistaPrevia;
@@ -39,30 +36,35 @@ namespace Capas
         
         public Parametros()
         {
+            Stp();
+            Text = NombreFormulario();
+
             InitializeComponent();
+
+            InicializarTableLayout();
+
+            AnadirTableLayoutPanel();
+        }
+
+        private void Stp()
+        {
+            _stopwatch = new Stopwatch();
+            _stopwatch.Start();
+        }
+
+        private static string NombreFormulario()
+        {
+            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(_rutaReporte, ""));
+            return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
+        }
+
+        private void InicializarTableLayout()
+        {
             using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
             {
                 _tableLayoutPanel = controlesParametros.TableLayoutPanel;
                 controlesParametros.Dispose();
             }
-
-            AnadirTableLayoutPanel();
-        }
-        private void FormParametrosReporte_Load(object sender, EventArgs e)
-        {
-            Text = _nombreFormulario;
-
-            //
-            BucleParametrosListasRangoDiscreto();
-            //
-            AgregarBotonCheckBox();
-
-            FocoBoton();
-        }
-        private static string NombreFormulario()
-        {
-            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(_rutaReporte, ""));
-            return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
 
         private void AnadirTableLayoutPanel()
@@ -70,6 +72,20 @@ namespace Capas
             Controls.Add(_tableLayoutPanel);
         }
 
+        private void FormParametrosReporte_Load(object sender, EventArgs e)
+        {
+            BucleParametrosListasRangoDiscreto();
+            
+            AgregarBotonCheckBox();
+
+            FocoBoton();
+
+            _stopwatch.Stop();
+            Console.WriteLine();
+            Console.WriteLine("Tiempo total Parametros: " + _stopwatch.Elapsed);
+            Console.WriteLine();
+        }
+        
         private void BucleParametrosListasRangoDiscreto()
         {
             foreach (List<ModeloParametros> lista in _listasParametrosRangoDiscreto)
@@ -86,7 +102,7 @@ namespace Capas
             }
         }
         
-        private void SwitchCreacionComponentesFormulario()
+        private void SwitchCreacionComponentesFormulario() //mover a negocio
         {
             switch (_parametro.CondicionSwitch)
             {
@@ -113,15 +129,8 @@ namespace Capas
                     break;
             }
         }
+
         
-        private void SeleccionarPrimerIndiceComboBox()
-        {
-            if (_comboBox.Items.Count > 0) _comboBox.SelectedIndex = 0;
-        }
-        private void AgregarFila()
-        {
-            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
-        }
          
         private void AgregarCampoParametro(int nColumna, bool minMaxQuery)
         {
@@ -132,7 +141,7 @@ namespace Capas
                 _minMaxQuery = minMaxQuery;
                 AnadirElementoAlTableLayout(controlesParametros.Label, nColumna);
 
-                if (_nombreLabel == "FECHA:")
+                if (_parametro.NombreDelLabel() == "FECHA")
                 {
                     AnadirElementoAlTableLayout(controlesParametros.DateTimePicker, nColumnaSiguiente);
                 }
@@ -171,7 +180,16 @@ namespace Capas
         {
             return ConsultaParametros.ConsultaParametro(_parametro.NombreParametrosSinPrefijoIniFin, _minMaxQuery);
         }
-        
+
+        private void SeleccionarPrimerIndiceComboBox()
+        {
+            if (_comboBox.Items.Count > 0) _comboBox.SelectedIndex = 0;
+        }
+
+        private void AgregarFila()
+        {
+            _tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, ALTURA_FILA));
+        }
 
         #region REFACTOR
         private void AnadirLabelDesdeHastaSeparadorEntreRangoY_Discretos()
@@ -233,102 +251,38 @@ namespace Capas
 
         private void VerificarEspaciosEnBlanco()
         {
-            if (HayCamposEnBlanco())
+            if (NegocioParametrosReporte.HayCamposEnBlanco(_tableLayoutPanel))
             {
-                MessageBox.Show(
-                            "Rellena todos los campos para visualizar o imprimir el reporte.",
-                            "Campo en blanco",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-            }
-            else ClickAceptar();
-        }
-
-        private bool HayCamposEnBlanco()
-        {
-            foreach (Control control in _tableLayoutPanel.Controls)
-            {
-                if (!(control is Label) || !(control is TableLayoutPanel))
+                using (ControlesParametros controlesParmetros = new ControlesParametros())
                 {
-                    if (control.Text == "")
-                    {
-                        control.Focus();
-                        return true;
-                    }
+                    controlesParmetros.NewMessageBoxEspaciosEnBlanco();
                 }
             }
-            return false;
+            else ProcesarParametros();
         }
-        private void ClickAceptar()
+        private void ProcesarParametros()
         {
-            LeerControles();
+            //Negocio.ProcesarParametros
+            
+            NegocioParametrosReporte.ProcesarParametros(_tableLayoutPanel);
+
             if (_checkBoxVistaPrevia.Checked)
             {
-                //ModeloParametros.AsignaParametros();
-                RptViewer visorReporte = new RptViewer()
-                {
-                    MdiParent = MDI_Principal.InstanciaMdiPrincipal
-                };
-                visorReporte.Show();
+                LanzarReportViewer();
             }
             else NegocioReporte.ImprimirReporte();
 
             Dispose();
         }
-        private void LeerControles()
+
+        private void LanzarReportViewer()
         {
-            _diccionarioNombreParametroValorParametro = new Dictionary<string, string>();
-
-            for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
+            RptViewer visorReporte = new RptViewer()
             {
-                Control label = _tableLayoutPanel.Controls[i];
-                Control controlSiguiente = _tableLayoutPanel.Controls[i + 1];
-
-                _labelTag = label.Tag?.ToString();
-                if (_labelTag != null)
-                {
-                    if (label is Label && CondicionesParametros.DiferenteDeDESDE_O_HASTA(label.Tag.ToString()))
-                    {
-                        try
-                        {
-                            _diccionarioNombreParametroValorParametro.Add(_labelTag, controlSiguiente.Text);
-                        }
-                        catch (ArgumentException)
-                        {
-                            _diccionarioNombreParametroValorParametro.Add(_labelTag + "range", controlSiguiente.Text);
-                        }
-                    }
-                }
-            }
+                MdiParent = MDI_Principal.InstanciaMdiPrincipal
+            };
+            visorReporte.Show();
         }
-        /*
-        private void AsignaParametros() //pasar mitad alli (pasarle una lista idk)
-        {
-            foreach (ParameterFieldDefinition parametro in _reporte.DataDefinition.ParameterFields)
-            {
-                _nombreParametroSubreporte = parametro.ReportName;
-                if (NoEsSubreprote())
-                {
-                    var tipoDeValor = parametro.DiscreteOrRangeKind;
-                    var nombreParametro = parametro.Name;
-
-                    if (tipoDeValor is DiscreteOrRangeKind.DiscreteValue)
-                    {
-                        _reporte.SetParameterValue(nombreParametro, _diccionarioNombreParametroValorParametro[nombreParametro]);
-                    }
-                    else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
-                    {
-                        ParameterRangeValue range = new ParameterRangeValue
-                        {
-                            StartValue = _diccionarioNombreParametroValorParametro[nombreParametro],
-                            EndValue = _diccionarioNombreParametroValorParametro[nombreParametro + "range"]
-                        };
-
-                        _reporte.SetParameterValue(nombreParametro, range);
-                    }
-                }
-            }
-        }*/
         private void FocoBoton()
         {
             foreach (Control item in _tableLayoutPanel.Controls)

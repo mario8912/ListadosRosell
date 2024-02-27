@@ -40,7 +40,6 @@ namespace Datos
                 try 
                 {
                     await _conexionSql.OpenAsync();
-                    _conexionSql.Close();
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -52,6 +51,7 @@ namespace Datos
                 }
                 finally 
                 {
+                    if (_conexionSql.State == System.Data.ConnectionState.Open) _conexionSql.Close();
                     this?.Dispose();  
                 }
             }

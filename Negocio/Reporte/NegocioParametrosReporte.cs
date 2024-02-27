@@ -17,6 +17,10 @@ namespace Negocio
         private static List<ModeloParametros> _listaParametrosDiscreto;
         private static List<List<ModeloParametros>> _ambasListas;
 
+        private static Dictionary<string, string> _diccionarioNombreValorDelParametro;
+        private static string _labelTag;
+        private static TableLayoutPanel _tableLayoutPanel;
+
         public static List<List<ModeloParametros>> NegocioGetAmbasListas()
         {
             RellenarListasConParametrosRangoDiscreto();
@@ -72,5 +76,84 @@ namespace Negocio
         {
             foreach (List<T> lista in args) lista?.Clear();
         }
+
+        public static bool HayCamposEnBlanco(TableLayoutPanel tableLayoutPanel)
+        {
+            foreach (Control control in tableLayoutPanel.Controls)
+            {
+                if (!(control is Label) || !(control is TableLayoutPanel))
+                {
+                    if (control.Text == "")
+                    {
+                        control.Focus();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static void ProcesarParametros(TableLayoutPanel tableLayoutPanel)
+        {
+            _tableLayoutPanel = tableLayoutPanel;
+            _diccionarioNombreValorDelParametro = new Dictionary<string, string>();
+
+            LeerParametrosDelFormulario();
+            if (_diccionarioNombreValorDelParametro.Count > 0) AsignarParametrosAlReport();
+        }
+
+        private static void LeerParametrosDelFormulario()
+        {
+            for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
+            {
+                Control label = _tableLayoutPanel.Controls[i]; //pasar a _propiedad
+                string labelTag = label.Tag?.ToString();
+                Control controlSiguiente = _tableLayoutPanel.Controls[i + 1];
+                
+                if (labelTag != null)//encapsular
+                {
+                    if (label is Label && CondicionesParametros.DiferenteDeDESDE_O_HASTA(label.Tag.ToString()))
+                    {
+                        try
+                        {
+                            _diccionarioNombreValorDelParametro.Add(labelTag, controlSiguiente.Text);
+                        }
+                        catch (ArgumentException)
+                        {
+                            _diccionarioNombreValorDelParametro.Add(labelTag + "range", controlSiguiente.Text);
+                        }
+                    }
+                }
+            }
+        }
+        private static void AsignarParametrosAlReport()
+        {
+            foreach (ParameterFieldDefinition parametro in Global.ReporteCargado.DataDefinition.ParameterFields)
+            {
+                _modeloParametro = new ModeloParametros(parametro);
+
+                if (NoEsSubreprote())
+                {
+                    var tipoDeValor = _modeloParametro.RangoDiscretoParametro;
+                    var nombreParametro = _modeloParametro.NombreParametroDiccionario;
+
+                    if (_modeloParametro.RangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
+                    {
+                        Global.ReporteCargado.SetParameterValue(nombreParametro, _diccionarioNombreValorDelParametro[nombreParametro]);
+                    }
+                    else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
+                    {
+                        ParameterRangeValue range = new ParameterRangeValue
+                        {
+                            StartValue = _diccionarioNombreValorDelParametro[nombreParametro],
+                            EndValue = _diccionarioNombreValorDelParametro[nombreParametro + "range"]
+                        };
+
+                        Global.ReporteCargado.SetParameterValue(nombreParametro, range);
+                    }
+                }
+            }
+        }
+
     }
 }
