@@ -5,7 +5,7 @@ using CrystalDecisions.CrystalReports.Engine;
 namespace Entidades
 {
     public static class Global
-    {
+    {                           
         public static string RutaAplicacion = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string RutaDirectorioInformes = TryRutaInformes();
 
@@ -22,7 +22,7 @@ namespace Entidades
 
         public static string TryRutaInformes()
         {
-            string dirInformes = Path.Combine(RutaAplicacion, "Informes__");
+            string dirInformes = Path.Combine(RutaAplicacion, "Informes");
 
             if (Directory.Exists(dirInformes)) return dirInformes;
             else throw new DirectoryNotFoundException("El directorio Informes no existe");

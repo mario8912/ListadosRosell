@@ -21,7 +21,6 @@ namespace FormularioParametros
         internal DateTimePicker DateTimePicker { get { return NewDateTimePicker(); } }
         internal CheckBox CheckBoxVistaPrevia { get { return NewCheckBox(); } }
         internal Button BotonAceptar { get { return NewBotonAceptar(); } }
-
         internal TableLayoutPanel NewTableLayoutPanel()
         {
             VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
@@ -91,6 +90,12 @@ namespace FormularioParametros
                 Text = "ACEPTAR",
                 Dock = DockStyle.Bottom
             };
+        }
+
+        public void NewMessageBoxEspaciosEnBlanco()
+        {
+            VerifyNotDisposed();
+            MessageBox.Show("Rellena todos los campos para visualizar o imprimir el reporte.","Campo en blanco",MessageBoxButtons.OK,MessageBoxIcon.Warning);
         }
 
         // Método para verificar si Dispose() ya se llamó.

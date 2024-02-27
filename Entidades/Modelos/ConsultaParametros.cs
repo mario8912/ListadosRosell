@@ -130,6 +130,12 @@ namespace Entidades.Modelos
                     return $"" +
                         $"SELECT {minMaxQuery}(idprovgasto)" +
                         $" FROM provgasto";
+
+                case "conceptogasto":
+                case "concepto":
+                    return $"" +
+                        $"SELECT {minMaxQuery}(idConceptoGasto)" +
+                        $"FROM conceptoGasto";
                 default:
                     return string.Empty; 
             }

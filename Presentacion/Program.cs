@@ -1,6 +1,7 @@
 ﻿using Capas;
 using Datos;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -10,7 +11,7 @@ namespace Presentacion
     {
         /// <summary>
         /// Punto de entrada principal para la aplicación.
-        /// </summary>
+        /// </summary> 
         [STAThread]
         
         static void Main()
@@ -21,11 +22,12 @@ namespace Presentacion
             Task.Run(() => ComprobarConexion());
 
             Application.Run(new MDI_Principal());
-            
         }
 
         public static async Task ComprobarConexion()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 using (Conexion cn = new Conexion())
@@ -37,7 +39,10 @@ namespace Presentacion
             {
                 Console.WriteLine(ex.ToString());
             }
+            stopwatch.Stop();
+            Console.WriteLine();    
+            Console.WriteLine("Primera conexión: " + stopwatch.Elapsed.ToString());    
+            Console.WriteLine();    
         }
     }
 }
-
