@@ -15,7 +15,11 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
+<<<<<<< HEAD
         private static readonly string _rutaReporte = Global.RutaReporte;
+=======
+        private static readonly string _rutaReporte = GlobalInformes.RutaReporte;
+>>>>>>> separacion-datos-sql
         private Stopwatch _stopwatch;
 
         private const int ALTURA_FILA = 50;
@@ -23,7 +27,7 @@ namespace Capas
 
         private TableLayoutPanel _tableLayoutPanel;
 
-        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioParametrosReporte.NegocioGetAmbasListas();
+        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioReporteParametro.NegocioGetAmbasListas();
         private ModeloParametros _parametro;
 
         private bool _labelDesdeHastaAnadido = false;
@@ -251,7 +255,11 @@ namespace Capas
 
         private void VerificarEspaciosEnBlanco()
         {
+<<<<<<< HEAD
             if (NegocioParametrosReporte.HayCamposEnBlanco(_tableLayoutPanel))
+=======
+            if (NegocioReporteParametro.HayCamposEnBlanco(_tableLayoutPanel))
+>>>>>>> separacion-datos-sql
             {
                 using (ControlesParametros controlesParmetros = new ControlesParametros())
                 {
@@ -264,7 +272,11 @@ namespace Capas
         {
             //Negocio.ProcesarParametros
             
+<<<<<<< HEAD
             NegocioParametrosReporte.ProcesarParametros(_tableLayoutPanel);
+=======
+            NegocioReporteParametro.ProcesarParametros(_tableLayoutPanel);
+>>>>>>> separacion-datos-sql
 
             if (_checkBoxVistaPrevia.Checked)
             {

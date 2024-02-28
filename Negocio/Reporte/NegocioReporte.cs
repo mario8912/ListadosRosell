@@ -1,5 +1,4 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using Datos;
 using Entidades;
 
 namespace Negocio
@@ -8,17 +7,17 @@ namespace Negocio
     {
         public static ReportDocument Reporte(string rutaReporte)
         {
-            return new Reporte(rutaReporte);
+            return new Datos.Reporte(rutaReporte);
         }
 
         public static bool ComprobarParametrosReporte()
         {
-            return Global.ReporteCargado.ParameterFields.Count > 0;
+            return GlobalInformes.ReporteCargado.ParameterFields.Count > 0;
         }
 
         public static void ImprimirReporte()
         {
-            new Reporte(Global.RutaReporte).ImprimirReporte();
+            new Datos.Reporte(GlobalInformes.RutaReporte).ImprimirReporte();
         }
     }
 }

@@ -29,8 +29,7 @@ namespace Capas
         {
             try
             {
-                Global.TryRutaInformes();
-                return true;
+                return GlobalInformes.RutaDirectorioInformes != null;
             }
             catch
             {
