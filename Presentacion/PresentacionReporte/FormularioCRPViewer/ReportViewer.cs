@@ -15,7 +15,7 @@ namespace Capas
         {
             InitializeComponent();
             
-            Text = Path.GetFileName(Global.RutaReporte);
+            Text = Path.GetFileName(GlobalInformes.RutaReporte);
         }
 
         private void CierreAsincrono()
@@ -58,7 +58,7 @@ namespace Capas
         {
             try
             {
-                _visorReporte.ReportSource = Global.ReporteCargado;
+                _visorReporte.ReportSource = GlobalInformes.ReporteCargado;
             }
             catch (Exception excepcion)
             {

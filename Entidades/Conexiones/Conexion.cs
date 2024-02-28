@@ -20,7 +20,7 @@ namespace Datos
         {
             EstablecerServidorBaseDeDatos();
             FormatoCadenaConexion();
-            _conexionSql = new SqlConnection(Global.CadenaConexion);
+            _conexionSql = new SqlConnection(GlobalInformes.CadenaConexion);
         }
 
         private void EstablecerServidorBaseDeDatos()
@@ -35,7 +35,7 @@ namespace Datos
         }
         public async Task ComprobarConexion()
         {
-            using (_conexionSql = new SqlConnection(Global.CadenaConexion))
+            using (_conexionSql = new SqlConnection(GlobalInformes.CadenaConexion))
             {
                 try 
                 {
@@ -60,7 +60,7 @@ namespace Datos
         public void FormatoCadenaConexion()
         {
             //Global.CadenaConexion = string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
-            Global.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            GlobalInformes.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
         public void Dispose()

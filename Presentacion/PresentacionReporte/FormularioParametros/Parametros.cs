@@ -15,7 +15,7 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
-        private static readonly string _rutaReporte = Global.RutaReporte;
+        private static readonly string _rutaReporte = GlobalInformes.RutaReporte;
         private Stopwatch _stopwatch;
 
         private const int ALTURA_FILA = 50;
@@ -23,7 +23,7 @@ namespace Capas
 
         private TableLayoutPanel _tableLayoutPanel;
 
-        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioParametrosReporte.NegocioGetAmbasListas();
+        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioReporteParametro.NegocioGetAmbasListas();
         private ModeloParametros _parametro;
 
         private bool _labelDesdeHastaAnadido = false;
@@ -251,7 +251,7 @@ namespace Capas
 
         private void VerificarEspaciosEnBlanco()
         {
-            if (NegocioParametrosReporte.HayCamposEnBlanco(_tableLayoutPanel))
+            if (NegocioReporteParametro.HayCamposEnBlanco(_tableLayoutPanel))
             {
                 using (ControlesParametros controlesParmetros = new ControlesParametros())
                 {
@@ -264,7 +264,7 @@ namespace Capas
         {
             //Negocio.ProcesarParametros
             
-            NegocioParametrosReporte.ProcesarParametros(_tableLayoutPanel);
+            NegocioReporteParametro.ProcesarParametros(_tableLayoutPanel);
 
             if (_checkBoxVistaPrevia.Checked)
             {

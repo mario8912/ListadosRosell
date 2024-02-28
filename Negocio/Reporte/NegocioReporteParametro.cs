@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Negocio
 {
-    public static class NegocioParametrosReporte
+    public static class NegocioReporteParametro
     {
         private static ModeloParametros _modeloParametro;
 
@@ -18,7 +18,6 @@ namespace Negocio
         private static List<List<ModeloParametros>> _ambasListas;
 
         private static Dictionary<string, string> _diccionarioNombreValorDelParametro;
-        private static string _labelTag;
         private static TableLayoutPanel _tableLayoutPanel;
 
         public static List<List<ModeloParametros>> NegocioGetAmbasListas()
@@ -31,7 +30,7 @@ namespace Negocio
         {
             InstanciaY_VaciaListas();
 
-            foreach (ParameterFieldDefinition parametro in Global.ReporteCargado.DataDefinition.ParameterFields)
+            foreach (ParameterFieldDefinition parametro in GlobalInformes.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _modeloParametro = new ModeloParametros(parametro);
 
@@ -128,7 +127,7 @@ namespace Negocio
         }
         private static void AsignarParametrosAlReport()
         {
-            foreach (ParameterFieldDefinition parametro in Global.ReporteCargado.DataDefinition.ParameterFields)
+            foreach (ParameterFieldDefinition parametro in GlobalInformes.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _modeloParametro = new ModeloParametros(parametro);
 
@@ -139,7 +138,7 @@ namespace Negocio
 
                     if (_modeloParametro.RangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
                     {
-                        Global.ReporteCargado.SetParameterValue(nombreParametro, _diccionarioNombreValorDelParametro[nombreParametro]);
+                        GlobalInformes.ReporteCargado.SetParameterValue(nombreParametro, _diccionarioNombreValorDelParametro[nombreParametro]);
                     }
                     else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
                     {
@@ -149,7 +148,7 @@ namespace Negocio
                             EndValue = _diccionarioNombreValorDelParametro[nombreParametro + "range"]
                         };
 
-                        Global.ReporteCargado.SetParameterValue(nombreParametro, range);
+                        GlobalInformes.ReporteCargado.SetParameterValue(nombreParametro, range);
                     }
                 }
             }

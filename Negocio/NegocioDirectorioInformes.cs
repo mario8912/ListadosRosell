@@ -15,7 +15,7 @@ namespace Negocio
 
         private static Dictionary<string, string> LlenarDiccionario(Dictionary<string, string> claveValorNombreRuta)
         {
-            string[] rutaDirectorios = Directory.GetDirectories(Global.RutaDirectorioInformes);
+            string[] rutaDirectorios = Directory.GetDirectories(GlobalInformes.RutaDirectorioInformes);
 
             foreach (string directorio in rutaDirectorios)
             {

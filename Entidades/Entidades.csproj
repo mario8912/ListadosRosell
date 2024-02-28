@@ -83,7 +83,8 @@
   <ItemGroup>
     <Compile Include="Conexiones\Conexion.cs" />
     <Compile Include="Conexiones\ConexionReporte.cs" />
-    <Compile Include="Global.cs" />
+    <Compile Include="Global\GlobalInformes.cs" />
+    <Compile Include="Global\GlobalInformesHelper.cs" />
     <Compile Include="Modelos\CondicionesParametros.cs" />
     <Compile Include="Modelos\ConsultaParametros.cs" />
     <Compile Include="Modelos\ModeloParametros.cs" />
