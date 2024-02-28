@@ -1,4 +1,4 @@
-﻿using Datos;
+﻿using Entidades.Conexiones;
 using System.Data.SqlClient;
 
 namespace Entidades.Modelos

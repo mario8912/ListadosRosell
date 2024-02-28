@@ -1,7 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 
-namespace Datos
+namespace Entidades.Conexiones
 {
     public class ConexionReporte : Conexion
     {

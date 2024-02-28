@@ -85,43 +85,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PresentacionReporte\FormularioParametros\ControlesParametros.cs" />
-    <Compile Include="PresentacionReporte\FormularioParametros\Parametros.cs">
+    <Compile Include="Reporte\Parametros\HelperParametros.cs" />
+    <Compile Include="Reporte\Parametros\ControlesParametros.cs" />
+    <Compile Include="Reporte\Parametros\Parametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PresentacionReporte\FormularioParametros\Parametros.designer.cs">
+    <Compile Include="Reporte\Parametros\Parametros.designer.cs">
       <DependentUpon>Parametros.cs</DependentUpon>
     </Compile>
-    <Compile Include="PresentacionReporte\FormularioCRPViewer\ReportViewer.cs">
+    <Compile Include="Reporte\CRPViewer\ReportViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PresentacionReporte\FormularioCRPViewer\ReportViewer.Designer.cs">
+    <Compile Include="Reporte\CRPViewer\ReportViewer.Designer.cs">
       <DependentUpon>ReportViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="PresentacionPrincipal\MDI_Principal.cs">
+    <Compile Include="MDI_Principal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PresentacionPrincipal\MDI_Principal.Designer.cs">
+    <Compile Include="MDI_Principal.Designer.cs">
       <DependentUpon>MDI_Principal.cs</DependentUpon>
     </Compile>
-    <Compile Include="PresentacionListados\Listados.cs">
+    <Compile Include="ListadoInformes\Listados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PresentacionListados\Listados.Designer.cs">
+    <Compile Include="ListadoInformes\Listados.Designer.cs">
       <DependentUpon>Listados.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="PresentacionReporte\FormularioParametros\Parametros.resx">
+    <EmbeddedResource Include="Reporte\Parametros\Parametros.resx">
       <DependentUpon>Parametros.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PresentacionReporte\FormularioCRPViewer\ReportViewer.resx">
+    <EmbeddedResource Include="Reporte\CRPViewer\ReportViewer.resx">
       <DependentUpon>ReportViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PresentacionPrincipal\MDI_Principal.resx">
+    <EmbeddedResource Include="MDI_Principal.resx">
       <DependentUpon>MDI_Principal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PresentacionListados\Listados.resx">
+    <EmbeddedResource Include="ListadoInformes\Listados.resx">
       <DependentUpon>Listados.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

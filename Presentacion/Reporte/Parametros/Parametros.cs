@@ -1,9 +1,7 @@
-﻿using Capas.FormularioReporte;
-using CrystalDecisions.CrystalReports.Engine;
-using Entidades;
-using Entidades.Modelos;
+﻿using Entidades;
+using Negocio.Reporte;
+using Entidades.Modelos.Parametro;
 using FormularioParametros;
-using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,11 +13,7 @@ namespace Capas
 {
     public partial class Parametros : Form
     {
-<<<<<<< HEAD
-        private static readonly string _rutaReporte = Global.RutaReporte;
-=======
         private static readonly string _rutaReporte = GlobalInformes.RutaReporte;
->>>>>>> separacion-datos-sql
         private Stopwatch _stopwatch;
 
         private const int ALTURA_FILA = 50;

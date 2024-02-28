@@ -1,23 +1,23 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
-using Entidades;
 using System.Threading.Tasks;
+using Entidades.Conexiones;
 
-namespace Datos
+namespace Entidades.Modelos.Reporte
 {
-    public class Reporte : ReportDocument, IReporte
+    public class ModeloReporte : ReportDocument, IReporte
     {
         private string _rutaReporte;
         private string _nombreReporte;
 
         private ReportDocument _reporte;
 
-        public Reporte(string rutaReporte)
+        public ModeloReporte(string rutaReporte)
         {
             VerificarGlobareporte(rutaReporte);
         }
 
-        private void VerificarGlobareporte(string rutaReporte) 
+        private void VerificarGlobareporte(string rutaReporte)
         {
             if (GlobalInformes.ReporteCargado == null || GlobalInformes.RutaReporte != rutaReporte)
             {
@@ -36,7 +36,7 @@ namespace Datos
         {
             return _reporte;
         }
-        
+
         private async Task CargarReporte()
         {
             _reporte.Load(_rutaReporte);

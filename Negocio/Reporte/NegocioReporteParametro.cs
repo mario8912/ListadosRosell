@@ -2,12 +2,12 @@
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades;
-using Entidades.Modelos;
+using Entidades.Modelos.Parametro;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Negocio
+namespace Negocio.Reporte
 {
     public static class NegocioReporteParametro
     {
@@ -59,7 +59,7 @@ namespace Negocio
         private static bool ParametroEsRango()
         {
             return (_modeloParametro.RangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || 
-                CondicionesParametros.IgualA_Todo(_modeloParametro.IniFinParametro, _modeloParametro.DesdeHastaParametro));
+                HelperParametros.IgualA_Todo(_modeloParametro.IniFinParametro, _modeloParametro.DesdeHastaParametro));
         }
 
         private static void LlenarAmbasListasConListasDeParametros()
@@ -111,7 +111,7 @@ namespace Negocio
                 
                 if (labelTag != null)//encapsular
                 {
-                    if (label is Label && CondicionesParametros.DiferenteDeDESDE_O_HASTA(label.Tag.ToString()))
+                    if (label is Label && HelperParametros.DiferenteDeDESDE_O_HASTA(label.Tag.ToString()))
                     {
                         try
                         {

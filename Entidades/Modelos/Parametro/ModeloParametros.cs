@@ -1,13 +1,11 @@
 ﻿using Capas.FormularioReporte;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using System;
-using System.CodeDom;
 using System.Collections.Generic;
 
-namespace Entidades.Modelos
+namespace Entidades.Modelos.Parametro
 {
-    public class ModeloParametros //: IDisposable
+    public class ModeloParametros
     {
         private ParameterFieldDefinition _parametro;
         public ModeloParametros(ParameterFieldDefinition parametro) 
@@ -75,7 +73,7 @@ namespace Entidades.Modelos
         {
             if (RangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
             {
-                if (CondicionesParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro)) CondicionSwitch = DesdeHastaParametro;
+                if (HelperParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro)) CondicionSwitch = DesdeHastaParametro;
                 else CondicionSwitch = IniFinParametro;
             }
             else CondicionSwitch = "RANGO";
@@ -83,11 +81,11 @@ namespace Entidades.Modelos
 
         public string NombreDelLabel()
         {
-            if (CondicionesParametros.IgualA_INI_O_FIN(IniFinParametro))
+            if (HelperParametros.IgualA_INI_O_FIN(IniFinParametro))
             {
                 return NombreParametro.Substring(0, NombreParametro.Length - 3);
             }
-            else if (CondicionesParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro))
+            else if (HelperParametros.IgualA_DESDE_O_HASTA(DesdeHastaParametro))
             {
                 return NombreParametro.Substring(5).Replace(" ", "");
             }
@@ -102,7 +100,7 @@ namespace Entidades.Modelos
 
         private EnumRangoDiscreto GetRangoDiscretoFuncionalParametro()
         {
-            if (CondicionesParametros.IgualA_Todo(IniFinParametro, DesdeHastaParametro) || this.RangoDiscretoParametro is DiscreteOrRangeKind.RangeValue) return EnumRangoDiscreto.Rango;
+            if (HelperParametros.IgualA_Todo(IniFinParametro, DesdeHastaParametro) || this.RangoDiscretoParametro is DiscreteOrRangeKind.RangeValue) return EnumRangoDiscreto.Rango;
             else return EnumRangoDiscreto.Discreto;
         }
 
@@ -111,36 +109,5 @@ namespace Entidades.Modelos
             Rango, 
             Discreto
         }
-        /*
-        #region DISPOSE
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    // Liberar recursos gestionados aquí
-                    Console.WriteLine("Recursos gestionados liberados...");
-                }
-
-                // Liberar recursos no gestionados aquí
-                Console.WriteLine("Recursos no gestionados liberados...");
-
-                disposed = true;
-            }
-        }
-
-        // Destructor para asegurar que Dispose se llama si no se ha llamado explícitamente
-        ~ModeloParametros()
-        {
-            Dispose(false);
-        }
-        #endregion*/
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Capas.FormularioReporte
 {
-    public static class CondicionesParametros
+    public static class HelperParametros
     {
         public static readonly Func<string, bool> DiferenteDeINI = (iniFinParam) => iniFinParam != "INI";
         public static readonly Func<string, bool> DiferenteDeFIN = (iniFinParam) => iniFinParam != "FIN";

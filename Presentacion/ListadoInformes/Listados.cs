@@ -63,15 +63,6 @@ namespace Capas
             _nodoSeleccionado = treeViewListados.SelectedNode;
             GenerarListados();
         }
-
-        private void Listados_KeyDown(KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                _nodoSeleccionado = treeViewListados.SelectedNode;
-                GenerarListados();
-            }
-        }
         private void GenerarListados()
         {
             if (_nodoSeleccionado.Text != "INFORMES")

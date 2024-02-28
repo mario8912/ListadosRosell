@@ -1,9 +1,8 @@
-﻿using Entidades;
-using System;
+﻿using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace Datos
+namespace Entidades.Conexiones
 {
     public class Conexion : IDisposable
     {

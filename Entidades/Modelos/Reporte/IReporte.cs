@@ -1,9 +1,9 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using System.Threading.Tasks;
 
-namespace Datos
+namespace Entidades.Modelos.Reporte
 {
-    public interface IReporte
+    internal interface IReporte
     {
         Task ConectarReporte();
         void ImprimirReporte();
