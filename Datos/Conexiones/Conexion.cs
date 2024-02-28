@@ -3,7 +3,7 @@ using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace Entidades.Conexiones
+namespace Datos.Conexiones
 {
     public class Conexion : IDisposable
     {
@@ -43,11 +43,11 @@ namespace Entidades.Conexiones
                 }
                 catch (InvalidOperationException ex)
                 {
-                    System.Windows.Forms.MessageBox.Show(ex.ToString());
+                    throw ex;
                 }
-                catch(Exception ex) 
+                catch(Exception) 
                 {
-                    System.Windows.Forms.MessageBox.Show(ex.ToString()); 
+                    throw new Exception();
                 }
                 finally 
                 {

@@ -1,4 +1,5 @@
-﻿using Negocio;
+﻿using Negocio.Informes;
+using Negocio.Reporte;
 using System;
 using System.Collections.Generic;
 using System.IO;

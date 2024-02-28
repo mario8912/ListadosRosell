@@ -3,7 +3,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Windows.Forms;
 using CrystalDecisions.Windows.Forms;
-using Entidades;
+using Entidades.Global;
 
 namespace Capas
 {

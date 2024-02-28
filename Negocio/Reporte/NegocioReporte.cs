@@ -1,14 +1,14 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using Entidades;
+using Entidades.Global;
 using Entidades.Modelos.Reporte;
 
 namespace Negocio.Reporte
 {
     public static class NegocioReporte
     {
-        public static ReportDocument Reporte(string rutaReporte)
+        public static void Reporte(string rutaReporte)
         {
-            return new ModeloReporte(rutaReporte);
+            new ModeloReporte(rutaReporte);
         }
 
         public static bool ComprobarParametrosReporte()

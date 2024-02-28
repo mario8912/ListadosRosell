@@ -1,6 +1,7 @@
-﻿using Entidades;
-using Negocio.Reporte;
+﻿using Negocio.Reporte;
+using Entidades.Modelos;
 using Entidades.Modelos.Parametro;
+using Entidades.Global;
 using FormularioParametros;
 using System;
 using System.Collections.Generic;

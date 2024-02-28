@@ -1,7 +1,7 @@
 ﻿using Capas.FormularioReporte;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
-using Entidades;
+using Entidades.Global;
 using Entidades.Modelos.Parametro;
 using System;
 using System.Collections.Generic;

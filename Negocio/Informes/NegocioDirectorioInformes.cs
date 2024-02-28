@@ -1,4 +1,4 @@
-﻿using Entidades;
+﻿using Entidades.Global;
 using System.Collections.Generic;
 using System.IO;
 

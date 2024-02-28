@@ -1,5 +1,5 @@
 ﻿using Capas;
-using Datos;
+using Entidades.Conexiones;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;

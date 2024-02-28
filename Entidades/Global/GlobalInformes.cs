@@ -1,7 +1,6 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
-using Entidades.Global;
 
-namespace Entidades
+namespace Entidades.Global
 {
     public static class GlobalInformes
     {

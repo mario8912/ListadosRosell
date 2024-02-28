@@ -1,4 +1,5 @@
-﻿using CrystalDecisions.CrystalReports.Engine;
+﻿using Entidades.Global;
+using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
 using System.Threading.Tasks;
 using Entidades.Conexiones;

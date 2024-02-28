@@ -1,4 +1,4 @@
-﻿using Entidades;
+﻿using Entidades.Global;
 using System;
 using System.Windows.Forms;
 
