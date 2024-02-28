@@ -249,11 +249,7 @@ namespace Capas
 
         private void VerificarEspaciosEnBlanco()
         {
-<<<<<<< HEAD
-            if (NegocioParametrosReporte.HayCamposEnBlanco(_tableLayoutPanel))
-=======
             if (NegocioReporteParametro.HayCamposEnBlanco(_tableLayoutPanel))
->>>>>>> separacion-datos-sql
             {
                 using (ControlesParametros controlesParmetros = new ControlesParametros())
                 {
@@ -264,13 +260,7 @@ namespace Capas
         }
         private void ProcesarParametros()
         {
-            //Negocio.ProcesarParametros
-            
-<<<<<<< HEAD
-            NegocioParametrosReporte.ProcesarParametros(_tableLayoutPanel);
-=======
             NegocioReporteParametro.ProcesarParametros(_tableLayoutPanel);
->>>>>>> separacion-datos-sql
 
             if (_checkBoxVistaPrevia.Checked)
             {
