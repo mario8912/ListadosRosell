@@ -82,7 +82,7 @@ namespace Datos.Conexiones
 
         public void AbrirConexion()
         {
-            ConexionSql.Open();
+            ConexionSql.OpenAsync();
         }
 
         public string EjecutarConsulta(string consulta)

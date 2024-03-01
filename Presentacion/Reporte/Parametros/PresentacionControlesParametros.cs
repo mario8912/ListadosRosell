@@ -42,7 +42,7 @@ namespace FormularioParametros
 
         private Label NewLabel()
         {
-            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
+            VerifyNotDisposed(); 
             return new Label
             {
                 Text = _parametro?.NombreParametrosSinPrefijoIniFin + ":",
@@ -53,7 +53,7 @@ namespace FormularioParametros
         }
         private ComboBox NewComboBox()
         {
-            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
+            VerifyNotDisposed(); 
             return new ComboBox
             {
                 Dock = DockStyle.Bottom,
@@ -62,7 +62,7 @@ namespace FormularioParametros
         }
         private DateTimePicker NewDateTimePicker()
         {
-            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
+            VerifyNotDisposed(); 
             return new DateTimePicker
             {
                 Dock = DockStyle.Bottom,
@@ -73,7 +73,7 @@ namespace FormularioParametros
 
         private CheckBox NewCheckBox()
         {
-            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
+            VerifyNotDisposed();
             return new CheckBox
             {
                 Text = "Vista Previa",
@@ -84,7 +84,7 @@ namespace FormularioParametros
 
         private Button NewBotonAceptar()
         {
-            VerifyNotDisposed(); // Verifica si ya se llamó a Dispose()
+            VerifyNotDisposed();
             return new Button
             {
                 Text = "ACEPTAR",
@@ -98,21 +98,20 @@ namespace FormularioParametros
             MessageBox.Show("Rellena todos los campos para visualizar o imprimir el reporte.","Campo en blanco",MessageBoxButtons.OK,MessageBoxIcon.Warning);
         }
 
-        // Método para verificar si Dispose() ya se llamó.
+        
         private void VerifyNotDisposed()
         {
             if (disposed)
                 throw new ObjectDisposedException("ControlesParametros", "Esta instancia ya ha sido eliminada.");
         }
 
-        // Implementación del método Dispose()
+        
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        // Método Dispose(bool) para liberar recursos
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)

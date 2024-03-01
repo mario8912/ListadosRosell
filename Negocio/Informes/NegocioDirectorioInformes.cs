@@ -18,9 +18,7 @@ namespace Negocio.Informes
             string[] rutaDirectorios = Directory.GetDirectories(GlobalInformes.RutaDirectorioInformes);
 
             foreach (string directorio in rutaDirectorios)
-            {
                 claveValorNombreRuta.Add(Path.GetFileName(directorio).ToUpper(), directorio);
-            }
 
             return claveValorNombreRuta;
         }

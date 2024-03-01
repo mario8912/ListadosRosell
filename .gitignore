@@ -1,4 +1,8 @@
 #EXTENSIONES
+<<<<<<< HEAD
+=======
+!desktop.ini
+>>>>>>> 93f8227 (juncionalidad json anadida)
 *.ini
 *.config
 

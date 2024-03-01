@@ -28,8 +28,7 @@ namespace Presentacion
         {
             try
             {
-                if (await PruebaConexion.ComprobarConexion()) Console.WriteLine("good");
-                else Console.WriteLine("bad");
+                await PruebaConexion.ComprobarConexion();
             }
             catch (Exception ex)
             {
