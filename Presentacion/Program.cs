@@ -1,7 +1,6 @@
 ﻿using Capas;
-using Entidades.Conexiones;
+using Negocio;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,6 +12,7 @@ namespace Presentacion
         /// Punto de entrada principal para la aplicación.
         /// </summary> 
         [STAThread]
+
         
         static void Main()
         {
@@ -24,25 +24,17 @@ namespace Presentacion
             Application.Run(new MDI_Principal());
         }
 
-        public static async Task ComprobarConexion()
+        private static async Task ComprobarConexion()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             try
             {
-                using (Conexion cn = new Conexion())
-                {
-                    await cn.ComprobarConexion();
-                }
+                if (await PruebaConexion.ComprobarConexion()) Console.WriteLine("good");
+                else Console.WriteLine("bad");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine($"Error al probar la conexión: {ex.Message}");
             }
-            stopwatch.Stop();
-            Console.WriteLine();    
-            Console.WriteLine("Primera conexión: " + stopwatch.Elapsed.ToString());    
-            Console.WriteLine();    
         }
     }
 }

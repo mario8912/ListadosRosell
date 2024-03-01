@@ -1,4 +1,4 @@
-﻿using Capas.FormularioReporte;
+﻿using Entidades.Utils;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades.Global;
@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Negocio.Reporte
 {
-    public static class NegocioReporteParametro
+    public static class NegocioParametro
     {
         private static ModeloParametros _modeloParametro;
 

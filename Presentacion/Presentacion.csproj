@@ -85,13 +85,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Reporte\Parametros\HelperParametros.cs" />
-    <Compile Include="Reporte\Parametros\ControlesParametros.cs" />
-    <Compile Include="Reporte\Parametros\Parametros.cs">
+    <Compile Include="Reporte\Parametros\PresentacionControlesParametros.cs" />
+    <Compile Include="Reporte\Parametros\PresentacionParametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reporte\Parametros\Parametros.designer.cs">
-      <DependentUpon>Parametros.cs</DependentUpon>
+    <Compile Include="Reporte\Parametros\PresentacionParametros.designer.cs">
+      <DependentUpon>PresentacionParametros.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporte\CRPViewer\ReportViewer.cs">
       <SubType>Form</SubType>
@@ -113,11 +112,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Reporte\Parametros\Parametros.resx">
-      <DependentUpon>Parametros.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reporte\CRPViewer\ReportViewer.resx">
       <DependentUpon>ReportViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporte\Parametros\PresentacionParametros.resx">
+      <DependentUpon>PresentacionParametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MDI_Principal.resx">
       <DependentUpon>MDI_Principal.cs</DependentUpon>
@@ -154,7 +153,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Entidades\Entidades.csproj">
       <Project>{e098a814-37d6-47e6-a042-12e1bde600dc}</Project>
-      <Name>Entidades</Name>
+      <Name>0Entidades</Name>
     </ProjectReference>
     <ProjectReference Include="..\Negocio\Negocio.csproj">
       <Project>{69d3b05b-f544-4b06-bd91-495d5c22a88f}</Project>

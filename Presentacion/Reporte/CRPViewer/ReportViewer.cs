@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing.Text;
 using System.IO;
 using System.Windows.Forms;
 using CrystalDecisions.Windows.Forms;

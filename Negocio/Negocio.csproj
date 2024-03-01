@@ -81,20 +81,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Reporte\NegocioReporteParametro.cs" />
+    <Compile Include="Conexiones\NegocioConsulta.cs" />
+    <Compile Include="PruebaConexion.cs" />
+    <Compile Include="Reporte\NegocioParametro.cs" />
     <Compile Include="Informes\NegocioDirectorioInformes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporte\NegocioReporte.cs" />
-    <Compile Include="Reporte\NegocioReporteConexion.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Datos\Datos.csproj">
       <Project>{6e29ec42-2ba8-4f5a-8d8a-e64e998c433b}</Project>
       <Name>Datos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entidades\Entidades.csproj">
+    <ProjectReference Include="..\Entidades\0Entidades.csproj">
       <Project>{e098a814-37d6-47e6-a042-12e1bde600dc}</Project>
-      <Name>Entidades</Name>
+      <Name>0Entidades</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

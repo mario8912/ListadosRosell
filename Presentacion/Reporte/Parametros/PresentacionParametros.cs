@@ -1,5 +1,5 @@
 ﻿using Negocio.Reporte;
-using Entidades.Modelos;
+using Negocio.Conexiones;
 using Entidades.Modelos.Parametro;
 using Entidades.Global;
 using FormularioParametros;
@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Capas
 {
-    public partial class Parametros : Form
+    public partial class PresentacionParametros : Form
     {
         private static readonly string _rutaReporte = GlobalInformes.RutaReporte;
         private Stopwatch _stopwatch;
@@ -22,7 +22,7 @@ namespace Capas
 
         private TableLayoutPanel _tableLayoutPanel;
 
-        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioReporteParametro.NegocioGetAmbasListas();
+        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioParametro.NegocioGetAmbasListas();
         private ModeloParametros _parametro;
 
         private bool _labelDesdeHastaAnadido = false;
@@ -33,7 +33,7 @@ namespace Capas
 
         private bool _minMaxQuery = true;
         
-        public Parametros()
+        public PresentacionParametros()
         {
             Stp();
             Text = NombreFormulario();
@@ -59,7 +59,7 @@ namespace Capas
 
         private void InicializarTableLayout()
         {
-            using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
+            using (PresentacionControlesParametros controlesParametros = new PresentacionControlesParametros(_parametro))
             {
                 _tableLayoutPanel = controlesParametros.TableLayoutPanel;
                 controlesParametros.Dispose();
@@ -133,7 +133,7 @@ namespace Capas
          
         private void AgregarCampoParametro(int nColumna, bool minMaxQuery)
         {
-            using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
+            using (PresentacionControlesParametros controlesParametros = new PresentacionControlesParametros(_parametro))
             {
                 var nColumnaSiguiente = nColumna + 1;
 
@@ -177,7 +177,7 @@ namespace Capas
         }
         private string Consulta()
         {
-            return ConsultaParametros.ConsultaParametro(_parametro.NombreParametrosSinPrefijoIniFin, _minMaxQuery);
+            return NegocioConsulta.ConsultaParametro(_parametro.NombreParametrosSinPrefijoIniFin, _minMaxQuery);
         }
 
         private void SeleccionarPrimerIndiceComboBox()
@@ -229,7 +229,7 @@ namespace Capas
 
         private void AgregarBotonCheckBox()
         {
-            using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
+            using (PresentacionControlesParametros controlesParametros = new PresentacionControlesParametros(_parametro))
             {
                 _botonAceptar = controlesParametros.BotonAceptar;
                 _checkBoxVistaPrevia = controlesParametros.CheckBoxVistaPrevia;
@@ -250,9 +250,9 @@ namespace Capas
 
         private void VerificarEspaciosEnBlanco()
         {
-            if (NegocioReporteParametro.HayCamposEnBlanco(_tableLayoutPanel))
+            if (NegocioParametro.HayCamposEnBlanco(_tableLayoutPanel))
             {
-                using (ControlesParametros controlesParmetros = new ControlesParametros())
+                using (PresentacionControlesParametros controlesParmetros = new PresentacionControlesParametros())
                 {
                     controlesParmetros.NewMessageBoxEspaciosEnBlanco();
                 }
@@ -261,7 +261,9 @@ namespace Capas
         }
         private void ProcesarParametros()
         {
-            NegocioReporteParametro.ProcesarParametros(_tableLayoutPanel);
+            //Negocio.ProcesarParametros
+            
+            NegocioParametro.ProcesarParametros(_tableLayoutPanel);
 
             if (_checkBoxVistaPrevia.Checked)
             {

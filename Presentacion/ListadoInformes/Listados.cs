@@ -72,7 +72,7 @@ namespace Capas
                 if (VerificarEtiqueta() && ComprobarExtensionRpt())
                 {
                     FormatoCargaFomrulario();
-                    NegocioReporte.Reporte(_rutaReporte);
+                    NegocioReporte.CargarReporte(_rutaReporte); //negocio.cargarReporote
                     ComprobarParametros();
                     FormatoPostCargaFormulario();
                 }
@@ -144,7 +144,7 @@ namespace Capas
 
         private void FormParametrosReporte()
         {
-            new Parametros().ShowDialog();
+            new PresentacionParametros().ShowDialog();
         }
 
         private void FormatoPostCargaFormulario()

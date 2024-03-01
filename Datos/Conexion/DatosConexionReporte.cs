@@ -1,15 +1,16 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
+using Entidades.Global;
 
-namespace Entidades.Conexiones
+namespace Datos.Conexiones
 {
-    public class ConexionReporte : Conexion
+    public class DatosConexionReporte : DatosConexion
     {
         private readonly ReportDocument _reporte;
 
-        public ConexionReporte(ReportDocument reporte)
+        public DatosConexionReporte()
         {
-            _reporte = reporte;
+            _reporte = GlobalInformes.ReporteCargado;
             ConectarReporte();
             Dispose();
         }
@@ -20,7 +21,6 @@ namespace Entidades.Conexiones
             tableInfo.ConnectionInfo.ServerName = Servidor;
             tableInfo.ConnectionInfo.DatabaseName = BaseDeDatos;
             tableInfo.ConnectionInfo.IntegratedSecurity = SeguridadIntegrada;
-
             #region CONEXIÓN LOCAL
             tableInfo.ConnectionInfo.UserID = Usuario;
             tableInfo.ConnectionInfo.Password = Contrasenya;
@@ -28,11 +28,7 @@ namespace Entidades.Conexiones
 
             Tables tablas = _reporte.Database.Tables;
 
-            foreach (Table tabla in tablas)
-            {
-                tabla.ApplyLogOnInfo(tableInfo);
-                tabla.SetDataSource(tableInfo);
-            }
+            foreach (Table tabla in tablas) tabla.ApplyLogOnInfo(tableInfo);
         }
     }
 }

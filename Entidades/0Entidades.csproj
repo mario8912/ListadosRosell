@@ -85,7 +85,9 @@
     <Compile Include="Global\GlobalInformesHelper.cs" />
     <Compile Include="Modelos\Parametro\ModeloParametros.cs" />
     <Compile Include="Modelos\Reporte\IfEntidadReporte.cs" />
-    <Compile Include="Modelos\Reporte\EntidadReporte.cs" />
+    <Compile Include="Modelos\Reporte\EntidadReporte.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\HelperParametros.cs" />
   </ItemGroup>

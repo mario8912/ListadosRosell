@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datos", "..\Datos\Datos.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Negocio", "..\Negocio\Negocio.csproj", "{69D3B05B-F544-4B06-BD91-495D5C22A88F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entidades", "..\Entidades\Entidades.csproj", "{E098A814-37D6-47E6-A042-12E1BDE600DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0Entidades", "..\Entidades\0Entidades.csproj", "{E098A814-37D6-47E6-A042-12E1BDE600DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

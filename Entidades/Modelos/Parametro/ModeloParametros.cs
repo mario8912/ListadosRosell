@@ -1,4 +1,4 @@
-﻿using Capas.FormularioReporte;
+﻿using Entidades.Utils;
 using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using System.Collections.Generic;
@@ -8,10 +8,31 @@ namespace Entidades.Modelos.Parametro
     public class ModeloParametros
     {
         private ParameterFieldDefinition _parametro;
+
+        private List<string> valoresPredeterminados = new List<string>();
+        public List<string> ValoresPredeterminados
+        {
+            get { return valoresPredeterminados; }
+            private set { valoresPredeterminados = value; }
+        }
+
+        public DiscreteOrRangeKind RangoDiscretoParametro { get; private set; }
+        public EnumRangoDiscreto RangoDiscretoFuncionalParametro { get; private set; } //establece el tratado del valor en funcion de su uso, no de su DiscreteOrRangeKind
+        public string NombreParametroDiccionario { get; private set; }
+        public string NombreParametro { get; private set; }
+        public string NombreParametroSubreporte { get; private set; }
+        public string IniFinParametro { get; private set; }
+        public string DesdeHastaParametro { get; private set; }
+        public string CondicionSwitch { get; private set; }
+        public string NombreParametrosSinPrefijoIniFin { get; private set; }
+        public int NumeroValoresPredeterminados { get; private set; }
+        public bool TieneValoresPredeterminados { get { return VerificarSiTieneValoresPredeterminados(); } }
+
         public ModeloParametros(ParameterFieldDefinition parametro) 
         {
             Parametro = parametro;
         }
+
         public ParameterFieldDefinition Parametro
         {
             get { return _parametro; }
@@ -35,23 +56,7 @@ namespace Entidades.Modelos.Parametro
             }
         }
 
-        private List<string> valoresPredeterminados = new List<string>();
-        public List<string> ValoresPredeterminados 
-        {
-            get { return valoresPredeterminados; }
-            private set { valoresPredeterminados = value; }
-        }
-        public DiscreteOrRangeKind RangoDiscretoParametro { get; private set; }
-        public EnumRangoDiscreto RangoDiscretoFuncionalParametro { get; private set; } //establece el tratado del valor en funcion de su uso, no de su DiscreteOrRangeKind
-        public string NombreParametroDiccionario { get; private set; }
-        public string NombreParametro { get; private set; }
-        public string NombreParametroSubreporte { get; private set; }
-        public string IniFinParametro { get; private set; }
-        public string DesdeHastaParametro { get; private set; }
-        public string CondicionSwitch { get; private set; }
-        public string NombreParametrosSinPrefijoIniFin { get; private set; }
-        public int NumeroValoresPredeterminados { get; private set; }
-        public bool TieneValoresPredeterminados { get {return VerificarSiTieneValoresPredeterminados();} }
+        
 
         public void ExtrarPrefijoRangoDeParametro()
         {

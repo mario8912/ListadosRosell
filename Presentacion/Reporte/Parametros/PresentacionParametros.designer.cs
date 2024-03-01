@@ -1,6 +1,6 @@
 ﻿namespace Capas
 {
-    partial class Parametros
+    partial class PresentacionParametros
     {
         /// <summary>
         /// Required designer variable.

@@ -88,9 +88,7 @@
     <Compile Include="Modelos\ConsultaParametros.cs" />
     <Compile Include="Modelos\Parametro\ModeloParametros.cs" />
     <Compile Include="Modelos\Reporte\IReporte.cs" />
-    <Compile Include="Modelos\Reporte\ModeloReporte.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Modelos\Reporte\ModeloReporte.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\HelperParametros.cs" />
   </ItemGroup>

@@ -5,12 +5,12 @@ using Entidades.Modelos.Parametro;
 
 namespace FormularioParametros
 {
-    internal class ControlesParametros : IDisposable
+    internal class PresentacionControlesParametros : IDisposable
     {
         private bool disposed = false; // Bandera para controlar si Dispose() ya se llamó.
         private readonly ModeloParametros _parametro;
 
-        public ControlesParametros(ModeloParametros parametro = null)
+        public PresentacionControlesParametros(ModeloParametros parametro = null)
         {
             _parametro = parametro;
         }
