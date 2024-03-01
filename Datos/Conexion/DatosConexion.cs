@@ -1,4 +1,5 @@
-﻿using Entidades.Global;
+﻿using Datos.Conexion;
+using Entidades.Global;
 using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -14,8 +15,6 @@ namespace Datos.Conexiones
         public string Contrasenya { get; private set;}
         public SqlConnection ConexionSql { get; private set; }
 
-        private readonly string nombreEquipo = Environment.MachineName;
-
         public DatosConexion()
         {
             EstablecerServidorBaseDeDatos();
@@ -25,14 +24,13 @@ namespace Datos.Conexiones
 
         private void EstablecerServidorBaseDeDatos()
         {
-            if (nombreEquipo == "PUESTO012") Servidor = "server2017";
-            else Servidor = @"DESKTOP-BO267HF\SQLEXPRESS";
+            var datosJson = DatosLeerJson.DatosConexionJson();
 
-            //Servidor = "server2017";
-            Usuario = "sa";
-            Contrasenya = "";
-            BaseDeDatos = "rosell";
-            SeguridadIntegrada = true;
+            Servidor = datosJson.Servidor;
+            Usuario = datosJson.Seguridad.Usuario;
+            Contrasenya = datosJson.Seguridad.Contrasenya;
+            BaseDeDatos = datosJson.BaseDeDatos;
+            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;
         }
 
         public async Task<bool> ComprobarConexion()

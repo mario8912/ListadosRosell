@@ -47,7 +47,7 @@ namespace Entidades.Utils
                     return $"" +
                         $"SELECT {minMaxQuery}(idPreventa)" +
                         $" FROM preventista" +
-                        $" WHERE inactivo = 0";
+                        $" WHERE idPreventa < 89";
 
                 case "ruta":
                     return $"" +
