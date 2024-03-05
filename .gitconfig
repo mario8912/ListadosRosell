@@ -1,0 +1,24 @@
+[user]
+	name = mario8912
+	email = lopezvilamario98@gmail.com
+[alias]
+	lg = log --graph
+	ss = status
+	commim = commit -m
+	configl = config --global --list
+	lgo = log --graph --pretty=oneline
+	lgr = log --graph --pretty=reference
+	sw = switch
+	lga = lg --all
+	reb2 = rebase -i HEAD~2
+	p = push
+	pf = push --force
+	rgn = reflog show origin/master --date=human
+[core]
+	autocrlf = input
+	filemode = false
+
+[color "hash"]
+	current = yellow reverse
+	local = yellow
+	remote = green
