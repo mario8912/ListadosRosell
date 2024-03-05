@@ -24,13 +24,20 @@ namespace Datos.Conexiones
 
         private void EstablecerServidorBaseDeDatos()
         {
-            var datosJson = DatosLeerJson.DatosConexionJson();
+            DatosConexionIni conexionIni = DatosLeerIni.AsignarDatosIni();
+
+            Servidor = conexionIni.Servior;
+            BaseDeDatos = conexionIni.BaseDeDatos;
+            SeguridadIntegrada = conexionIni.TrustedConnection;
+            #region JSON DATOS CONEXION
+            /*var datosJson = DatosLeerJson.DatosConexionJson();
 
             Servidor = datosJson.Servidor;
             Usuario = datosJson.Seguridad.Usuario;
             Contrasenya = datosJson.Seguridad.Contrasenya;
             BaseDeDatos = datosJson.BaseDeDatos;
-            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;
+            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;*/
+            #endregion
         }
 
         public async Task<bool> ComprobarConexion()

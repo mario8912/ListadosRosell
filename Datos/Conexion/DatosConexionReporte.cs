@@ -21,10 +21,10 @@ namespace Datos.Conexiones
             tableInfo.ConnectionInfo.ServerName = Servidor;
             tableInfo.ConnectionInfo.DatabaseName = BaseDeDatos;
             tableInfo.ConnectionInfo.IntegratedSecurity = SeguridadIntegrada;
-            #region CONEXIÓN LOCAL
+            /*#region CONEXIÓN LOCAL
             tableInfo.ConnectionInfo.UserID = Usuario;
             tableInfo.ConnectionInfo.Password = Contrasenya;
-            #endregion
+            #endregion*/
 
             Tables tablas = _reporte.Database.Tables;
 

@@ -1,5 +1,4 @@
 #EXTENSIONES
-
 *.ini
 *.config
 
@@ -9,8 +8,8 @@ bin/
 obj/
 .vs/
 debug/
-Informes/*
 #ARCHIVOS
 
 #EXCEPCIONES
 !Presentacion/bin/Debug/Informes/
+!Presentacion/bin/Debug/ConexionCapas.ini
