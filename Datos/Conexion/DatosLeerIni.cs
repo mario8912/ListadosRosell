@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 
 namespace Datos.Conexion
 {
@@ -24,6 +25,58 @@ namespace Datos.Conexion
             
             return conexionIni;
         }
+
+        [TestFixture]
+        public class DatosConexionIniTests
+        {
+            private DatosConexionIni _datosConexionIni;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _datosConexionIni = new DatosConexionIni();
+            }
+
+            [Test]
+            public void TestServiorProperty()
+            {
+                string expected = "TestServer";
+                _datosConexionIni.Servior = expected;
+                Assert.AreEqual(expected, _datosConexionIni.Servior);
+            }
+
+            [Test]
+            public void TestBaseDeDatosProperty()
+            {
+                string expected = "TestDatabase";
+                _datosConexionIni.BaseDeDatos = expected;
+                Assert.AreEqual(expected, _datosConexionIni.BaseDeDatos);
+            }
+
+            [Test]
+            public void TestTrustedConnectionProperty()
+            {
+                bool expected = true;
+                _datosConexionIni.TrustedConnection = expected;
+                Assert.AreEqual(expected, _datosConexionIni.TrustedConnection);
+            }
+
+            [Test]
+            public void TestUsuarioProperty()
+            {
+                string expected = "TestUser";
+                _datosConexionIni.Usuario = expected;
+                Assert.AreEqual(expected, _datosConexionIni.Usuario);
+            }
+
+            [Test]
+            public void TestContraseniaProperty()
+            {
+                string expected = "TestPassword";
+                _datosConexionIni.Contrasenia = expected;
+                Assert.AreEqual(expected, _datosConexionIni.Contrasenia);
+            }
+        }
     }
 
     internal class DatosConexionIni
@@ -35,3 +88,5 @@ namespace Datos.Conexion
         public string Contrasenia { get; set; }
     }
 }
+
+
