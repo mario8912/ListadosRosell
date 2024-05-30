@@ -24,14 +24,7 @@ namespace Entidades.Global
 
         private StreamWriter _sr;
 
-        public string RutaDirectorioInformes
-        {
-            get
-            {
-                return TryRutaInformes();
-            }
-            private set { }
-        }
+        public string RutaDirectorioInformes { get; private set; }
 
         //Global reporte
         public string RutaReporte { get; set; }
@@ -46,11 +39,15 @@ namespace Entidades.Global
             _cancellationToken = _cancellationTokenSource.Token;
 
             RutaCarpetaPrincipal = Path.GetFullPath(Path.Combine(RutaExe, @"..\..\..\"));
+            TryRutaInformes();
+
+            FileStream fs = new FileStream(Path.GetFullPath(Path.Combine(RutaCarpetaPrincipal, @"..\log.txt")), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+            _sr = new StreamWriter(fs);
         }
 
         private string TryRutaInformes()
         {
-            Task tarea = Task.Run(() =>
+            /*Task tarea = Task.Run(() =>
             {
                 BusquedaRecursiva(RutaCarpetaPrincipal);
             }, _cancellationToken);
@@ -66,39 +63,37 @@ namespace Entidades.Global
             catch (Exception)
             {
             }
-            
+            */
+
+            BusquedaRecursiva(RutaCarpetaPrincipal);
+
             if (Directory.Exists(RutaDirectorioInformes))
                 return RutaDirectorioInformes;
             else
                 throw new DirectoryNotFoundException("El directorio Informes no existe. Ruta: " + RutaDirectorioInformes);
         }
 
-        private List<string> BusquedaRecursiva(string ruta)
+        public List<string> BusquedaRecursiva(string ruta)
         {
             List<string> files = new List<string>();
 
             foreach (var subDir in Directory.EnumerateDirectories(ruta))
             {
-                string dir = subDir.Split('\\').ToList().Last();
-
-                if (subDir.Contains(dir))
+                
+                if (!subDir.Equals(@"D:\miPc\desktop\ListadosRosell\.git"))
                 {
-                    RutaDirectorioInformes = subDir;
-                    break;
-                }
-                else
+                    if (subDir.Contains("Informes"))
+                    {
+                        RutaDirectorioInformes = subDir;
+                        break;
+                    }
+
+                    Console.WriteLine(subDir);
                     files.AddRange(BusquedaRecursiva(subDir));
+                }
             }
 
             return files;
-        }
-
-        private void Print(string dir)
-        {
-            var txt = Path.GetFullPath(Path.Combine(RutaCarpetaPrincipal, @"..\log.txt"));
-            _sr = new StreamWriter(txt);
-
-            _sr.WriteLine(dir, true);
         }
     }
 }

@@ -2,7 +2,6 @@
 using Entidades.Global;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Runtime.InteropServices;
 
 namespace UnitTestProject.Tests
 {

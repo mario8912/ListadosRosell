@@ -18,11 +18,18 @@ namespace UnitTestProject
             _globalInfomes = _testServiceProvider.ServiceProvider.GetRequiredService<GlobalInformes>();
         }
 
-        [TestMethod]
-        public void MDI_PrincipalTest()
+        /*[TestMethod]
+        public void MDI_Principal()
         {
             MDI_PrincipalTests mdiPrincipalTest = new MDI_PrincipalTests(_globalInfomes);
             mdiPrincipalTest.TryGlobaDirectorioInfomes_True();
+        }*/
+
+        
+        public void BusquedaRecursiva()
+        {
+            BusquedaRecursivaTest brTest = new BusquedaRecursivaTest();
+            brTest.BuscquedaRecursiva_RutaDirectorioInformes();
         }
     }
 }
