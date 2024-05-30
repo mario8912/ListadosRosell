@@ -6,11 +6,14 @@ namespace Datos.Conexiones
 {
     public class DatosConexionReporte : DatosConexion
     {
+        //DI
+        private readonly GlobalInformes _globalInformes;
         private readonly ReportDocument _reporte;
 
-        public DatosConexionReporte()
+        public DatosConexionReporte(GlobalInformes globalInformes)
         {
-            _reporte = GlobalInformes.ReporteCargado;
+            _globalInformes = globalInformes;
+            _reporte = _globalInformes.ReporteCargado;
             ConectarReporte();
             Dispose();
         }
@@ -18,13 +21,9 @@ namespace Datos.Conexiones
         private void ConectarReporte()
         {
             TableLogOnInfo tableInfo = new TableLogOnInfo();
-            tableInfo.ConnectionInfo.ServerName = Servidor;
-            tableInfo.ConnectionInfo.DatabaseName = BaseDeDatos;
-            tableInfo.ConnectionInfo.IntegratedSecurity = SeguridadIntegrada;
-            /*#region CONEXIÓN LOCAL
-            tableInfo.ConnectionInfo.UserID = Usuario;
-            tableInfo.ConnectionInfo.Password = Contrasenya;
-            #endregion*/
+            tableInfo.ConnectionInfo.ServerName = base.Servidor;
+            tableInfo.ConnectionInfo.DatabaseName = base.BaseDeDatos;
+            tableInfo.ConnectionInfo.IntegratedSecurity = base.SeguridadIntegrada;
 
             Tables tablas = _reporte.Database.Tables;
 

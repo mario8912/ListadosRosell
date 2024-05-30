@@ -4,18 +4,26 @@ using System.IO;
 
 namespace Negocio.Informes
 {
-    public static class NegocioRutaDirectorioInformes
+    public class NegocioRutaDirectorioInformes
     {
-        public static Dictionary<string, string> DiccionarioSubdirectoriosInformes()
+        //DI
+        private readonly GlobalInformes _globalInformes;
+
+        public NegocioRutaDirectorioInformes(GlobalInformes globalInformes)
+        {
+            _globalInformes = globalInformes;
+        }
+
+        public Dictionary<string, string> DiccionarioSubdirectoriosInformes()
         {
             Dictionary<string, string> claveValorNombreRuta = new Dictionary<string, string>();
 
             return LlenarDiccionario(claveValorNombreRuta);
         }
 
-        private static Dictionary<string, string> LlenarDiccionario(Dictionary<string, string> claveValorNombreRuta)
+        private Dictionary<string, string> LlenarDiccionario(Dictionary<string, string> claveValorNombreRuta)
         {
-            string[] rutaDirectorios = Directory.GetDirectories(GlobalInformes.RutaDirectorioInformes);
+            string[] rutaDirectorios = Directory.GetDirectories(_globalInformes.RutaDirectorioInformes);
 
             foreach (string directorio in rutaDirectorios)
                 claveValorNombreRuta.Add(Path.GetFileName(directorio).ToUpper(), directorio);

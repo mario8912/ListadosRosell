@@ -6,15 +6,18 @@ using Entidades.Global;
 
 namespace Capas
 {
-    public partial class RptViewer : Form
+    public partial class ReportViewer : Form
     {
+        //DI
+        private readonly GlobalInformes _globalInformes;
         private CrystalReportViewer _visorReporte;
 
-        public RptViewer()
+        public ReportViewer(GlobalInformes globalInformes)
         {
+            _globalInformes = globalInformes;
             InitializeComponent();
             
-            Text = Path.GetFileName(GlobalInformes.RutaReporte);
+            Text = Path.GetFileName(_globalInformes.RutaReporte);
         }
 
         private void CierreAsincrono()
@@ -57,7 +60,7 @@ namespace Capas
         {
             try
             {
-                _visorReporte.ReportSource = GlobalInformes.ReporteCargado;
+                _visorReporte.ReportSource = _globalInformes.ReporteCargado;
             }
             catch (Exception excepcion)
             {

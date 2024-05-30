@@ -6,12 +6,20 @@ using System.IO;
 
 namespace Negocio.Reporte
 {
-    public static class NegocioReporte
+    public class NegocioReporte
     {
-        private static EntidadReporte _reporte;
-        private static string _rutaReporte;
+        //DI
+        private readonly GlobalInformes _globalInformes;
 
-        public static ReportDocument CargarReporte(string rutaReporte)
+        private EntidadReporte _reporte;
+        private string _rutaReporte;
+
+        public NegocioReporte(GlobalInformes globalInformes)
+        {
+            _globalInformes = globalInformes;
+        }
+
+        public ReportDocument CargarReporte(string rutaReporte)
         {
             _rutaReporte = rutaReporte;
             _reporte = new EntidadReporte();
@@ -26,38 +34,38 @@ namespace Negocio.Reporte
             return null;
         }
 
-        private static bool GlobalReporteNoEstaCargado()
+        private bool GlobalReporteNoEstaCargado()
         {
-            if (GlobalInformes.ReporteCargado == null || GlobalInformes.RutaReporte != _rutaReporte) return true;
+            if (_globalInformes.ReporteCargado == null || _globalInformes.RutaReporte != _rutaReporte) return true;
             else return false;
         }
 
-        private static void AsignarValoresReporte()
+        private void AsignarValoresReporte()
         {
             _reporte.RutaReporte = _rutaReporte;
             _reporte.NombreReporte = Path.GetFileName(_rutaReporte);
             _reporte.Reporte = _reporte;
 
-            GlobalInformes.RutaReporte = _rutaReporte;
+            _globalInformes.RutaReporte = _rutaReporte;
         }
 
-        private static void Cargar()
+        private void Cargar()
         {
-            _reporte.Reporte.Load(GlobalInformes.RutaReporte);
-            GlobalInformes.ReporteCargado = _reporte;
+            _reporte.Reporte.Load(_globalInformes.RutaReporte);
+            _globalInformes.ReporteCargado = _reporte;
         }
 
-        private static void Conectar()
+        private void Conectar()
         {
-            _ = new DatosConexionReporte().ComprobarConexion();
+            _ = new DatosConexionReporte(_globalInformes).ComprobarConexion();
         }
 
-        public static bool ComprobarParametrosReporte()
+        public bool ComprobarParametrosReporte()
         {
-            return GlobalInformes.ReporteCargado.ParameterFields.Count > 0;
+            return _globalInformes.ReporteCargado.ParameterFields.Count > 0;
         }
 
-        public static void ImprimirReporte()
+        public void ImprimirReporte()
         {
             new EntidadReporte().ImprimirReporte();
         }

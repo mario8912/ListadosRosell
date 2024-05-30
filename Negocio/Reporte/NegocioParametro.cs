@@ -9,28 +9,36 @@ using System.Windows.Forms;
 
 namespace Negocio.Reporte
 {
-    public static class NegocioParametro
+    public class NegocioParametro
     {
-        private static ModeloParametros _modeloParametro;
+        //DI
+        private readonly GlobalInformes _globalInformes;
 
-        private static List<ModeloParametros> _listaParametrosRango;
-        private static List<ModeloParametros> _listaParametrosDiscreto;
-        private static List<List<ModeloParametros>> _ambasListas;
+        private ModeloParametros _modeloParametro;
 
-        private static Dictionary<string, string> _diccionarioNombreValorDelParametro;
-        private static TableLayoutPanel _tableLayoutPanel;
+        private List<ModeloParametros> _listaParametrosRango;
+        private List<ModeloParametros> _listaParametrosDiscreto;
+        private List<List<ModeloParametros>> _ambasListas;
 
-        public static List<List<ModeloParametros>> NegocioGetAmbasListas()
+        private Dictionary<string, string> _diccionarioNombreValorDelParametro;
+        private TableLayoutPanel _tableLayoutPanel;
+
+        public NegocioParametro(GlobalInformes globalInformes)
+        { 
+            _globalInformes = globalInformes;
+        }
+
+        public List<List<ModeloParametros>> NegocioGetAmbasListas()
         {
             RellenarListasConParametrosRangoDiscreto();
             LlenarAmbasListasConListasDeParametros();
             return _ambasListas;
         }
-        private static void RellenarListasConParametrosRangoDiscreto()
+        private void RellenarListasConParametrosRangoDiscreto()
         {
             InstanciaY_VaciaListas();
 
-            foreach (ParameterFieldDefinition parametro in GlobalInformes.ReporteCargado.DataDefinition.ParameterFields)
+            foreach (ParameterFieldDefinition parametro in _globalInformes.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _modeloParametro = new ModeloParametros(parametro);
 
@@ -38,31 +46,31 @@ namespace Negocio.Reporte
             }
         }
 
-        private static void InstanciaY_VaciaListas()
+        private void InstanciaY_VaciaListas()
         {
             _listaParametrosRango = new List<ModeloParametros>();
             _listaParametrosDiscreto = new List<ModeloParametros>();
 
             VaciarListas(_listaParametrosRango, _listaParametrosDiscreto);
         }
-        private static bool NoEsSubreprote()
+        private bool NoEsSubreprote()
         {
             return (_modeloParametro.NombreParametroSubreporte == "" || _modeloParametro.NombreParametroSubreporte == null);
         }
 
-        private static void AgregarParametroA_ListaRangoO_Discreto()
+        private void AgregarParametroA_ListaRangoO_Discreto()
         {
             if (ParametroEsRango()) _listaParametrosRango.Add(_modeloParametro);
             else _listaParametrosDiscreto.Add(_modeloParametro);
         }
 
-        private static bool ParametroEsRango()
+        private bool ParametroEsRango()
         {
             return (_modeloParametro.RangoDiscretoParametro is DiscreteOrRangeKind.RangeValue || 
                 HelperParametros.IgualA_Todo(_modeloParametro.IniFinParametro, _modeloParametro.DesdeHastaParametro));
         }
 
-        private static void LlenarAmbasListasConListasDeParametros()
+        private void LlenarAmbasListasConListasDeParametros()
         {
             _ambasListas = new List<List<ModeloParametros>>();
             VaciarListas(_ambasListas);
@@ -71,12 +79,12 @@ namespace Negocio.Reporte
             _ambasListas.Add(_listaParametrosRango);
         }
 
-        private static void VaciarListas<T>(params List<T>[] args)
+        private void VaciarListas<T>(params List<T>[] args)
         {
             foreach (List<T> lista in args) lista?.Clear();
         }
 
-        public static bool HayCamposEnBlanco(TableLayoutPanel tableLayoutPanel)
+        public bool HayCamposEnBlanco(TableLayoutPanel tableLayoutPanel)
         {
             foreach (Control control in tableLayoutPanel.Controls)
             {
@@ -92,7 +100,7 @@ namespace Negocio.Reporte
             return false;
         }
 
-        public static void ProcesarParametros(TableLayoutPanel tableLayoutPanel)
+        public void ProcesarParametros(TableLayoutPanel tableLayoutPanel)
         {
             _tableLayoutPanel = tableLayoutPanel;
             _diccionarioNombreValorDelParametro = new Dictionary<string, string>();
@@ -101,7 +109,7 @@ namespace Negocio.Reporte
             if (_diccionarioNombreValorDelParametro.Count > 0) AsignarParametrosAlReport();
         }
 
-        private static void LeerParametrosDelFormulario()
+        private void LeerParametrosDelFormulario()
         {
             for (int i = 0; i < _tableLayoutPanel.Controls.Count - 3; i++)
             {
@@ -125,9 +133,9 @@ namespace Negocio.Reporte
                 }
             }
         }
-        private static void AsignarParametrosAlReport()
+        private void AsignarParametrosAlReport()
         {
-            foreach (ParameterFieldDefinition parametro in GlobalInformes.ReporteCargado.DataDefinition.ParameterFields)
+            foreach (ParameterFieldDefinition parametro in _globalInformes.ReporteCargado.DataDefinition.ParameterFields)
             {
                 _modeloParametro = new ModeloParametros(parametro);
 
@@ -138,7 +146,7 @@ namespace Negocio.Reporte
 
                     if (_modeloParametro.RangoDiscretoParametro is DiscreteOrRangeKind.DiscreteValue)
                     {
-                        GlobalInformes.ReporteCargado.SetParameterValue(nombreParametro, _diccionarioNombreValorDelParametro[nombreParametro]);
+                        _globalInformes.ReporteCargado.SetParameterValue(nombreParametro, _diccionarioNombreValorDelParametro[nombreParametro]);
                     }
                     else if (tipoDeValor is DiscreteOrRangeKind.RangeValue)
                     {
@@ -148,7 +156,7 @@ namespace Negocio.Reporte
                             EndValue = _diccionarioNombreValorDelParametro[nombreParametro + "range"]
                         };
 
-                        GlobalInformes.ReporteCargado.SetParameterValue(nombreParametro, range);
+                        _globalInformes.ReporteCargado.SetParameterValue(nombreParametro, range);
                     }
                 }
             }

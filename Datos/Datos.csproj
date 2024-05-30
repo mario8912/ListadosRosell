@@ -176,8 +176,6 @@
     <Compile Include="Conexion\DatosConexion.cs" />
     <Compile Include="Conexion\DatosConexionReporte.cs" />
     <Compile Include="Conexion\DatosLeerJson.cs" />
-    <Compile Include="Conexion\IfDatosConexion.cs" />
-    <Compile Include="Conexion\DatosLeerIni.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="conexionCapas.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

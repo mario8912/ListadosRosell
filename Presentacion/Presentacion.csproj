@@ -68,10 +68,25 @@
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Extensions.DependencyInjection.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="SAPBusinessObjects.WPF.Viewer, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
@@ -85,17 +100,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Reporte\Parametros\PresentacionControlesParametros.cs" />
-    <Compile Include="Reporte\Parametros\PresentacionParametros.cs">
+    <Compile Include="Reporte\Parametros\ControlesParametros.cs" />
+    <Compile Include="Reporte\Parametros\Parametros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reporte\Parametros\PresentacionParametros.designer.cs">
-      <DependentUpon>PresentacionParametros.cs</DependentUpon>
+    <Compile Include="Reporte\Parametros\Parametros.designer.cs">
+      <DependentUpon>Parametros.cs</DependentUpon>
     </Compile>
-    <Compile Include="Reporte\CRPViewer\ReportViewer.cs">
+    <Compile Include="Reporte\ReportViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reporte\CRPViewer\ReportViewer.Designer.cs">
+    <Compile Include="Reporte\ReportViewer.Designer.cs">
       <DependentUpon>ReportViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="MDI_Principal.cs">
@@ -104,24 +119,24 @@
     <Compile Include="MDI_Principal.Designer.cs">
       <DependentUpon>MDI_Principal.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListadoInformes\Listados.cs">
+    <Compile Include="Listados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListadoInformes\Listados.Designer.cs">
+    <Compile Include="Listados.Designer.cs">
       <DependentUpon>Listados.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Reporte\CRPViewer\ReportViewer.resx">
+    <EmbeddedResource Include="Reporte\ReportViewer.resx">
       <DependentUpon>ReportViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reporte\Parametros\PresentacionParametros.resx">
-      <DependentUpon>PresentacionParametros.cs</DependentUpon>
+    <EmbeddedResource Include="Reporte\Parametros\Parametros.resx">
+      <DependentUpon>Parametros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MDI_Principal.resx">
       <DependentUpon>MDI_Principal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ListadoInformes\Listados.resx">
+    <EmbeddedResource Include="Listados.resx">
       <DependentUpon>Listados.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

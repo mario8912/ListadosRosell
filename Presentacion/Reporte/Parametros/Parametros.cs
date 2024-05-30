@@ -2,27 +2,30 @@
 using Negocio.Conexiones;
 using Entidades.Modelos.Parametro;
 using Entidades.Global;
-using FormularioParametros;
+using Parametros;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Capas
 {
-    public partial class PresentacionParametros : Form
+    public partial class Parametros : Form
     {
-        private static readonly string _rutaReporte = GlobalInformes.RutaReporte;
-        private Stopwatch _stopwatch;
+        //DI
+        private readonly GlobalInformes _globalInformes;
 
-        private const int ALTURA_FILA = 50;
+        private readonly NegocioParametro _negocioParametro;
+        private readonly NegocioConsulta _negocioConsulta;
+        private readonly NegocioReporte _negocioReporte; 
+
+        private readonly int ALTURA_FILA = 50;
         private int _nFila = 0;
 
         private TableLayoutPanel _tableLayoutPanel;
 
-        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto = NegocioParametro.NegocioGetAmbasListas();
+        private readonly List<List<ModeloParametros>> _listasParametrosRangoDiscreto;
         private ModeloParametros _parametro;
 
         private bool _labelDesdeHastaAnadido = false;
@@ -33,9 +36,17 @@ namespace Capas
 
         private bool _minMaxQuery = true;
         
-        public PresentacionParametros()
+        public Parametros(GlobalInformes globalInformes)
         {
-            Stp();
+            _globalInformes = globalInformes;
+            _negocioParametro = new NegocioParametro(_globalInformes);
+            _listasParametrosRangoDiscreto = _negocioParametro.NegocioGetAmbasListas();
+
+            _negocioConsulta = new NegocioConsulta();
+            _negocioReporte = new NegocioReporte(_globalInformes);
+
+            _globalInformes = globalInformes;
+
             Text = NombreFormulario();
 
             InitializeComponent();
@@ -45,21 +56,15 @@ namespace Capas
             AnadirTableLayoutPanel();
         }
 
-        private void Stp()
+        private string NombreFormulario()
         {
-            _stopwatch = new Stopwatch();
-            _stopwatch.Start();
-        }
-
-        private static string NombreFormulario()
-        {
-            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(_rutaReporte, ""));
+            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(_globalInformes.RutaReporte, ""));
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
 
         private void InicializarTableLayout()
         {
-            using (PresentacionControlesParametros controlesParametros = new PresentacionControlesParametros(_parametro))
+            using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
             {
                 _tableLayoutPanel = controlesParametros.TableLayoutPanel;
                 controlesParametros.Dispose();
@@ -78,11 +83,6 @@ namespace Capas
             AgregarBotonCheckBox();
 
             FocoBoton();
-
-            _stopwatch.Stop();
-            Console.WriteLine();
-            Console.WriteLine("Tiempo total Parametros: " + _stopwatch.Elapsed);
-            Console.WriteLine();
         }
         
         private void BucleParametrosListasRangoDiscreto()
@@ -129,11 +129,9 @@ namespace Capas
             }
         }
 
-        
-         
         private void AgregarCampoParametro(int nColumna, bool minMaxQuery)
         {
-            using (PresentacionControlesParametros controlesParametros = new PresentacionControlesParametros(_parametro))
+            using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
             {
                 var nColumnaSiguiente = nColumna + 1;
 
@@ -175,9 +173,10 @@ namespace Capas
                 
             if (val != null && val != "" && val != string.Empty) _comboBox.Items.Add(val);
         }
+
         private string Consulta()
         {
-            return NegocioConsulta.ConsultaParametro(_parametro.NombreParametrosSinPrefijoIniFin, _minMaxQuery);
+            return _negocioConsulta.ConsultaParametro(_parametro.NombreParametrosSinPrefijoIniFin, _minMaxQuery);
         }
 
         private void SeleccionarPrimerIndiceComboBox()
@@ -229,7 +228,7 @@ namespace Capas
 
         private void AgregarBotonCheckBox()
         {
-            using (PresentacionControlesParametros controlesParametros = new PresentacionControlesParametros(_parametro))
+            using (ControlesParametros controlesParametros = new ControlesParametros(_parametro))
             {
                 _botonAceptar = controlesParametros.BotonAceptar;
                 _checkBoxVistaPrevia = controlesParametros.CheckBoxVistaPrevia;
@@ -250,33 +249,30 @@ namespace Capas
 
         private void VerificarEspaciosEnBlanco()
         {
-            if (NegocioParametro.HayCamposEnBlanco(_tableLayoutPanel))
-            {
-                using (PresentacionControlesParametros controlesParmetros = new PresentacionControlesParametros())
+            if (_negocioParametro.HayCamposEnBlanco(_tableLayoutPanel))
+                using (ControlesParametros controlesParmetros = new ControlesParametros())
                 {
                     controlesParmetros.NewMessageBoxEspaciosEnBlanco();
                 }
-            }
-            else ProcesarParametros();
+            else 
+                ProcesarParametros();
         }
+
         private void ProcesarParametros()
-        {
-            //Negocio.ProcesarParametros
-            
-            NegocioParametro.ProcesarParametros(_tableLayoutPanel);
+        {   
+            _negocioParametro.ProcesarParametros(_tableLayoutPanel);
 
             if (_checkBoxVistaPrevia.Checked)
-            {
                 LanzarReportViewer();
-            }
-            else NegocioReporte.ImprimirReporte();
+            else 
+                _negocioReporte.ImprimirReporte();
 
             Dispose();
         }
 
         private void LanzarReportViewer()
         {
-            RptViewer visorReporte = new RptViewer()
+            ReportViewer visorReporte = new ReportViewer(_globalInformes)
             {
                 MdiParent = MDI_Principal.InstanciaMdiPrincipal
             };
@@ -285,12 +281,8 @@ namespace Capas
         private void FocoBoton()
         {
             foreach (Control item in _tableLayoutPanel.Controls)
-            {
                 if (!(item is Button))
-                {
                     SendKeys.Send("{tab}");
-                }
-            }
         }
     }
 }

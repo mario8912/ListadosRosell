@@ -1,7 +1,5 @@
 ﻿using Entidades.Global;
 using CrystalDecisions.CrystalReports.Engine;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Entidades.Modelos.Reporte
 {
@@ -23,7 +21,8 @@ namespace Entidades.Modelos.Reporte
 
         public void ImprimirReporte()
         {
-            GlobalInformes.ReporteCargado.PrintToPrinter(1, true, 1, 1);
+            GlobalInformes globalInformes = new GlobalInformes();
+            globalInformes.ReporteCargado.PrintToPrinter(1, true, 1, 1);
         }
 
         public string GetNombreReporte()

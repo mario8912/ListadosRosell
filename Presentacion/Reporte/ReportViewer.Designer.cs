@@ -2,7 +2,7 @@
 
 namespace Capas
 {
-    partial class RptViewer
+    partial class ReportViewer
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace Capas
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RptViewer));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportViewer));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();

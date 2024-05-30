@@ -82,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global\GlobalInformes.cs" />
-    <Compile Include="Global\GlobalInformesHelper.cs" />
     <Compile Include="Modelos\Parametro\ModeloParametros.cs" />
     <Compile Include="Modelos\Reporte\IfEntidadReporte.cs" />
     <Compile Include="Modelos\Reporte\EntidadReporte.cs">

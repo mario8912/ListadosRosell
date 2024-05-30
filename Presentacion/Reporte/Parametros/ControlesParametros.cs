@@ -3,14 +3,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using Entidades.Modelos.Parametro;
 
-namespace FormularioParametros
+namespace Parametros
 {
-    internal class PresentacionControlesParametros : IDisposable
+    internal class ControlesParametros : IDisposable
     {
         private bool disposed = false; // Bandera para controlar si Dispose() ya se llamó.
         private readonly ModeloParametros _parametro;
 
-        public PresentacionControlesParametros(ModeloParametros parametro = null)
+        public ControlesParametros(ModeloParametros parametro = null)
         {
             _parametro = parametro;
         }

@@ -1,4 +1,5 @@
-﻿using Negocio.Informes;
+﻿using Entidades.Global;
+using Negocio.Informes;
 using Negocio.Reporte;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,23 @@ namespace Capas
 {
     public partial class Listados : Form
     {
+        //DI
+        private readonly GlobalInformes _globalInformes;
+
+        private readonly NegocioReporte _negocioReporte;
+        private readonly NegocioRutaDirectorioInformes _negocioRutaDirectorio;
+
         private static string _rutaReporte;
         private DialogResult _respuesta;
         private static TreeNode _nodoSeleccionado;
 
-        public Listados()
+        public Listados(GlobalInformes globalInformes)
         {
+            _globalInformes = globalInformes;
+
+            _negocioReporte = new NegocioReporte(globalInformes);
+            _negocioRutaDirectorio = new NegocioRutaDirectorioInformes(globalInformes);
+
             InitializeComponent();
         }
 
@@ -28,7 +40,7 @@ namespace Capas
         private void CrearYAnadirNodosSubdirectoriosYReportes()
         {
             TreeNode nodoInformes = treeViewListados.Nodes[0];
-            var claveValorNombreRuta = NegocioRutaDirectorioInformes.DiccionarioSubdirectoriosInformes();
+            var claveValorNombreRuta = _negocioRutaDirectorio.DiccionarioSubdirectoriosInformes();
 
             foreach (KeyValuePair<string, string> subidorectoriosInformes in claveValorNombreRuta)
             {
@@ -72,7 +84,7 @@ namespace Capas
                 if (VerificarEtiqueta() && ComprobarExtensionRpt())
                 {
                     FormatoCargaFomrulario();
-                    NegocioReporte.CargarReporte(_rutaReporte); //negocio.cargarReporote
+                    _negocioReporte.CargarReporte(_rutaReporte); //negocio.cargarReporote
                     ComprobarParametros();
                     FormatoPostCargaFormulario();
                 }
@@ -95,7 +107,7 @@ namespace Capas
 
         private void ComprobarParametros()
         {
-            if (NegocioReporte.ComprobarParametrosReporte())
+            if (_negocioReporte.ComprobarParametrosReporte())
             {
                 FormParametrosReporte();
                 #region GUARDADO PARAMETROS TXT
@@ -130,7 +142,7 @@ namespace Capas
 
         private void FormReportViewer()
         {
-            RptViewer visorReporte = new RptViewer()
+            ReportViewer visorReporte = new ReportViewer(_globalInformes)
             {
                 MdiParent = MDI_Principal.InstanciaMdiPrincipal
             };
@@ -139,12 +151,12 @@ namespace Capas
 
         private void ImprimirReporte()
         {
-            NegocioReporte.ImprimirReporte();
+            _negocioReporte.ImprimirReporte();
         }
 
         private void FormParametrosReporte()
         {
-            new PresentacionParametros().ShowDialog();
+            new Parametros(_globalInformes).ShowDialog();
         }
 
         private void FormatoPostCargaFormulario()

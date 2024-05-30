@@ -1,0 +1,9 @@
+{
+  "servidor": "DESKTOP-BO267HF\\SQLEXPRESS", 
+  "baseDeDatos": "rosell",
+  "seguridad": {
+    "usuario": "sa",
+    "contrasenya": " ",
+    "trustedConnection": true
+  }
+}

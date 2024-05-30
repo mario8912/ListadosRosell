@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Datos.Conexiones
 {
-    public class DatosConexion : IfDatosConexion, IDisposable 
+    public class DatosConexion : IDisposable 
     {
+        private GlobalInformes _globalInformes;
         public string Servidor {get; private set;}
         public string BaseDeDatos { get; private set;}
         public bool SeguridadIntegrada { get; private set;}
@@ -19,25 +20,20 @@ namespace Datos.Conexiones
         {
             EstablecerServidorBaseDeDatos();
             FormatoCadenaConexion();
-            ConexionSql = new SqlConnection(GlobalInformes.CadenaConexion);
+
+            _globalInformes = new GlobalInformes();
+            ConexionSql = new SqlConnection(_globalInformes.CadenaConexion);
         }
 
         private void EstablecerServidorBaseDeDatos()
         {
-            DatosConexionIni conexionIni = DatosLeerIni.AsignarDatosIni();
-
-            Servidor = conexionIni.Servior;
-            BaseDeDatos = conexionIni.BaseDeDatos;
-            SeguridadIntegrada = conexionIni.TrustedConnection;
-            #region JSON DATOS CONEXION
-            /*var datosJson = DatosLeerJson.DatosConexionJson();
+            var datosJson = DatosLeerJson.DatosConexionJson();
 
             Servidor = datosJson.Servidor;
             Usuario = datosJson.Seguridad.Usuario;
             Contrasenya = datosJson.Seguridad.Contrasenya;
             BaseDeDatos = datosJson.BaseDeDatos;
-            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;*/
-            #endregion
+            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;
         }
 
         public async Task<bool> ComprobarConexion()
@@ -58,8 +54,7 @@ namespace Datos.Conexiones
 
         public void FormatoCadenaConexion()
         {
-            //GlobalInformes.CadenaConexion = string.Format("Server={0};Database={1};User={2};Password={3}", Servidor, BaseDeDatos, Usuario, Contrasenya);
-            GlobalInformes.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            _globalInformes.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
         }
 
         public void Dispose()
