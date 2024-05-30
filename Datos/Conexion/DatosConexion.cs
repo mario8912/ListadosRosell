@@ -1,5 +1,6 @@
 ﻿using Datos.Conexion;
 using Entidades.Global;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -8,7 +9,8 @@ namespace Datos.Conexiones
 {
     public class DatosConexion : IDisposable 
     {
-        private GlobalInformes _globalInformes;
+        private readonly GlobalInformes _globalInformes;
+
         public string Servidor {get; private set;}
         public string BaseDeDatos { get; private set;}
         public bool SeguridadIntegrada { get; private set;}
@@ -16,12 +18,13 @@ namespace Datos.Conexiones
         public string Contrasenya { get; private set;}
         public SqlConnection ConexionSql { get; private set; }
 
-        public DatosConexion()
+        public DatosConexion(GlobalInformes globalInformes)
         {
             EstablecerServidorBaseDeDatos();
             FormatoCadenaConexion();
 
-            _globalInformes = new GlobalInformes();
+            _globalInformes = globalInformes;
+
             ConexionSql = new SqlConnection(_globalInformes.CadenaConexion);
         }
 
@@ -38,7 +41,7 @@ namespace Datos.Conexiones
 
         public async Task<bool> ComprobarConexion()
         {
-            using (DatosConexion cn = new DatosConexion())
+            using (DatosConexion cn = new DatosConexion(_globalInformes))
             {
                 try
                 {
@@ -82,7 +85,7 @@ namespace Datos.Conexiones
 
         public string EjecutarConsulta(string consulta)
         {
-            using (DatosConexion cn = new DatosConexion())
+            using (DatosConexion cn = new DatosConexion(_globalInformes))
             {
                 var respuesta = "";
 

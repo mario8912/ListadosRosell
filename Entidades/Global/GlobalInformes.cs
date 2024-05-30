@@ -2,7 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
+
 
 [assembly: InternalsVisibleTo("Capas")]
 namespace Entidades.Global
@@ -13,13 +19,18 @@ namespace Entidades.Global
         private readonly string RutaExe = AppDomain.CurrentDomain.BaseDirectory;
         private readonly string RutaCarpetaPrincipal;
 
+        CancellationTokenSource _cancellationTokenSource;
+        CancellationToken _cancellationToken;
+
+        private StreamWriter _sr;
+
         public string RutaDirectorioInformes
         {
             get
             {
                 return TryRutaInformes();
             }
-            set {}
+            private set { }
         }
 
         //Global reporte
@@ -31,13 +42,31 @@ namespace Entidades.Global
 
         public GlobalInformes()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
+            _cancellationToken = _cancellationTokenSource.Token;
+
             RutaCarpetaPrincipal = Path.GetFullPath(Path.Combine(RutaExe, @"..\..\..\"));
         }
 
         private string TryRutaInformes()
         {
-            BusquedaRecursiva(RutaCarpetaPrincipal);
+            Task tarea = Task.Run(() =>
+            {
+                BusquedaRecursiva(RutaCarpetaPrincipal);
+            }, _cancellationToken);
 
+            try
+            {
+                if (!tarea.Wait(TimeSpan.FromMilliseconds(100000)))
+                {
+                    MessageBox.Show("bye");
+                    _cancellationTokenSource.Cancel();
+                }
+            }
+            catch (Exception)
+            {
+            }
+            
             if (Directory.Exists(RutaDirectorioInformes))
                 return RutaDirectorioInformes;
             else
@@ -50,7 +79,9 @@ namespace Entidades.Global
 
             foreach (var subDir in Directory.EnumerateDirectories(ruta))
             {
-                if (subDir.Contains("Informes"))
+                string dir = subDir.Split('\\').ToList().Last();
+
+                if (subDir.Contains(dir))
                 {
                     RutaDirectorioInformes = subDir;
                     break;
@@ -60,6 +91,14 @@ namespace Entidades.Global
             }
 
             return files;
+        }
+
+        private void Print(string dir)
+        {
+            var txt = Path.GetFullPath(Path.Combine(RutaCarpetaPrincipal, @"..\log.txt"));
+            _sr = new StreamWriter(txt);
+
+            _sr.WriteLine(dir, true);
         }
     }
 }

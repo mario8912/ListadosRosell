@@ -1,6 +1,7 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades.Global;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Datos.Conexiones
 {
@@ -8,14 +9,17 @@ namespace Datos.Conexiones
     {
         //DI
         private readonly GlobalInformes _globalInformes;
+
         private readonly ReportDocument _reporte;
 
-        public DatosConexionReporte(GlobalInformes globalInformes)
+        public DatosConexionReporte(GlobalInformes globalInformes) : base(globalInformes)
         {
-            _globalInformes = globalInformes;
-            _reporte = _globalInformes.ReporteCargado;
-            ConectarReporte();
-            Dispose();
+            {
+                _globalInformes = globalInformes;
+                _reporte = _globalInformes.ReporteCargado;
+                ConectarReporte();
+                Dispose();
+            }
         }
 
         private void ConectarReporte()

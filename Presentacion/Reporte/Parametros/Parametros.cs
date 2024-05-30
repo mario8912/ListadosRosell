@@ -42,7 +42,7 @@ namespace Capas
             _negocioParametro = new NegocioParametro(_globalInformes);
             _listasParametrosRangoDiscreto = _negocioParametro.NegocioGetAmbasListas();
 
-            _negocioConsulta = new NegocioConsulta();
+            _negocioConsulta = new NegocioConsulta(_globalInformes);
             _negocioReporte = new NegocioReporte(_globalInformes);
 
             _globalInformes = globalInformes;
