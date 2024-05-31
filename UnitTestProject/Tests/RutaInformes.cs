@@ -1,10 +1,11 @@
 ﻿using Presentacion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Entidades.Global;
+using System.Threading.Tasks;
 
 namespace UnitTestProject.Tests
 {
-    [TestClass]
     public class RutaInformes
     {
         public RutaInformes()
@@ -12,17 +13,21 @@ namespace UnitTestProject.Tests
             Console.WriteLine("MDI_Principal Tests:");
         }
 
-        [TestMethod]
-        public void TryRutaInformes_RutaCorrecta()
+        public async void TryRutaInformes_RutaCorrecta()
         {
             // Arrange
             ProgramConfig programConfig = new ProgramConfig();
 
+            string expectedResult = @"D:\miPc\desktop\ListadosRosell\Presentacion\bin\Debug\InformesCRP";
+            string result;
             // Act
-            //programConfig
+            Task task = Task.Run(() => programConfig.TryRutaInformes());
+            await task;
+            
+            result = GlobalInformes.RutaDirectorioInformes;
 
             // Assert
-            ///Assert.IsTrue(result);
+            Assert.AreEqual(expectedResult, result);
         }
     }
 }

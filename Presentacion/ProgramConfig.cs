@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-
 
 namespace Presentacion
 {
-    public class ProgramConfig
+    internal class ProgramConfig
     {
-        private static IEnumerable<string> _oddsList;
-        private static IEnumerable<string> _evensList;
-        private static bool Itemfound = false;
+        private IEnumerable<string> _oddsList;
+        private IEnumerable<string> _evensList;
+        private bool Itemfound = false;
 
-        private static readonly object _lock = new object();
+        private readonly object _lock = new object();
 
-        internal static async void TryRutaInformes()
+        internal async Task TryRutaInformes()
         {
             SetLists();
 
@@ -29,7 +27,7 @@ namespace Presentacion
                 throw new DirectoryNotFoundException("El directorio Informes no existe. Ruta: " + GlobalInformes.RutaDirectorioInformes);
         }
 
-        private static void SetLists()
+        private void SetLists()
         {
             var list = Directory.EnumerateDirectories(GlobalInformes.RutaCarpetaPrincipal).ToList();
             ILookup<bool, string> lookup = list.ToLookup(num => list.IndexOf(num) % 2 == 0);
@@ -38,7 +36,7 @@ namespace Presentacion
             _oddsList = lookup[false];
         }
 
-        static async Task BuscarEnDirectoriosAsync(IEnumerable<string> directorios)
+        async Task BuscarEnDirectoriosAsync(IEnumerable<string> directorios)
         {
             foreach (var directorio in directorios)
             {
@@ -49,7 +47,7 @@ namespace Presentacion
             }
         }
 
-        private static void BusquedaRecursiva(string ruta)
+        private void BusquedaRecursiva(string ruta)
         {
             var directorios = Directory.EnumerateDirectories(ruta);
             foreach (var subDir in directorios)

@@ -1,12 +1,7 @@
-﻿using Presentacion;
-using Negocio;
-using Entidades.Global;
+﻿using Negocio;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Presentacion
 {
@@ -15,15 +10,16 @@ namespace Presentacion
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary> 
-        
+
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            
-            ProgramConfig.TryRutaInformes();
+
+            ProgramConfig programConfig = new ProgramConfig();
+            programConfig.TryRutaInformes().Wait();
 
             Task.Run(() => ComprobarConexion());
 
