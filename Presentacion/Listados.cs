@@ -1,5 +1,4 @@
-﻿using Entidades.Global;
-using Negocio.Informes;
+﻿using Negocio.Informes;
 using Negocio.Reporte;
 using System;
 using System.Collections.Generic;
@@ -7,13 +6,10 @@ using System.IO;
 using System.Windows.Forms;
 
 
-namespace Capas
+namespace Presentacion
 {
     public partial class Listados : Form
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
-
         private readonly NegocioReporte _negocioReporte;
         private readonly NegocioRutaDirectorioInformes _negocioRutaDirectorio;
 
@@ -21,12 +17,10 @@ namespace Capas
         private DialogResult _respuesta;
         private static TreeNode _nodoSeleccionado;
 
-        public Listados(GlobalInformes globalInformes)
+        public Listados()
         {
-            _globalInformes = globalInformes;
-
-            _negocioReporte = new NegocioReporte(globalInformes);
-            _negocioRutaDirectorio = new NegocioRutaDirectorioInformes(globalInformes);
+            _negocioReporte = new NegocioReporte();
+            _negocioRutaDirectorio = new NegocioRutaDirectorioInformes();
 
             InitializeComponent();
         }
@@ -142,7 +136,7 @@ namespace Capas
 
         private void FormReportViewer()
         {
-            ReportViewer visorReporte = new ReportViewer(_globalInformes)
+            ReportViewer visorReporte = new ReportViewer()
             {
                 MdiParent = MDI_Principal.InstanciaMdiPrincipal
             };
@@ -156,7 +150,7 @@ namespace Capas
 
         private void FormParametrosReporte()
         {
-            new Parametros(_globalInformes).ShowDialog();
+            new Parametros().ShowDialog();
         }
 
         private void FormatoPostCargaFormulario()

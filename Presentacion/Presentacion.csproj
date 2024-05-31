@@ -100,6 +100,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProgramConfig.cs" />
     <Compile Include="Reporte\Parametros\ControlesParametros.cs" />
     <Compile Include="Reporte\Parametros\Parametros.cs">
       <SubType>Form</SubType>

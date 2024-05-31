@@ -1,19 +1,16 @@
 ﻿using Datos.Conexiones;
 using Entidades.Global;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Negocio
 {
     public class PruebaConexion
     {
-        private readonly GlobalInformes _globalInformes;
         private readonly DatosConexion _conexion;
 
-        public PruebaConexion(GlobalInformes globalInformes)
+        public PruebaConexion()
         {
-            _globalInformes = globalInformes;
-            _conexion = new DatosConexion(globalInformes);
+            _conexion = new DatosConexion();
         }
 
         public async Task<bool> ComprobarConexion()

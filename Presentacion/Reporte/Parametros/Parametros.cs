@@ -9,13 +9,10 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Capas
+namespace Presentacion
 {
     public partial class Parametros : Form
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
-
         private readonly NegocioParametro _negocioParametro;
         private readonly NegocioConsulta _negocioConsulta;
         private readonly NegocioReporte _negocioReporte; 
@@ -36,16 +33,13 @@ namespace Capas
 
         private bool _minMaxQuery = true;
         
-        public Parametros(GlobalInformes globalInformes)
+        public Parametros()
         {
-            _globalInformes = globalInformes;
-            _negocioParametro = new NegocioParametro(_globalInformes);
+            _negocioParametro = new NegocioParametro();
             _listasParametrosRangoDiscreto = _negocioParametro.NegocioGetAmbasListas();
 
-            _negocioConsulta = new NegocioConsulta(_globalInformes);
-            _negocioReporte = new NegocioReporte(_globalInformes);
-
-            _globalInformes = globalInformes;
+            _negocioConsulta = new NegocioConsulta();
+            _negocioReporte = new NegocioReporte();
 
             Text = NombreFormulario();
 
@@ -58,7 +52,7 @@ namespace Capas
 
         private string NombreFormulario()
         {
-            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(_globalInformes.RutaReporte, ""));
+            string nombreFormulario = Path.GetFileName(Path.ChangeExtension(GlobalInformes.RutaReporte, ""));
             return nombreFormulario.Substring(0, nombreFormulario.Length - 1).ToUpper();
         }
 
@@ -272,7 +266,7 @@ namespace Capas
 
         private void LanzarReportViewer()
         {
-            ReportViewer visorReporte = new ReportViewer(_globalInformes)
+            ReportViewer visorReporte = new ReportViewer()
             {
                 MdiParent = MDI_Principal.InstanciaMdiPrincipal
             };

@@ -17,7 +17,7 @@ namespace Datos.Conexion
             {
                 PropertyNameCaseInsensitive = true 
             };
-
+            
             return JsonSerializer.Deserialize<Configuracion>(jsonString, opciones);
         }
     }

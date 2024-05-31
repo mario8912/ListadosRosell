@@ -1,10 +1,12 @@
-﻿using Capas;
+﻿using Presentacion;
 using Negocio;
 using Entidades.Global;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Presentacion
 {
@@ -17,39 +19,22 @@ namespace Presentacion
         [STAThread]
         static void Main()
         {
-            IServiceCollection services = ConfigureServices();
-            var serviceProvider = services.BuildServiceProvider();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            MDI_Principal mdiPrincipal = serviceProvider.GetRequiredService<MDI_Principal>();
+            
+            ProgramConfig.TryRutaInformes();
 
             Task.Run(() => ComprobarConexion());
 
-            Application.Run(mdiPrincipal);
-        }
-
-        private static IServiceCollection ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            services.AddSingleton<GlobalInformes>();
-
-            services.AddSingleton<MDI_Principal>();
-            services.AddSingleton<Listados>();
-            services.AddSingleton<ReportViewer>();
-            services.AddSingleton<Parametros.ControlesParametros>();
-
-            return services;
+            Application.Run(new MDI_Principal());
         }
 
         private static async Task ComprobarConexion()
         {
             try
             {
-                GlobalInformes globalInformes = ConfigureServices().BuildServiceProvider().GetRequiredService<GlobalInformes>();
-                PruebaConexion pruebaConexion = new PruebaConexion(globalInformes);
+                PruebaConexion pruebaConexion = new PruebaConexion();
                 await pruebaConexion.ComprobarConexion();
                 Console.WriteLine("good");
             }

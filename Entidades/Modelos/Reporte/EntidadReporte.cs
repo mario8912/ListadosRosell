@@ -21,8 +21,7 @@ namespace Entidades.Modelos.Reporte
 
         public void ImprimirReporte()
         {
-            GlobalInformes globalInformes = new GlobalInformes();
-            globalInformes.ReporteCargado.PrintToPrinter(1, true, 1, 1);
+            GlobalInformes.ReporteCargado.PrintToPrinter(1, true, 1, 1);
         }
 
         public string GetNombreReporte()

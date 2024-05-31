@@ -65,8 +65,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestServiceProvider.cs" />
-    <Compile Include="Tests\MDI_PrincipalTests.cs" />
+    <Compile Include="Tests\RutaInformes.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

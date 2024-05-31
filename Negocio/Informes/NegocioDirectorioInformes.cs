@@ -6,14 +6,6 @@ namespace Negocio.Informes
 {
     public class NegocioRutaDirectorioInformes
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
-
-        public NegocioRutaDirectorioInformes(GlobalInformes globalInformes)
-        {
-            _globalInformes = globalInformes;
-        }
-
         public Dictionary<string, string> DiccionarioSubdirectoriosInformes()
         {
             Dictionary<string, string> claveValorNombreRuta = new Dictionary<string, string>();
@@ -23,7 +15,7 @@ namespace Negocio.Informes
 
         private Dictionary<string, string> LlenarDiccionario(Dictionary<string, string> claveValorNombreRuta)
         {
-            string[] rutaDirectorios = Directory.GetDirectories(_globalInformes.RutaDirectorioInformes);
+            string[] rutaDirectorios = Directory.GetDirectories(GlobalInformes.RutaDirectorioInformes);
 
             foreach (string directorio in rutaDirectorios)
                 claveValorNombreRuta.Add(Path.GetFileName(directorio).ToUpper(), directorio);

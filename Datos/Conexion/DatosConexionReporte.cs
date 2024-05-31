@@ -1,23 +1,18 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using Entidades.Global;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Datos.Conexiones
 {
     public class DatosConexionReporte : DatosConexion
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
-
         private readonly ReportDocument _reporte;
 
-        public DatosConexionReporte(GlobalInformes globalInformes) : base(globalInformes)        
+        public DatosConexionReporte()
         {
-                _globalInformes = globalInformes;
-                _reporte = _globalInformes.ReporteCargado;
-                ConectarReporte();
-                Dispose();
+            _reporte = GlobalInformes.ReporteCargado;
+            ConectarReporte();
+            Dispose();
         }
 
         private void ConectarReporte()

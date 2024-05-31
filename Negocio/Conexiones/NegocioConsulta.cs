@@ -6,17 +6,13 @@ namespace Negocio.Conexiones
 {
     public class NegocioConsulta
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
-
         private string _parametro;
         private string _consulta;
         private readonly DatosConexion _datosConexion;
 
-        public NegocioConsulta(GlobalInformes globalInformes)
+        public NegocioConsulta()
         {
-            _globalInformes = globalInformes;
-            _datosConexion = new DatosConexion(_globalInformes);
+            _datosConexion = new DatosConexion();
         }
 
         public string ConsultaParametro(string parametro, bool minMax)

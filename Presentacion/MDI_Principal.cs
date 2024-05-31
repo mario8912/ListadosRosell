@@ -1,20 +1,18 @@
 ﻿using Entidades.Global;
 using System;
-using System.Windows.Forms;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 [assembly: InternalsVisibleTo("UnitTestProject")]
-namespace Capas
+namespace Presentacion
 {
     public partial class MDI_Principal : Form
     {
-        private readonly GlobalInformes _globalInformes;
         private Listados _formularioListados = null;
-        public static MDI_Principal InstanciaMdiPrincipal {  get; private set; }
+        public static MDI_Principal InstanciaMdiPrincipal { get; private set; }
 
-        public MDI_Principal(GlobalInformes globalInformes)
+        public MDI_Principal()
         {
-            _globalInformes = globalInformes;
             InstanciaMdiPrincipal = this;
 
             InitializeComponent();
@@ -33,7 +31,7 @@ namespace Capas
         {
             try
             {
-                return _globalInformes.RutaDirectorioInformes != null;
+                return GlobalInformes.RutaDirectorioInformes != null;
             }
             catch
             {
@@ -49,12 +47,12 @@ namespace Capas
 
         private Listados InstanciaFormListados()
         {
-            _formularioListados = new Listados(_globalInformes);
+            _formularioListados = new Listados();
             EstablecerHijoMdi(_formularioListados);
 
             return _formularioListados;
         }
-        
+
         internal void EstablecerHijoMdi(Form formulario)
         {
             formulario.MdiParent = this;

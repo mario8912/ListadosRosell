@@ -1,6 +1,6 @@
 ﻿
 
-namespace Capas
+namespace Presentacion
 {
     partial class ReportViewer
     {

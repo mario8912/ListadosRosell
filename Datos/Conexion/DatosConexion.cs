@@ -1,15 +1,14 @@
-﻿using Datos.Conexion;
-using Entidades.Global;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Entidades.Global;
 using System;
 using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("UnitTestProject")]
 namespace Datos.Conexiones
 {
     public class DatosConexion : IDisposable 
     {
-        private readonly GlobalInformes _globalInformes;
         public string Servidor {get; private set;}
         public string BaseDeDatos { get; private set;}
         public bool SeguridadIntegrada { get; private set;}
@@ -17,29 +16,34 @@ namespace Datos.Conexiones
         public string Contrasenya { get; private set;}
         public SqlConnection ConexionSql { get; private set; }
 
-        public DatosConexion(GlobalInformes globalInformes)
+        public DatosConexion()
         {
             EstablecerServidorBaseDeDatos();
             FormatoCadenaConexion();
 
-            _globalInformes = globalInformes;
-            ConexionSql = new SqlConnection(_globalInformes.CadenaConexion);
+            ConexionSql = new SqlConnection(GlobalInformes.CadenaConexion);
         }
 
         private void EstablecerServidorBaseDeDatos()
         {
-            var datosJson = DatosLeerJson.DatosConexionJson();
+            #region JSON
+            /*var datosJson = DatosLeerJson.DatosConexionJson();
 
             Servidor = datosJson.Servidor;
             Usuario = datosJson.Seguridad.Usuario;
             Contrasenya = datosJson.Seguridad.Contrasenya;
             BaseDeDatos = datosJson.BaseDeDatos;
-            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;
+            SeguridadIntegrada = datosJson.Seguridad.TrustedConnection;*/
+            #endregion
+
+            Servidor = "DESKTOP-BO267HF\\SQLEXPRESS";
+            BaseDeDatos = "rosell";
+            SeguridadIntegrada = true;
         }
 
         public async Task<bool> ComprobarConexion()
         {
-            using (DatosConexion cn = new DatosConexion(_globalInformes))
+            using (DatosConexion cn = new DatosConexion())
             {
                 try
                 {
@@ -55,7 +59,7 @@ namespace Datos.Conexiones
 
         public void FormatoCadenaConexion()
         {
-            _globalInformes.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection=True;", Servidor, BaseDeDatos);
+            GlobalInformes.CadenaConexion = string.Format("Server={0};Database={1};Trusted_Connection={2};", Servidor, BaseDeDatos, SeguridadIntegrada);
         }
 
         public void Dispose()
@@ -83,7 +87,7 @@ namespace Datos.Conexiones
 
         public string EjecutarConsulta(string consulta)
         {
-            using (DatosConexion cn = new DatosConexion(_globalInformes))
+            using (DatosConexion cn = new DatosConexion())
             {
                 var respuesta = "";
 

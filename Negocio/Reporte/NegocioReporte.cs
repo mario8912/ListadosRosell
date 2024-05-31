@@ -8,16 +8,8 @@ namespace Negocio.Reporte
 {
     public class NegocioReporte
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
-
         private EntidadReporte _reporte;
         private string _rutaReporte;
-
-        public NegocioReporte(GlobalInformes globalInformes)
-        {
-            _globalInformes = globalInformes;
-        }
 
         public ReportDocument CargarReporte(string rutaReporte)
         {
@@ -36,7 +28,7 @@ namespace Negocio.Reporte
 
         private bool GlobalReporteNoEstaCargado()
         {
-            if (_globalInformes.ReporteCargado == null || _globalInformes.RutaReporte != _rutaReporte) return true;
+            if (GlobalInformes.ReporteCargado == null || GlobalInformes.RutaReporte != _rutaReporte) return true;
             else return false;
         }
 
@@ -46,23 +38,23 @@ namespace Negocio.Reporte
             _reporte.NombreReporte = Path.GetFileName(_rutaReporte);
             _reporte.Reporte = _reporte;
 
-            _globalInformes.RutaReporte = _rutaReporte;
+            GlobalInformes.RutaReporte = _rutaReporte;
         }
 
         private void Cargar()
         {
-            _reporte.Reporte.Load(_globalInformes.RutaReporte);
-            _globalInformes.ReporteCargado = _reporte;
+            _reporte.Reporte.Load(GlobalInformes.RutaReporte);
+            GlobalInformes.ReporteCargado = _reporte;
         }
 
         private void Conectar()
         {
-            _ = new DatosConexionReporte(_globalInformes).ComprobarConexion();
+            _ = new DatosConexionReporte().ComprobarConexion();
         }
 
         public bool ComprobarParametrosReporte()
         {
-            return _globalInformes.ReporteCargado.ParameterFields.Count > 0;
+            return GlobalInformes.ReporteCargado.ParameterFields.Count > 0;
         }
 
         public void ImprimirReporte()

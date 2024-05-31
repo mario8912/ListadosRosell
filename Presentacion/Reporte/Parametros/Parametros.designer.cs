@@ -1,4 +1,4 @@
-﻿namespace Capas
+﻿namespace Presentacion
 {
     partial class Parametros
     {

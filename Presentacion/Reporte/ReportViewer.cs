@@ -4,20 +4,17 @@ using System.Windows.Forms;
 using CrystalDecisions.Windows.Forms;
 using Entidades.Global;
 
-namespace Capas
+namespace Presentacion
 {
     public partial class ReportViewer : Form
     {
-        //DI
-        private readonly GlobalInformes _globalInformes;
         private CrystalReportViewer _visorReporte;
 
-        public ReportViewer(GlobalInformes globalInformes)
+        public ReportViewer()
         {
-            _globalInformes = globalInformes;
             InitializeComponent();
             
-            Text = Path.GetFileName(_globalInformes.RutaReporte);
+            Text = Path.GetFileName(GlobalInformes.RutaReporte);
         }
 
         private void CierreAsincrono()
@@ -41,17 +38,18 @@ namespace Capas
 
         private void AnadirReporteViewer()
         {
-            _visorReporte = new CrystalReportViewer();
-            
-            _visorReporte.ActiveViewIndex = -1;
-            _visorReporte.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            _visorReporte.BorderStyle = BorderStyle.FixedSingle;
-            _visorReporte.Cursor = Cursors.Default;
-            _visorReporte.Location = new System.Drawing.Point(0, 0);
-            _visorReporte.Size = new System.Drawing.Size(Width-10, Height);
-            _visorReporte.TabIndex = 0;
-            _visorReporte.ShowCloseButton = true;
-            _visorReporte.ShowZoomButton = true;
+            _visorReporte = new CrystalReportViewer
+            {
+                ActiveViewIndex = -1,
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                BorderStyle = BorderStyle.FixedSingle,
+                Cursor = Cursors.Default,
+                Location = new System.Drawing.Point(0, 0),
+                Size = new System.Drawing.Size(Width - 10, Height),
+                TabIndex = 0,
+                ShowCloseButton = true,
+                ShowZoomButton = true
+            };
 
             Controls.Add(_visorReporte);
         }
@@ -60,7 +58,7 @@ namespace Capas
         {
             try
             {
-                _visorReporte.ReportSource = _globalInformes.ReporteCargado;
+                _visorReporte.ReportSource = GlobalInformes.ReporteCargado;
             }
             catch (Exception excepcion)
             {
