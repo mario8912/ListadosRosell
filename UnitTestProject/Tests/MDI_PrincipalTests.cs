@@ -2,10 +2,7 @@
 using Entidades.Global;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-<<<<<<< HEAD
-=======
 using System.Runtime.InteropServices;
->>>>>>> aa6fa2d (unit and services)
 
 namespace UnitTestProject.Tests
 {

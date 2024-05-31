@@ -5,9 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 
 [assembly: InternalsVisibleTo("Capas")]
@@ -75,17 +72,30 @@ namespace Entidades.Global
 
         public List<string> BusquedaRecursiva(string ruta)
         {
+            var list = Directory.EnumerateDirectories(ruta).ToList();
+            var lookup = list.ToLookup(num => list.IndexOf(num) % 2 == 0);
+
+            IEnumerable<string> trueList = lookup[true];
+            IEnumerable<string> falseList = lookup[false];
+
+            Foo(trueList);
+            Foo(falseList);
+
+            return list;
+        }
+
+        private bool Foo(IEnumerable<string> list)
+        {
             List<string> files = new List<string>();
 
-            foreach (var subDir in Directory.EnumerateDirectories(ruta))
+            foreach (var subDir in list)
             {
-                
                 if (!subDir.Equals(@"D:\miPc\desktop\ListadosRosell\.git"))
                 {
                     if (subDir.Contains("Informes"))
                     {
                         RutaDirectorioInformes = subDir;
-                        break;
+                        return true;
                     }
 
                     Console.WriteLine(subDir);
@@ -93,7 +103,7 @@ namespace Entidades.Global
                 }
             }
 
-            return files;
+            return false;
         }
     }
 }

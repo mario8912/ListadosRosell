@@ -18,7 +18,6 @@ namespace UnitTestProject
             _globalInfomes = _testServiceProvider.ServiceProvider.GetRequiredService<GlobalInformes>();
         }
 
-<<<<<<< HEAD
         /*[TestMethod]
         public void MDI_Principal()
         {
@@ -27,17 +26,10 @@ namespace UnitTestProject
         }*/
 
         
-        public void BusquedaRecursiva()
+        /*public void BusquedaRecursiva()
         {
             BusquedaRecursivaTest brTest = new BusquedaRecursivaTest();
             brTest.BuscquedaRecursiva_RutaDirectorioInformes();
-=======
-        [TestMethod]
-        public void MDI_PrincipalTest()
-        {
-            MDI_PrincipalTests mdiPrincipalTest = new MDI_PrincipalTests(_globalInfomes);
-            mdiPrincipalTest.TryGlobaDirectorioInfomes_True();
->>>>>>> aa6fa2d (unit and services)
-        }
+        }*/
     }
 }

@@ -9,12 +9,7 @@ namespace Datos.Conexiones
 {
     public class DatosConexion : IDisposable 
     {
-<<<<<<< HEAD
         private readonly GlobalInformes _globalInformes;
-
-=======
-        private GlobalInformes _globalInformes;
->>>>>>> aa6fa2d (unit and services)
         public string Servidor {get; private set;}
         public string BaseDeDatos { get; private set;}
         public bool SeguridadIntegrada { get; private set;}
@@ -27,12 +22,7 @@ namespace Datos.Conexiones
             EstablecerServidorBaseDeDatos();
             FormatoCadenaConexion();
 
-<<<<<<< HEAD
             _globalInformes = globalInformes;
-
-=======
-            _globalInformes = new GlobalInformes();
->>>>>>> aa6fa2d (unit and services)
             ConexionSql = new SqlConnection(_globalInformes.CadenaConexion);
         }
 
